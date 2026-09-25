@@ -3,61 +3,68 @@
 > **Status**: `FINALIZED`
 > **Project**: SkillForge
 > **Created**: 2026-09-24
+> **Last Updated**: 2026-09-25
 
 ## Vision
 
-**SkillForge** is a cross-IDE extension that acts as a developer's skill compass — when a developer has an idea they want to implement, SkillForge analyzes their intent and workspace context to suggest the technologies, frameworks, libraries, and patterns they need, with actionable learning paths. It starts beginner-friendly and progressively serves more advanced developers in future versions.
+**SkillForge** is a cross-IDE extension that acts as a developer's skill compass — when a developer has an idea they want to implement, SkillForge analyzes their intent and workspace context to suggest the technologies, frameworks, libraries, and patterns they need, with actionable learning paths and verified trust signals. It starts beginner-friendly and progressively serves more advanced developers in future versions.
 
 ## Goals
 
-1. **Cross-IDE Skill Suggestion Engine** — Build an LSP-based backend that works across VS Code, JetBrains, Neovim, and other LSP-compatible editors
-2. **Multi-Entry-Point UX** — Support command palette, sidebar panel, and inline comment detection (`// IDEA: ...`) as trigger mechanisms
-3. **Configurable Analysis Backend** — Let users choose and configure their suggestion engine: local curated DB, LLM API (Gemini/OpenAI/Anthropic), or hybrid mode
-4. **Workspace-Aware Suggestions** — Scan the user's project files (package.json, requirements.txt, etc.) to tailor suggestions to their existing stack
-5. **Skill Bookmarks & Comparison** — Allow users to save skill suggestions for later and compare 2-3 alternative technologies side by side
-6. **Beginner-First Design** — Prioritize clarity, approachability, and educational value in all UX decisions
+1. **Cross-IDE Headless Suggestion Engine** — Build an LSP-based backend that runs independently and can serve VS Code (v1.0) and future clients (JetBrains, Neovim).
+2. **Multi-Entry-Point UX** — Support command palette, dedicated sidebar with context scope selector, and inline comment detection (`// IDEA: ...`, `// SKILL: ...`) as trigger mechanisms.
+3. **Multi-Tiered Reliability & Trust Engine** — Guarantee accuracy and prevent hallucinations via a 6-layer reliability pipeline: Zod schema contracts, ground-truth anchoring against vetted database, package existence & health verification (npm/GitHub), trust tiers (🟢 Verified, 🟡 Validated, 🟠 Suggested, ⛔ Deprecated), transparent "WHY" reasoning, and optional Generator-Validator dual-pass LLM checking.
+4. **User-Controlled Workspace Context** — Smart auto-detection of workspace dependencies with an explicit folder/scope selector in the sidebar (crucial for monorepos and multi-tier projects).
+5. **Configurable Analysis Backend (BYOK)** — Fully offline zero-config curated database by default; optional Bring-Your-Own-Key (BYOK) for OpenAI-compatible and Gemini endpoints securely stored in VS Code `SecretStorage`.
+6. **Smart Fallback & Duplicate Awareness** — Cache and detect duplicate/repeat queries, warn when skills are already installed in the active scope, and fallback gracefully (LLM → Local DB → Category Browser).
+7. **Skill Bookmarks & Side-by-Side Comparison** — Allow users to bookmark skills into a personal library and compare 2-3 alternatives across difficulty, ecosystem, learning curve, and health metrics.
+8. **Beginner-First Design & Performance Guardrails** — Snappy local results in <300ms, activation <500ms, non-blocking extension host, clean onboarding walkthrough, and accessible Webview UI with strict Content Security Policy (CSP).
 
 ## Non-Goals (Out of Scope for v1.0)
 
-- Code generation or auto-scaffolding (this is about *what to use*, not *writing code for you*)
-- Full learning management system (we suggest paths, not host courses)
-- Real-time collaboration features
-- Senior/enterprise-tier features (advanced architecture recommendations, team skill gap analysis)
-- Mobile IDE support
-- Plugin marketplace for community-contributed skill databases
+- Automatic code generation, scaffolding, or writing boilerplate
+- Full learning management system (we suggest links and paths, not host courses)
+- Real-time cloud collaboration / team skill gap tracking
+- Native JetBrains or Neovim UI clients (LSP server is built headless to enable them post-v1.0)
+- Telemetry tracking or collecting user data
+- Arbitrary file-system access or outbound code transmission
 
 ## Users
 
 ### Primary (v1.0): Beginners & Bootcamp Graduates
 - Don't know what tools exist for a given problem domain
 - Need guidance on *which* technology to pick and *why*
-- Value clear explanations, difficulty ratings, and learning resources
+- Need protection against abandoned, hallucinated, or unmaintained libraries
+- Value clear explanations, difficulty ratings, and curated learning resources
 
 ### Secondary (v1.x+): Mid-Level Developers
-- Exploring new domains (e.g., backend dev trying frontend)
-- Want quick technology comparison when evaluating options
-- Value workspace-aware suggestions that respect their existing stack
+- Exploring new domains (e.g., backend dev exploring frontend or DevOps)
+- Need quick side-by-side technology comparison
+- Work in monorepos where scoping context to specific folders is essential
 
-### Future (v2.0+): Senior Developers
+### Future (v2.0+): Senior Developers & Architects
 - Evaluating architecture choices for new projects
-- Want deep trade-off analysis and ecosystem health metrics
-- Value integration with team workflows
+- Want deep trade-off analysis, health metrics, and ecosystem stability signals
 
-## Constraints
+## Constraints & Security Requirements
 
-- **Architecture**: LSP-based to maximize IDE compatibility from a single codebase
-- **Language**: TypeScript for the LSP server and VS Code client; Kotlin for JetBrains client (later)
-- **Monetization**: Design for flexibility — free core with optional premium features possible, but no commitment yet
-- **API Dependencies**: Must work offline (curated DB) with optional LLM enhancement; never require an API key for basic functionality
-- **Performance**: Suggestions should appear within 2 seconds for local DB, 5 seconds for LLM-enhanced
+- **Privacy & Data Security**: No source code or full file paths ever leave the user's machine. Only query text and sanitized package lists are sent to the LLM (if enabled). API keys must exclusively be stored via `context.secrets` (VS Code `SecretStorage`).
+- **Webview Security**: Strict CSP meta tag with nonces (`default-src 'none'; script-src 'nonce-...'; style-src ${webview.cspSource}`). Message payloads across `postMessage` must be strictly validated.
+- **Architecture**: Decoupled LSP server (JSON-RPC over stdio) + thin VS Code client.
+- **Language**: TypeScript across all packages managed with pnpm workspaces and Turborepo.
+- **Performance Budget**: Activation <500ms, local query response <200ms, total VSIX bundle <5MB, idle memory <30MB.
+- **Licensing**: Open source — MIT for extension code, CC BY 4.0 for curated skills dataset.
 
 ## Success Criteria
 
-- [ ] LSP server starts and responds to skill suggestion requests
-- [ ] VS Code extension connects to LSP and provides all 3 entry points (command palette, sidebar, inline comments)
-- [ ] Local curated skills database returns relevant suggestions for common development domains
-- [ ] At least one LLM provider (Gemini) integration works as configurable backend
-- [ ] Workspace scanning detects and factors in existing project stack
-- [ ] Skill bookmarks persist across sessions
-- [ ] Comparison mode renders side-by-side view for 2-3 technologies
-- [ ] Extension installs cleanly from VS Code marketplace (or local VSIX)
+- [ ] LSP server boots and handles custom `skillforge/suggest` requests with strict types
+- [ ] Curated skills database has 100+ verified skills with rich metadata and taxonomy
+- [ ] Suggestion engine performs fuzzy matching, intent parsing, and workspace scanning
+- [ ] Reliability engine validates outputs, verifies package health, filters hallucinations, and assigns trust badges
+- [ ] VS Code client provides Command Palette, Sidebar with context scope selector, and CodeLens inline comment triggers
+- [ ] Results panel (Webview) renders skill cards with "WHY" explanations, health metrics, and trust badges
+- [ ] BYOK LLM integration works seamlessly with OpenAI-compatible and Gemini endpoints
+- [ ] Duplicate query detection, "already installed" detection, and fallback cascade operate without breaking
+- [ ] Bookmarks persist across sessions and comparison mode displays side-by-side matrices
+- [ ] First-run onboarding walkthrough guides users interactively
+- [ ] VSIX builds cleanly and installs with zero unhandled errors or typing lag
