@@ -177,4 +177,8 @@ export class SkillForgeServer {
   public listen(): void {
     this.connection.listen();
   }
+
+  public dispose(): void {
+    this.connection.dispose();
+  }
 }
