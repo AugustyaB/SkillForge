@@ -19,6 +19,7 @@ import { TerminalRunner } from './terminal/terminal-runner.js';
 import { ContextTreeProvider } from './views/context-tree-provider.js';
 import { QuickActionsTreeProvider } from './views/quick-actions-tree-provider.js';
 import { RecentQueriesTreeProvider } from './views/recent-queries-tree-provider.js';
+import { SuggestionPanel } from './webview/suggestion-panel.js';
 
 let client: LanguageClient | undefined;
 
@@ -192,6 +193,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
   context.subscriptions.push(suggestForFileCmd);
 
+  // Command: Open Suggestion Canvas
+  const showCanvasCmd = vscode.commands.registerCommand('skillforge.showCanvas', () => {
+    SuggestionPanel.createOrShow(context.extensionUri, scopeManager.activeScope);
+  });
+  context.subscriptions.push(showCanvasCmd);
+
   // Command: Suggest Skills for My Idea (Core suggestion flow)
   const suggestCmd = vscode.commands.registerCommand(
     'skillforge.suggest',
@@ -217,6 +224,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
       const cleanIntent = intent.trim();
 
+      // Open Suggestion Canvas immediately in loading state
+      SuggestionPanel.showLoading(
+        cleanIntent,
+        scopeManager.activeScope,
+        context.extensionUri
+      );
+
       try {
         const workspaceCtx = scopeManager.buildWorkspaceContext();
         const params: SkillSuggestionParams = {
@@ -232,9 +246,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         const count = result.skills.length;
         await recentQueriesTreeProvider.addQuery(cleanIntent, count);
 
+        // Render results into the Suggestion Canvas
+        SuggestionPanel.showResults(
+          result,
+          scopeManager.activeScope,
+          context.extensionUri
+        );
+
         if (count === 0) {
           vscode.window.showInformationMessage(
-            `SkillForge found 0 skills for "${cleanIntent}" (${result.timings.localMs}ms)`
+            `SkillForge found 0 direct skills for "${cleanIntent}" (${result.timings.localMs}ms)`
           );
           return;
         }

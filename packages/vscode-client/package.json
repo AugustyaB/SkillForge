@@ -34,7 +34,8 @@
     "onCommand:skillforge.rescanWorkspace",
     "onCommand:skillforge.suggestForCurrentFile",
     "onCommand:skillforge.runInstallCommand",
-    "onCommand:skillforge.clearRecentQueries"
+    "onCommand:skillforge.clearRecentQueries",
+    "onCommand:skillforge.showCanvas"
   ],
   "contributes": {
     "viewsContainers": {
@@ -101,6 +102,12 @@
         "title": "Clear Discoveries History",
         "category": "SkillForge",
         "icon": "$(clear-all)"
+      },
+      {
+        "command": "skillforge.showCanvas",
+        "title": "Open Suggestion Canvas",
+        "category": "SkillForge",
+        "icon": "$(layout)"
       }
     ],
     "menus": {
@@ -114,6 +121,11 @@
           "command": "skillforge.rescanWorkspace",
           "when": "view == skillforge.contextView",
           "group": "navigation@2"
+        },
+        {
+          "command": "skillforge.showCanvas",
+          "when": "view == skillforge.contextView",
+          "group": "navigation@3"
         },
         {
           "command": "skillforge.clearRecentQueries",
