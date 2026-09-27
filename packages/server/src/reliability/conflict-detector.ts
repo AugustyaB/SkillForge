@@ -1,4 +1,5 @@
 import type { SuggestedSkill } from '@skillforge/shared';
+import type { SkillsRepository } from '../data/skills-repository.js';
 
 export interface ConflictAnnotation {
   skillId: string;
@@ -17,6 +18,12 @@ export interface ConflictAnnotation {
  *     are listed as alternatives to each other.
  */
 export class ConflictDetector {
+  private repository?: SkillsRepository;
+
+  constructor(repository?: SkillsRepository) {
+    this.repository = repository;
+  }
+
   /**
    * Annotate suggested skills with conflict warnings.
    * Returns a new array with conflictWith and conflictWarning populated
@@ -29,6 +36,16 @@ export class ConflictDetector {
     const installedSet = new Set(
       alreadyInstalled.map((pkg) => pkg.toLowerCase().trim())
     );
+
+    // Expand installed set with canonical skill IDs if repository is available
+    if (this.repository) {
+      for (const pkg of alreadyInstalled) {
+        const matched = this.repository.getSkillByIndicator(pkg);
+        if (matched) {
+          installedSet.add(matched.id.toLowerCase());
+        }
+      }
+    }
 
     // Build a lookup of skill IDs in this result set for co-suggestion detection
     const resultIdSet = new Set(
@@ -43,7 +60,18 @@ export class ConflictDetector {
       //    are already installed in the user's workspace
       for (const alt of skill.alternatives) {
         const normalizedAlt = alt.toLowerCase().trim();
-        if (installedSet.has(normalizedAlt)) {
+        let isAltInstalled = installedSet.has(normalizedAlt);
+
+        if (!isAltInstalled && this.repository) {
+          const altSkill = this.repository.getSkillById(normalizedAlt);
+          if (altSkill) {
+            isAltInstalled = altSkill.stackIndicators.some((ind) =>
+              installedSet.has(ind.toLowerCase())
+            );
+          }
+        }
+
+        if (isAltInstalled) {
           conflicts.push(alt);
           warnings.push(
             `Alternative to already-installed '${alt}' — consider whether to replace it`

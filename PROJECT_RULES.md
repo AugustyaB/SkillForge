@@ -21,7 +21,11 @@ Planning (Gate 1) ➔ User Approval ➔ Implementation ➔ Verification & Audit 
    - State the objective and deliverables.
    - List the exact files to create, modify, or delete.
    - Detail the architecture and design approach.
-   - Define explicit verification criteria (tests to run, expected assertions).
+   - **Adversarial Test Criteria (Anti-Happy-Path)**:
+     - Must explicitly enumerate test cases for **non-ideal conditions**, not just happy paths.
+     - Include dirty input tests (symbols, regex metacharacters like `c++`, empty strings, undefined/null).
+     - Include cross-layer discrepancy tests (package name vs. entity ID mismatches).
+     - Include state/option conflict tests (options changes, ecosystem overrides).
 2. **STRICT GATE**: Stop and present the plan to the user.
    - **Zero implementation code** may be written until the user gives explicit approval.
    - If the user asks questions or requests changes, adjust the plan and re-confirm.
@@ -44,12 +48,33 @@ Planning (Gate 1) ➔ User Approval ➔ Implementation ➔ Verification & Audit 
 
 ---
 
+### 🛡️ Adversarial Testing & Anti-Happy-Path Protocol
+
+All test suites must adhere to the 5 non-ideal condition invariants. Testing *only* happy-path or ideal fixtures is considered an audit failure:
+
+1. **Hostile & Dirty Input Invariants**:
+   - Any string parsed by regex or string operations must be tested with regex metacharacters (`c++`, `c#`, `*`, `?`, `[`, `]`, `(`, `)`), quotes, punctuation, emojis, and whitespace-only strings.
+   - All public methods receiving external or LSP parameters must be tested with `null`, `undefined`, and empty object `{}` payloads.
+2. **Cross-Domain Discrepancy Invariants**:
+   - Never assume external package names equal internal domain IDs (e.g. `next` vs `nextjs`, `tailwindcss` vs `tailwind-css`, `@angular/core` vs `angular`). Test cross-mapping explicitly.
+3. **Intent vs Context Collision Invariants**:
+   - Explicit user requests must take precedence over ambient context. Test with opposing context (e.g. user queries Rust tool in a Python workspace).
+   - Test cache keys across all parameter dimensions (`maxResults`, `minTrustTier`, active tabs), not just the intent string.
+4. **Lifecycle & State Isolation Invariants**:
+   - State transitions (caches, fallback on network down, eviction) must be tested on the **same** instance, not separate unlinked instances.
+   - Async background enhancements must not cause race conditions or unhandled rejections.
+5. **Schema & Boundary Invariants**:
+   - Test boundary values (`0.0`, `1.0`, min length - 1, min length) and invalid enum variants.
+   - Generated fallback objects must conform 100% to their target schemas (e.g. no empty string URLs if `.url()` is required).
+
+---
+
 ### Gate 2: The Verification & Audit Gate (Empirical Proof)
 
 Immediately following code implementation, the agent must run automated validation and provide concrete evidence:
 
 1. **Type Checking**: Run `pnpm typecheck` (`tsc -b`) — must exit `0` with zero type errors.
-2. **Test Suites**: Run `pnpm test` (`vitest run`) — all unit and integration tests must pass.
+2. **Test Suites**: Run `pnpm test` (`vitest run`) — all unit, integration, and adversarial tests must pass.
 3. **Build Integrity**: Run `pnpm build` — all monorepo packages must build cleanly.
 4. **Empirical Evidence Rule**:
    - "Trust me, it works" is strictly forbidden.

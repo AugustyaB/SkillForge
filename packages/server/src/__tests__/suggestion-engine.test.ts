@@ -140,5 +140,37 @@ describe('SuggestionEngine & IntentParser', () => {
       const result = await engine.suggest({ intent: '' });
       expect(result.skills).toHaveLength(0);
     });
+
+    it('prioritizes explicit query ecosystem over ambient workspace context (BUG-03)', async () => {
+      // User is in a Python workspace, but explicitly asks for a Rust backend
+      const result = await engine.suggest({
+        intent: 'suggest a rust backend framework',
+        context: {
+          ecosystem: 'python',
+          alreadyInstalled: ['django', 'flask'],
+        },
+      });
+
+      expect(result.skills.length).toBeGreaterThan(0);
+      const skillIds = result.skills.map((s) => s.id);
+      expect(skillIds.some((id) => id === 'axum' || id === 'actix-web')).toBe(true);
+      expect(skillIds).not.toContain('django');
+      expect(skillIds).not.toContain('flask');
+    });
+
+    it('resolves manifest package names to canonical skill IDs for compatibility boost (BUG-02)', async () => {
+      // Project has package manifest names: "next" (ID: nextjs) and "tailwindcss" (ID: tailwind-css)
+      const result = await engine.suggest({
+        intent: 'react frontend',
+        context: {
+          alreadyInstalled: ['next', 'tailwindcss'],
+          ecosystem: 'javascript',
+        },
+      });
+
+      const reactSkill = result.skills.find((s) => s.id === 'react');
+      expect(reactSkill).toBeDefined();
+      expect(reactSkill?.reasoning).toMatch(/nextjs|tailwind-css/i);
+    });
   });
 });

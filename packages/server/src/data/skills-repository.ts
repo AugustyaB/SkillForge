@@ -62,12 +62,17 @@ const STOP_WORDS = new Set([
   'application',
 ]);
 
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 export class SkillsRepository {
   private skills: Skill[] = [];
   private idIndex = new Map<string, Skill>();
   private tagIndex = new Map<string, Set<string>>();
   private categoryIndex = new Map<string, Set<string>>();
   private ecosystemIndex = new Map<string, Set<string>>();
+  private indicatorIndex = new Map<string, Skill>();
 
   constructor(customSkills?: Skill[]) {
     if (customSkills) {
@@ -139,6 +144,12 @@ export class SkillsRepository {
         this.ecosystemIndex.set(eco, new Set());
       }
       this.ecosystemIndex.get(eco)!.add(skill.id);
+
+      // 5. Index by stack indicators and skill ID
+      this.indicatorIndex.set(skill.id.toLowerCase(), skill);
+      for (const ind of skill.stackIndicators) {
+        this.indicatorIndex.set(ind.toLowerCase().trim(), skill);
+      }
     }
   }
 
@@ -152,6 +163,10 @@ export class SkillsRepository {
 
   public getSkillById(id: string): Skill | undefined {
     return this.idIndex.get(id);
+  }
+
+  public getSkillByIndicator(indicator: string): Skill | undefined {
+    return this.indicatorIndex.get(indicator.toLowerCase().trim());
   }
 
   public getSkillsByCategory(category: SkillCategory): Skill[] {
@@ -235,9 +250,15 @@ export class SkillsRepository {
         if (lowerName === token || lowerId === token) {
           score += 50;
           matchReasons.push(`Matches name "${skill.name}"`);
-        } else if (new RegExp(`\\b${token}\\b`, 'i').test(lowerName)) {
+        } else if (/^\w+$/.test(token)) {
+          const escaped = escapeRegExp(token);
+          if (new RegExp(`\\b${escaped}\\b`, 'i').test(lowerName)) {
+            score += 40;
+            matchReasons.push(`Name contains word "${token}"`);
+          }
+        } else if (lowerName.includes(token)) {
           score += 40;
-          matchReasons.push(`Name contains word "${token}"`);
+          matchReasons.push(`Name contains "${token}"`);
         }
 
         if (skill.tags.some((t) => t.toLowerCase() === token)) {

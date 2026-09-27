@@ -31,7 +31,8 @@ export class SuggestionEngine {
     this.repository = options?.repository ?? new SkillsRepository();
     this.intentParser = options?.intentParser ?? new IntentParser();
     this.cache = options?.cache ?? new QueryCache();
-    this.conflictDetector = options?.conflictDetector ?? new ConflictDetector();
+    this.conflictDetector =
+      options?.conflictDetector ?? new ConflictDetector(this.repository);
     this.trustTierClassifier =
       options?.trustTierClassifier ?? new TrustTierClassifier();
     this.fallbackCascade =
@@ -87,11 +88,12 @@ export class SuggestionEngine {
     // 2. Parse natural language intent
     const parsedIntent = this.intentParser.parse(intent);
 
-    // Determine target ecosystem (workspace context takes precedence if single ecosystem, else explicit query)
+    // Determine target ecosystem (explicit query intent takes precedence over ambient workspace context - BUG-03)
     const targetEcosystem =
-      context?.ecosystem && context.ecosystem !== 'multi'
+      parsedIntent.explicitEcosystem ??
+      (context?.ecosystem && context.ecosystem !== 'multi'
         ? context.ecosystem
-        : parsedIntent.explicitEcosystem;
+        : undefined);
 
     // 3. Search candidates from repository
     const maxResults = options?.maxResults ?? 5;
@@ -105,6 +107,16 @@ export class SuggestionEngine {
     let fallbackUsed = false;
 
     if (candidates.length > 0) {
+      // Map installed packages to canonical skill IDs using stack indicators (BUG-02)
+      const installedSkillIds = new Set<string>();
+      for (const pkg of alreadyInstalled) {
+        installedSkillIds.add(pkg.toLowerCase().trim());
+        const matched = this.repository.getSkillByIndicator(pkg);
+        if (matched) {
+          installedSkillIds.add(matched.id.toLowerCase());
+        }
+      }
+
       // 4. Apply Context-Aware Relevance Adjustments
       const adjusted = candidates.map(({ skill, score, matchReasons }) => {
         let finalScore = score;
@@ -113,9 +125,9 @@ export class SuggestionEngine {
 
         // A. Already-Installed Detection
         const isIndicatorInstalled = skill.stackIndicators.some((ind) =>
-          alreadyInstalled.has(ind.toLowerCase())
+          installedSkillIds.has(ind.toLowerCase())
         );
-        const isIdInstalled = alreadyInstalled.has(skill.id.toLowerCase());
+        const isIdInstalled = installedSkillIds.has(skill.id.toLowerCase());
 
         if (isIndicatorInstalled || isIdInstalled) {
           isInstalled = true;
@@ -123,9 +135,14 @@ export class SuggestionEngine {
         }
 
         // B. Compatibility Boost (+30 pts)
-        const compatibleTools = skill.worksWellWith.filter((compat) =>
-          alreadyInstalled.has(compat.toLowerCase())
-        );
+        const compatibleTools = skill.worksWellWith.filter((compat) => {
+          const lowerCompat = compat.toLowerCase();
+          if (installedSkillIds.has(lowerCompat)) return true;
+          const compatSkill = this.repository.getSkillById(compat);
+          return compatSkill?.stackIndicators.some((ind) =>
+            installedSkillIds.has(ind.toLowerCase())
+          );
+        });
         if (compatibleTools.length > 0) {
           finalScore += 30;
           reasons.push(`Integrates seamlessly with your project's ${compatibleTools.join(', ')}`);
@@ -169,7 +186,7 @@ export class SuggestionEngine {
       // 6. Conflict Detection — annotate mutually exclusive alternatives
       results = this.conflictDetector.detectConflicts(
         results,
-        Array.from(alreadyInstalled)
+        Array.from(installedSkillIds)
       );
 
       // 7. Filter by minimum trust tier if specified

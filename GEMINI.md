@@ -5,9 +5,10 @@ Cross-IDE developer skill discovery extension (headless LSP server + VS Code cli
 ## Primary Working Context
 Before planning or starting any task, always inspect:
 1. [`.gsd/STATE.md`](./.gsd/STATE.md) — Current phase, last completed milestone, and active session memory.
-2. [`.gsd/ROADMAP.md`](./.gsd/ROADMAP.md) — Phase deliverables and must-haves.
-3. [`PROJECT_RULES.md`](./PROJECT_RULES.md) — The GSD Gating Protocol and engineering standards.
-4. [`package.json`](./package.json) — Monorepo workspace layout and available build/test scripts.
+2. [`BUGS.md`](./BUGS.md) — Confirmed defect registry and technical debt action items.
+3. [`.gsd/ROADMAP.md`](./.gsd/ROADMAP.md) — Phase deliverables and must-haves.
+4. [`PROJECT_RULES.md`](./PROJECT_RULES.md) — The GSD Gating Protocol and engineering standards.
+5. [`package.json`](./package.json) — Monorepo workspace layout and available build/test scripts.
 
 ---
 
@@ -17,6 +18,7 @@ Always adhere to the 3-gate lifecycle defined in [`PROJECT_RULES.md`](./PROJECT_
 
 ### 1. Planning Gate (STRICT LOCK)
 - When starting a new phase, feature, or major refactor, prepare a structured plan (scope, affected files, architecture decisions, and test criteria).
+- **Anti-Happy-Path Requirement**: Every plan must include test scenarios for dirty/hostile inputs (regex symbols like `c++`, empty/null values, whitespace), cross-layer name mismatches (e.g. `next` package vs `nextjs` ID), and conflicting options.
 - **HALT after presenting the plan.** Do not write or modify implementation code until the user gives explicit approval to proceed.
 
 ### 2. Verification Gate (Empirical Proof)
@@ -25,6 +27,7 @@ Always adhere to the 3-gate lifecycle defined in [`PROJECT_RULES.md`](./PROJECT_
   - `pnpm test` (`vitest run`)
   - `pnpm build`
 - Provide actual terminal outputs and test counts as empirical proof. Never claim a task works without running the verification commands.
+- Verify that adversarial tests pass and non-ideal scenarios are covered. Testing *only* happy-path fixtures is an audit violation.
 
 ### 3. Documentation Sync Gate
 - On phase or major task completion, update:

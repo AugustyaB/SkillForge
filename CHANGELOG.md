@@ -16,6 +16,26 @@ The project follows a structured version & phase sequence:
 
 ---
 
+## Bug Remediation: Engine Hardening (BUG-01, BUG-02, BUG-03) (2026-09-27)
+
+### Fixes & Enhancements
+- **BUG-01 (RegExp Crash Prevention)**:
+  - Added `escapeRegExp` utility and guarded token matching with `/^\w+$/` in `SkillsRepository.search`.
+  - Symbolic tokens (`c++`, `c#`, `.net`) use safe exact/substring matching, eliminating `SyntaxError: Invalid regular expression`.
+  - Added `c++`, `cpp`, and `c#` to `ECOSYSTEM_KEYWORDS` and sanitized punctuation in `IntentParser`.
+- **BUG-02 (Manifest Package Name Resolution)**:
+  - Added `indicatorIndex` in `SkillsRepository` mapping package names (e.g. `next`, `tailwindcss`, `@angular/core`) to canonical Skill IDs.
+  - Resolved `alreadyInstalled` packages in `SuggestionEngine` and `ConflictDetector`, restoring compatibility boosts and conflict warnings for aliased packages.
+- **BUG-03 (Ecosystem Query Precedence)**:
+  - Prioritized explicit query ecosystem over ambient workspace context, ensuring cross-ecosystem queries return requested tools.
+
+### Verification Proof
+- `pnpm typecheck` (`tsc -b`): Passed with 0 diagnostics.
+- `pnpm test` (`vitest run`): 97/97 tests passing across 11 test suites.
+- `pnpm build`: Clean build with all 118 skills verified.
+
+---
+
 ## Phase 4: Reliability Engine & Trust Verification (2026-09-27)
 
 ### Deliverables

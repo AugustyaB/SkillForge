@@ -86,5 +86,28 @@ describe('SkillsRepository', () => {
   it('returns empty array for empty search queries', () => {
     expect(repository.search('')).toHaveLength(0);
     expect(repository.search('   ')).toHaveLength(0);
+    expect(repository.search('\t\n  ')).toHaveLength(0);
+  });
+
+  it('handles hostile regex tokens (c++, c#, (react)?, *, []) without throwing (BUG-01)', () => {
+    // These queries previously threw SyntaxError: Invalid regular expression: /\bc++\b/i: Nothing to repeat
+    expect(() => repository.search('build a c++ backend')).not.toThrow();
+    expect(() => repository.search('c# web api framework')).not.toThrow();
+    expect(() => repository.search('(react)? [tool] * + $ ^')).not.toThrow();
+
+    const cppResults = repository.search('c++ backend');
+    expect(Array.isArray(cppResults)).toBe(true);
+
+    const regexResults = repository.search('(react)? [tool] * +');
+    expect(Array.isArray(regexResults)).toBe(true);
+  });
+
+  it('retrieves skills by package stack indicators (BUG-02)', () => {
+    expect(repository.getSkillByIndicator('next')?.id).toBe('nextjs');
+    expect(repository.getSkillByIndicator('tailwindcss')?.id).toBe('tailwind-css');
+    expect(repository.getSkillByIndicator('@angular/core')?.id).toBe('angular');
+    expect(repository.getSkillByIndicator('solid-js')?.id).toBe('solidjs');
+    expect(repository.getSkillByIndicator('unknown-package-xyz')).toBeUndefined();
   });
 });
+

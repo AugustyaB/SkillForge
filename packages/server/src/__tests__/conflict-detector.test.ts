@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import type { SuggestedSkill, TrustTier } from '@skillforge/shared';
+import type { Skill, SuggestedSkill, TrustTier } from '@skillforge/shared';
 import { ConflictDetector } from '../reliability/conflict-detector.js';
+import { SkillsRepository } from '../data/skills-repository.js';
 
 /**
  * Build a minimal SuggestedSkill fixture for conflict detection tests.
@@ -167,5 +168,56 @@ describe('ConflictDetector', () => {
 
     const results = detector.detectConflicts([react], []);
     expect(results[0]!.conflictWith).toBeUndefined();
+  });
+
+  it('detects installed conflict when raw package name differs from skill ID (BUG-02)', () => {
+    // Angular package name is "@angular/core", while skill ID is "angular"
+    const angularSkill: Skill = {
+      id: 'angular',
+      name: 'Angular',
+      category: 'frontend-framework',
+      difficulty: 'intermediate',
+      description: 'Component-based framework.',
+      whyUseIt: 'Enterprise-grade full-featured framework.',
+      tags: ['angular', 'frontend'],
+      ecosystem: 'javascript',
+      officialUrl: 'https://angular.dev',
+      learnResources: [{ label: 'Docs', url: 'https://angular.dev', type: 'docs' }],
+      alternatives: ['react', 'vue'],
+      worksWellWith: ['rxjs'],
+      prerequisites: ['typescript'],
+      stackIndicators: ['@angular/core', 'angular'],
+    };
+
+    const reactSkill: Skill = {
+      id: 'react',
+      name: 'React',
+      category: 'frontend-framework',
+      difficulty: 'intermediate',
+      description: 'UI library.',
+      whyUseIt: 'Virtual DOM, component ecosystem.',
+      tags: ['react', 'frontend'],
+      ecosystem: 'javascript',
+      officialUrl: 'https://react.dev',
+      learnResources: [{ label: 'Docs', url: 'https://react.dev', type: 'docs' }],
+      alternatives: ['angular', 'vue'],
+      worksWellWith: ['nextjs'],
+      prerequisites: ['javascript'],
+      stackIndicators: ['react', 'react-dom'],
+    };
+
+    const repo = new SkillsRepository([angularSkill, reactSkill]);
+    const repoDetector = new ConflictDetector(repo);
+
+    const reactSuggested = makeSuggested({
+      id: 'react',
+      name: 'React',
+      alternatives: ['angular', 'vue'],
+    });
+
+    const results = repoDetector.detectConflicts([reactSuggested], ['@angular/core']);
+    expect(results).toHaveLength(1);
+    expect(results[0]!.conflictWith).toContain('angular');
+    expect(results[0]!.conflictWarning).toContain("already-installed 'angular'");
   });
 });

@@ -122,6 +122,9 @@ const ECOSYSTEM_KEYWORDS: Record<string, string> = {
   java: 'java',
   dotnet: 'dotnet',
   csharp: 'dotnet',
+  'c#': 'dotnet',
+  cpp: 'cpp',
+  'c++': 'cpp',
   ruby: 'ruby',
 };
 
@@ -178,7 +181,7 @@ export class IntentParser {
     const tokens: string[] = [];
 
     for (const rawToken of rawTokens) {
-      const token = rawToken.replace(/[?!.:;()]/g, '');
+      const token = rawToken.replace(/[?!.:;()[\]{}*^$|\\]/g, '');
       if (!token) continue;
 
       // 1. Action verb detection
