@@ -75,6 +75,24 @@ describe('WorkspaceScanner & Manifest Parsers', () => {
         expect(d.ecosystem).toBe('python');
       }
     });
+
+    it('handles inline comments on packages without version specifiers (BUG-08)', () => {
+      const content = `
+        fastapi # Main web framework
+        pydantic # Validation library
+        uvicorn[standard]   # ASGI server with spaces
+        django ; python_version > '3.8' # Env marker with comment
+      `;
+
+      const detected = parseRequirementsTxt(content);
+      const names = detected.map((d) => d.name);
+
+      expect(names).toContain('fastapi');
+      expect(names).toContain('pydantic');
+      expect(names).toContain('uvicorn');
+      expect(names).toContain('django');
+      expect(detected).toHaveLength(4);
+    });
   });
 
   describe('parseCargoToml', () => {

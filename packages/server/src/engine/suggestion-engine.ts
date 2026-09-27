@@ -47,9 +47,9 @@ export class SuggestionEngine {
     return this.cache;
   }
 
-  public async suggest(params: SkillSuggestionParams): Promise<SkillSuggestionResult> {
+  public async suggest(params?: SkillSuggestionParams): Promise<SkillSuggestionResult> {
     const startTime = Date.now();
-    const intent = params.intent ? params.intent.trim() : '';
+    const intent = typeof params?.intent === 'string' ? params.intent.trim() : '';
 
     if (!intent) {
       const elapsed = Date.now() - startTime;
@@ -60,19 +60,23 @@ export class SuggestionEngine {
       };
     }
 
-    const context = params.context;
-    const options = params.options;
+    const context = params?.context;
+    const options = params?.options;
     const alreadyInstalled = new Set(
       (context?.alreadyInstalled || []).map((pkg) => pkg.toLowerCase().trim())
     );
 
-    // 1. Check Query Cache
-    const cacheKey = this.cache.generateKey(
+    // 1. Check Query Cache (BUG-04: hash complete request context and options)
+    const cacheKey = this.cache.generateKey({
       intent,
-      context?.scope?.paths || [],
-      Array.from(alreadyInstalled),
-      options?.difficulty || 'all'
-    );
+      scopePaths: context?.scope?.paths || [],
+      installed: Array.from(alreadyInstalled),
+      difficulty: options?.difficulty || 'all',
+      ecosystem: context?.ecosystem || '',
+      activeSignals: context?.activeFileSignals?.map((s) => s.language) || [],
+      maxResults: options?.maxResults ?? 5,
+      minTrustTier: options?.minTrustTier,
+    });
 
     const cached = this.cache.get(cacheKey);
     if (cached) {

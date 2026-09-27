@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { Skill } from '@skillforge/shared';
+import { validateSkill } from '@skillforge/shared';
 import { SkillsRepository } from '../data/skills-repository.js';
 import { GroundTruthAnchor } from '../reliability/ground-truth-anchor.js';
 
@@ -129,5 +130,15 @@ describe('GroundTruthAnchor', () => {
     expect(result.suggestedSkill.category).toBe('other');
     expect(result.suggestedSkill.ecosystem).toBe('multi');
     expect(result.suggestedSkill.stackIndicators).toContain('my-new-tool');
+  });
+
+  it('unanchored skills generate valid officialUrl complying with SkillSchema (BUG-05)', () => {
+    // Omitting officialUrl in raw external suggestion
+    const result = anchor.anchor({ name: 'Unanchored External AI Tool' });
+    expect(result.isAnchored).toBe(false);
+    expect(result.suggestedSkill.officialUrl).toMatch(/^https?:\/\//);
+
+    // Must not throw ZodError when validated against SkillSchema
+    expect(() => validateSkill(result.suggestedSkill)).not.toThrow();
   });
 });

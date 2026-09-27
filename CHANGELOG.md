@@ -16,7 +16,7 @@ The project follows a structured version & phase sequence:
 
 ---
 
-## Bug Remediation: Engine Hardening (BUG-01, BUG-02, BUG-03) (2026-09-27)
+## Bug Remediation & Hardening: 100% Defect Resolution (BUG-01 to BUG-10) (2026-09-27)
 
 ### Fixes & Enhancements
 - **BUG-01 (RegExp Crash Prevention)**:
@@ -28,11 +28,25 @@ The project follows a structured version & phase sequence:
   - Resolved `alreadyInstalled` packages in `SuggestionEngine` and `ConflictDetector`, restoring compatibility boosts and conflict warnings for aliased packages.
 - **BUG-03 (Ecosystem Query Precedence)**:
   - Prioritized explicit query ecosystem over ambient workspace context, ensuring cross-ecosystem queries return requested tools.
+- **BUG-04 (QueryCache Key Completeness)**:
+  - Updated `generateKey` to hash full request options and context (`maxResults`, `minTrustTier`, `ecosystem`, `activeFileSignals`), preventing cache collisions when toggling options or switching editor tabs.
+- **BUG-05 (GroundTruthAnchor Schema Compliance)**:
+  - Provided valid fallback URL and default learning resource entry for unanchored suggestions, ensuring complete compliance with strict `SkillSchema` Zod validation without throwing.
+- **BUG-06 (Stale Cache Retention Test)**:
+  - Corrected test in `health-verifier.test.ts` to test stale cache retention on a single verifier instance during simulated network failure.
+- **BUG-07 (LSP Null/Undefined Guards)**:
+  - Added defensive guards across `SkillForgeServer.onRequest` and `SuggestionEngine.suggest` to prevent unhandled `TypeError` exceptions on null or malformed JSON-RPC payloads.
+- **BUG-08 (Inline Comments in requirements.txt)**:
+  - Stripped inline `#` comments before extracting package names, preventing valid Python packages (e.g. `fastapi # framework`) from being dropped.
+- **BUG-09 & BUG-10 (HealthVerifier Metrics & Publish Date Order)**:
+  - Awaited download counts within timeout budget so download metrics populate on the first call.
+  - Prioritized `dist-tags.latest` publish date over `modified` metadata date to accurately detect abandoned packages.
 
 ### Verification Proof
 - `pnpm typecheck` (`tsc -b`): Passed with 0 diagnostics.
-- `pnpm test` (`vitest run`): 97/97 tests passing across 11 test suites.
+- `pnpm test` (`vitest run`): 102/102 tests passing across 11 test suites in 383ms.
 - `pnpm build`: Clean build with all 118 skills verified.
+- All 10 defects in `BUGS.md` verified and resolved.
 
 ---
 

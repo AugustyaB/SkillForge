@@ -155,35 +155,59 @@ describe('HealthVerifier', () => {
     expect(registryFetchCount).toBe(1);
   });
 
-  it('returns stale cache data when network fails', async () => {
-    let callCount = 0;
-    const mockFetch = createMockFetch(() => {
-      callCount++;
-      if (callCount === 1) {
-        return {
-          status: 200,
-          body: {
-            name: 'stale-lib',
-            time: { modified: new Date().toISOString() },
-          },
-        };
+  it('returns stale cache data when network fails (BUG-06)', async () => {
+    let registryCallCount = 0;
+    const mockFetch = createMockFetch((url) => {
+      if (url.includes('registry.npmjs.org')) {
+        registryCallCount++;
+        if (registryCallCount === 1) {
+          return {
+            status: 200,
+            body: {
+              name: 'stale-lib',
+              time: { modified: '2026-01-01T00:00:00.000Z' },
+            },
+          };
+        }
+        throw new Error('Network down');
       }
-      throw new Error('Network down');
+      return { status: 200, body: { downloads: 100 } };
     });
 
-    // First call succeeds, populates cache
-    const verifier = new HealthVerifier({ fetchFn: mockFetch, cacheTtlMs: 0 }); // TTL=0 to force re-fetch
+    // TTL=0 ensures the 2nd call attempts to re-fetch from network
+    const verifier = new HealthVerifier({ fetchFn: mockFetch, cacheTtlMs: 0 });
     const first = await verifier.checkPackage('stale-lib');
     expect(first.packageExists).toBe(true);
+    expect(first.lastPublished).toBe('2026-01-01T00:00:00.000Z');
 
-    // Override fetch to fail — should return stale cache
-    const failingFetch = (async () => {
-      throw new Error('Network down');
-    }) as FetchFunction;
+    // 2nd call: network throws Error('Network down'), verifier falls back to stale cache
+    const second = await verifier.checkPackage('stale-lib');
+    expect(second.packageExists).toBe(true);
+    expect(second.lastPublished).toBe('2026-01-01T00:00:00.000Z');
+    expect(registryCallCount).toBe(2);
+  });
 
-    const verifier2 = new HealthVerifier({ fetchFn: failingFetch, cacheTtlMs: 0 });
-    // Manually we can't share cache between instances, so this tests the offline path
-    const fallback = await verifier2.checkPackage('some-other-pkg');
-    expect(fallback.packageExists).toBe(true); // graceful fallback
+  it('prioritizes latest release version publish date over modified metadata date (BUG-10)', async () => {
+    const fourYearsAgo = new Date(Date.now() - 4 * 365 * 24 * 60 * 60 * 1000).toISOString();
+    const today = new Date().toISOString();
+
+    const mockFetch = createMockFetch(() => ({
+      status: 200,
+      body: {
+        name: 'abandoned-with-recent-tweak',
+        'dist-tags': { latest: '1.0.0' },
+        time: {
+          modified: today, // Metadata changed today
+          '1.0.0': fourYearsAgo, // But actual code published 4 years ago!
+        },
+      },
+    }));
+
+    const verifier = new HealthVerifier({ fetchFn: mockFetch });
+    const health = await verifier.checkPackage('abandoned-with-recent-tweak');
+
+    expect(health.packageExists).toBe(true);
+    expect(health.lastPublished).toBe(fourYearsAgo);
+    expect(health.healthVerdict).toBe('abandoned');
   });
 });

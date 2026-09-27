@@ -79,10 +79,12 @@ export class HealthVerifier {
       const health = this.parseRegistryResponse(data);
       this.cacheResult(normalizedName, health);
 
-      // 3. Optionally fetch download counts (fire-and-forget enhancement)
-      this.fetchDownloads(normalizedName, health).catch(() => {
+      // 3. Fetch download counts (BUG-09)
+      try {
+        await this.fetchDownloads(normalizedName, health);
+      } catch {
         /* ignore download fetch failures */
-      });
+      }
 
       return health;
     } catch {
@@ -112,20 +114,19 @@ export class HealthVerifier {
     const now = Date.now();
     const deprecated = data.deprecated || false;
 
-    // Determine last publish date
+    // Determine last publish date: check latest release version first (BUG-10), then fallback to modified
     let lastPublished: string | undefined;
     let lastPublishedDate: Date | undefined;
 
-    if (data.time?.modified) {
+    const latestVersion = data['dist-tags']?.latest;
+    const latestTime = latestVersion && data.time ? data.time[latestVersion] : undefined;
+
+    if (latestTime) {
+      lastPublished = latestTime;
+      lastPublishedDate = new Date(latestTime);
+    } else if (data.time?.modified) {
       lastPublished = data.time.modified;
       lastPublishedDate = new Date(data.time.modified);
-    } else if (data['dist-tags']?.latest && data.time) {
-      const latestVersion = data['dist-tags'].latest;
-      const latestTime = data.time[latestVersion];
-      if (latestTime) {
-        lastPublished = latestTime;
-        lastPublishedDate = new Date(latestTime);
-      }
     }
 
     // Calculate age in years

@@ -172,5 +172,32 @@ describe('SuggestionEngine & IntentParser', () => {
       expect(reactSkill).toBeDefined();
       expect(reactSkill?.reasoning).toMatch(/nextjs|tailwind-css/i);
     });
+
+    it('generates distinct cache keys for different options and signals (BUG-04)', async () => {
+      // Query with maxResults: 2
+      const res2 = await engine.suggest({
+        intent: 'web framework',
+        options: { maxResults: 2 },
+      });
+      expect(res2.skills).toHaveLength(2);
+
+      // Query with maxResults: 4 — must NOT return cached 2-item list
+      const res4 = await engine.suggest({
+        intent: 'web framework',
+        options: { maxResults: 4 },
+      });
+      expect(res4.skills).toHaveLength(4);
+    });
+
+    it('safely handles null or undefined params without throwing (BUG-07)', async () => {
+      const resUndefined = await engine.suggest(undefined as any);
+      expect(resUndefined.skills).toHaveLength(0);
+
+      const resNull = await engine.suggest(null as any);
+      expect(resNull.skills).toHaveLength(0);
+
+      const resEmptyObj = await engine.suggest({} as any);
+      expect(resEmptyObj.skills).toHaveLength(0);
+    });
   });
 });

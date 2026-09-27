@@ -12,13 +12,13 @@
 - [x] **BUG-01** (Critical): Fix RegExp injection crash in `SkillsRepository.search` & `IntentParser`
 - [x] **BUG-02** (High): Fix Skill ID vs Package Name mismatch in compatibility boost & conflict detection
 - [x] **BUG-03** (High): Fix ambient workspace ecosystem overriding explicit user query intent
-- [ ] **BUG-04** (High): Fix incomplete cache key generation in `QueryCache`
-- [ ] **BUG-05** (Medium): Fix `GroundTruthAnchor.buildUnanchored()` invalid `officialUrl` contract violation
-- [ ] **BUG-06** (Medium): Fix broken stale cache test in `health-verifier.test.ts`
-- [ ] **BUG-07** (Medium): Add null/undefined guard for `params` in LSP suggest handler
-- [ ] **BUG-08** (Medium): Fix inline comment stripping in `parseRequirementsTxt`
-- [ ] **BUG-09** (Low): Fix fire-and-forget `weeklyDownloads` race condition in `HealthVerifier`
-- [ ] **BUG-10** (Low): Fix npm publish date detection using `latest` release over `modified`
+- [x] **BUG-04** (High): Fix incomplete cache key generation in `QueryCache`
+- [x] **BUG-05** (Medium): Fix `GroundTruthAnchor.buildUnanchored()` invalid `officialUrl` contract violation
+- [x] **BUG-06** (Medium): Fix broken stale cache test in `health-verifier.test.ts`
+- [x] **BUG-07** (Medium): Add null/undefined guard for `params` in LSP suggest handler
+- [x] **BUG-08** (Medium): Fix inline comment stripping in `parseRequirementsTxt`
+- [x] **BUG-09** (Low): Fix fire-and-forget `weeklyDownloads` race condition in `HealthVerifier`
+- [x] **BUG-10** (Low): Fix npm publish date detection using `latest` release over `modified`
 
 ---
 

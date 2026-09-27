@@ -115,8 +115,14 @@ export class GroundTruthAnchor {
         whyUseIt: raw.whyUseIt || raw.reasoning || `Suggested tool: ${raw.name}.`,
         tags: raw.tags || [this.normalizeToId(raw.name)],
         ecosystem: raw.ecosystem || 'multi',
-        officialUrl: raw.officialUrl || '',
-        learnResources: [],
+        officialUrl: raw.officialUrl || `https://www.google.com/search?q=${encodeURIComponent(raw.name)}`,
+        learnResources: [
+          {
+            label: 'Documentation',
+            url: raw.officialUrl || `https://www.google.com/search?q=${encodeURIComponent(raw.name)}`,
+            type: 'docs',
+          },
+        ],
         alternatives: [],
         worksWellWith: [],
         prerequisites: [],

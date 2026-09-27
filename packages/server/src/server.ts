@@ -75,11 +75,12 @@ export class SkillForgeServer {
     // 4. Custom suggest request
     this.connection.onRequest(
       SKILLFORGE_SUGGEST_METHOD,
-      async (params: SkillSuggestionParams): Promise<SkillSuggestionResult> => {
+      async (params?: SkillSuggestionParams): Promise<SkillSuggestionResult> => {
+        const intent = typeof params?.intent === 'string' ? params.intent : '';
         this.connection.console.log(
-          `[SkillForge LSP] Handling suggest request: "${params.intent}"`
+          `[SkillForge LSP] Handling suggest request: "${intent}"`
         );
-        return await this.engine.suggest(params);
+        return await this.engine.suggest(params || { intent: '' });
       }
     );
   }

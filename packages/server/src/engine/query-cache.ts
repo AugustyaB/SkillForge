@@ -6,6 +6,17 @@ export interface CacheEntry {
   expiresAt: number;
 }
 
+export interface CacheKeyParams {
+  intent: string;
+  scopePaths?: string[];
+  installed?: string[];
+  difficulty?: string;
+  ecosystem?: string;
+  activeSignals?: string[];
+  maxResults?: number;
+  minTrustTier?: string;
+}
+
 export class QueryCache {
   private cache = new Map<string, CacheEntry>();
   private readonly defaultTtlMs: number;
@@ -17,17 +28,35 @@ export class QueryCache {
   }
 
   /**
-   * Generates a deterministic SHA-256 cache key from query and context
+   * Generates a deterministic SHA-256 cache key from query, options, and context (BUG-04)
    */
   public generateKey(
-    intent: string,
+    intentOrParams: string | CacheKeyParams,
     scopePaths: string[] = [],
     installed: string[] = [],
     difficulty = 'all'
   ): string {
+    if (typeof intentOrParams === 'object' && intentOrParams !== null) {
+      const p = intentOrParams;
+      const sortedPaths = [...(p.scopePaths || [])].sort().join(';');
+      const sortedInstalled = [...(p.installed || [])].sort().join(';');
+      const sortedSignals = [...(p.activeSignals || [])].sort().join(';');
+      const payload = JSON.stringify({
+        intent: (p.intent || '').trim().toLowerCase(),
+        paths: sortedPaths,
+        installed: sortedInstalled,
+        difficulty: p.difficulty || 'all',
+        ecosystem: p.ecosystem || '',
+        signals: sortedSignals,
+        maxResults: p.maxResults ?? 5,
+        minTrustTier: p.minTrustTier || '',
+      });
+      return crypto.createHash('sha256').update(payload).digest('hex');
+    }
+
     const sortedPaths = [...scopePaths].sort().join(';');
     const sortedInstalled = [...installed].sort().join(';');
-    const payload = `${intent.trim().toLowerCase()}|${sortedPaths}|${sortedInstalled}|${difficulty}`;
+    const payload = `${(intentOrParams || '').trim().toLowerCase()}|${sortedPaths}|${sortedInstalled}|${difficulty}`;
     return crypto.createHash('sha256').update(payload).digest('hex');
   }
 

@@ -37,13 +37,14 @@ export function parseRequirementsTxt(
   const lines = content.split(/\r?\n/);
 
   for (const rawLine of lines) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith('#') || line.startsWith('-')) {
+    // Strip inline and line comments first (BUG-08)
+    const commentStripped = rawLine.split('#')[0]?.trim();
+    if (!commentStripped || commentStripped.startsWith('-')) {
       continue;
     }
 
     // Split on version specifiers: ==, >=, <=, ~=, !=, <, >, ;
-    const beforeVersion = line.split(/[=><~;!]/)[0]?.trim();
+    const beforeVersion = commentStripped.split(/[=><~;!]/)[0]?.trim();
     // Strip extras like uvicorn[standard] -> uvicorn
     const name = beforeVersion?.split('[')[0]?.trim();
 
