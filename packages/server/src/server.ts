@@ -8,25 +8,37 @@ import {
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
   type PingResult,
-  type Skill,
   type SkillSuggestionParams,
   type SkillSuggestionResult,
-  type SuggestedSkill,
 } from '@skillforge/shared';
 import { SkillsRepository } from './data/skills-repository.js';
+import { SuggestionEngine } from './engine/suggestion-engine.js';
 
 export class SkillForgeServer {
   private connection: Connection;
-  private repository: SkillsRepository;
+  private engine: SuggestionEngine;
 
-  constructor(connection: Connection, repository?: SkillsRepository) {
+  constructor(
+    connection: Connection,
+    repositoryOrEngine?: SkillsRepository | SuggestionEngine
+  ) {
     this.connection = connection;
-    this.repository = repository ?? new SkillsRepository();
+    if (repositoryOrEngine instanceof SuggestionEngine) {
+      this.engine = repositoryOrEngine;
+    } else if (repositoryOrEngine instanceof SkillsRepository) {
+      this.engine = new SuggestionEngine({ repository: repositoryOrEngine });
+    } else {
+      this.engine = new SuggestionEngine();
+    }
     this.registerHandlers();
   }
 
+  public getEngine(): SuggestionEngine {
+    return this.engine;
+  }
+
   public getRepository(): SkillsRepository {
-    return this.repository;
+    return this.engine.getRepository();
   }
 
   private registerHandlers(): void {
@@ -47,7 +59,7 @@ export class SkillForgeServer {
     // 2. Lifecycle: Initialized
     this.connection.onInitialized(() => {
       this.connection.console.log(
-        `[SkillForge LSP] Server initialized with ${this.repository.count} verified skills.`
+        `[SkillForge LSP] Server initialized with ${this.engine.getRepository().count} verified skills.`
       );
     });
 
@@ -64,62 +76,11 @@ export class SkillForgeServer {
     this.connection.onRequest(
       SKILLFORGE_SUGGEST_METHOD,
       async (params: SkillSuggestionParams): Promise<SkillSuggestionResult> => {
-        const startTime = Date.now();
-        const intent = params.intent ? params.intent.trim() : '';
-
-        this.connection.console.log(`[SkillForge LSP] Handling suggest request: "${intent}"`);
-
-        if (!intent) {
-          const elapsed = Date.now() - startTime;
-          return {
-            skills: [],
-            timings: { localMs: elapsed, totalMs: elapsed },
-            queryEcho: '',
-          };
-        }
-
-        const scored = this.repository.search(intent, {
-          difficulty: params.options?.difficulty,
-          maxResults: params.options?.maxResults ?? 5,
-        });
-
-        let results: SuggestedSkill[];
-        let fallbackUsed = false;
-
-        if (scored.length > 0) {
-          results = scored.map(({ skill, score, matchReasons }) => ({
-            ...skill,
-            trustTier: 'verified',
-            confidence: Math.min(0.99, Number((0.6 + Math.min(score, 40) / 100).toFixed(2))),
-            reasoning: matchReasons.length > 0 ? matchReasons.join('. ') : skill.whyUseIt,
-            isInstalledInWorkspace: false,
-          }));
-        } else {
-          fallbackUsed = true;
-          const fallbackIds = ['react', 'express', 'postgresql'];
-          results = fallbackIds
-            .map((id) => this.repository.getSkillById(id))
-            .filter((s): s is Skill => Boolean(s))
-            .map((skill) => ({
-              ...skill,
-              trustTier: 'verified',
-              confidence: 0.65,
-              reasoning: 'Baseline recommendation matching general application development.',
-              isInstalledInWorkspace: false,
-            }));
-        }
-
-        const elapsed = Date.now() - startTime;
-        return {
-          skills: results,
-          timings: {
-            localMs: elapsed,
-            totalMs: elapsed,
-          },
-          fallbackUsed,
-          queryEcho: intent,
-        };
-      },
+        this.connection.console.log(
+          `[SkillForge LSP] Handling suggest request: "${params.intent}"`
+        );
+        return await this.engine.suggest(params);
+      }
     );
   }
 
