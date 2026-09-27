@@ -38,9 +38,17 @@ The project follows a structured version & phase sequence:
 - **Integrated Terminal Runner (`packages/vscode-client/src/terminal/`)**:
   - `TerminalRunner`: Dedicated `"SkillForge"` terminal manager for executing derived install commands (`pnpm add`, `pip install`, `cargo add`, etc.) directly from suggestion notifications.
 
+### Bug Fixes & Refinements
+- **BUG-11 (Install Package Identifier Resolution)**:
+  - Fixed `deriveInstallCommand` invocation in `extension.ts` to pass `topSkill.stackIndicators?.[0] || topSkill.id` rather than display name (`topSkill.name`), eliminating shell syntax errors on names containing parentheses or spaces (e.g. `TanStack Query (React Query)`).
+- **BUG-12 (Language Activation Events)**:
+  - Added explicit `onLanguage:*` activation triggers for all 11 supported languages (`javascript`, `typescript`, `python`, `rust`, `go`, `java`, `c`, `cpp`, `csharp`, etc.) in `package.json`, ensuring CodeLens providers activate immediately on file open.
+- **BUG-13 (Terminal Working Directory Tracking)**:
+  - Added `lastCwd` state tracking and automatic `cd "<cwd>"` command dispatch in `TerminalRunner`, ensuring install commands run in the active context scope rather than a stale monorepo root. Added terminal disposal listener.
+
 ### Verification Proof
 - `pnpm typecheck` (`tsc -b`): Passed with 0 diagnostics.
-- `pnpm test` (`vitest run`): 134/134 tests passing across 14 test suites in 690ms.
+- `pnpm test` (`vitest run`): 146/146 tests passing across 15 test suites in 781ms.
 - `pnpm build`: Clean build across all monorepo workspaces (`@skillforge/shared`, `@skillforge/server`, `@skillforge/vscode-client`).
 
 ---

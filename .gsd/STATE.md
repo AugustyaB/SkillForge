@@ -1,34 +1,32 @@
 # STATE.md — Session Memory
 
 > **Last Updated**: 2026-09-27
-> **Current Phase**: Phase 5.1 (VS Code Client: The Command Center) — COMPLETE
+> **Current Phase**: Phase 5.1 Bug Remediation (BUG-11 to BUG-13) — COMPLETE (100% Resolved)
 > **Context Health**: PEAK
 
 ## Active Session
 
-- **Status**: Phase 5.1 (The Command Center) delivered & QA Audited.
-- **QA Audit Results**: 10 findings documented in [`phase-5-1-qa-audit-report.md`](../phase-5-1-qa-audit-report.md); BUG-11 (terminal install command naming), BUG-12 (CodeLens activation events), and BUG-13 (TerminalRunner CWD) registered in [`BUGS.md`](../BUGS.md).
-- **Next Action**: Gate 1 planning for Phase 5.2 (The Suggestion Canvas: Interactive Webview) including remediation of BUG-11 through BUG-13.
+- **Status**: BUG-11, BUG-12, and BUG-13 fully resolved and empirically verified.
+- **Verification Proof**: 146/146 tests passing across 15 test suites in 781ms; clean `tsc -b` and monorepo build.
+- **Next Action**: Gate 1 planning for Phase 5.2 (The Suggestion Canvas: Interactive Webview).
 
 ## Current Position
 
-- **Phase**: Phase 5.1 (Audited) → Phase 5.2
-- **Task**: QA Audit complete. Ready for Phase 5.2 planning + BUG-11 to BUG-13 fixes.
-- **Status**: Audit & Register Synced.
+- **Phase**: Phase 5.1 (Hardened) → Phase 5.2
+- **Task**: 100% of BUGS.md defect registry resolved and verified (13/13 bugs).
+- **Status**: Hardened & Ready for Phase 5.2.
 
 ## Last Session Summary
-- Delivered Phase 5.1 (The Command Center) in two focused waves:
-  - **Activity Bar & ViewContainer**: Added theme-adaptive anvil/forge SVG icon and registered `skillforge-activitybar` with 3 views: Context & Stack, Quick Actions, Recent Discoveries.
-  - **Context Folder Scope Selector**: Built `scope-utils.ts` (monorepo scan, manifest detection, `readInstalledPackagesFromScope`) and `ScopeManager` (`workspaceState` persistence, QuickPick selection, auto-injection into `WorkspaceContext`).
-  - **Inline CodeLens Provider**: Implemented `comment-parser.ts` supporting `// IDEA:`, `// SKILL:`, `# IDEA:`, `# SKILL:` across 11 languages with 300ms debounced updates.
-  - **Integrated Terminal Runner**: Created `TerminalRunner` with dedicated `"SkillForge"` terminal and automated command derivation (`pnpm add`, `pip install`, `cargo add`).
-  - **Sidebar Tree Providers**: Implemented `ContextTreeProvider`, `QuickActionsTreeProvider`, and `RecentQueriesTreeProvider` powered by decoupled pure `tree-view-models.ts`.
-  - **Command Integrations**: Wired `skillforge.selectScope`, `skillforge.rescanWorkspace`, `skillforge.suggestForCurrentFile`, `skillforge.runInstallCommand`, `skillforge.clearRecentQueries`, and enhanced `skillforge.suggest` with terminal install buttons and recent query recording.
-- Full verification: 134/134 tests passing (100% green), clean `tsc -b`, and clean multi-package build.
-- Conducted full QA audit of Phase 5.1, discovering 10 findings (BUG-11, BUG-12, BUG-13 added to `BUGS.md`).
+- Resolved BUG-11, BUG-12, and BUG-13 from Phase 5.1:
+  - **BUG-11 (Install Package Name)**: Resolved `packageName` via `topSkill.stackIndicators?.[0] || topSkill.id` in `extension.ts`, preventing shell syntax errors on human titles with parentheses or spaces.
+  - **BUG-12 (CodeLens Activation Events)**: Added explicit `onLanguage:*` activation triggers in `package.json` for 11 supported languages, ensuring CodeLens activates on fresh file open.
+  - **BUG-13 (Terminal Working Directory)**: Implemented `lastCwd` tracking and pre-command `cd "<cwd>"` execution in `TerminalRunner`, ensuring install commands execute in the active context scope.
+- Added comprehensive unit test suite in `packages/vscode-client/src/__tests__/terminal-runner.test.ts` (12 tests) verifying command derivation across ecosystems and scope directory switching.
+- Full verification: 146/146 tests passing (100% green across 15 test suites), clean `tsc -b`, and clean multi-package build.
 
 ## Next Steps
 
-1. Present Gate 1 Implementation Plan for Phase 5.2: The Suggestion Canvas (Interactive Webview results panel, CSS token design system, trust seals, collapsible "Why Use It" cards, and one-click install triggers), bundling fixes for BUG-11 (terminal install command naming), BUG-12 (CodeLens activation events), and BUG-13 (TerminalRunner CWD).
+1. Present Gate 1 Implementation Plan for Phase 5.2: The Suggestion Canvas (Interactive Webview results panel, CSS token design system, trust seals, collapsible "Why Use It" cards, and one-click install triggers).
 2. Halt for user approval before writing Phase 5.2 implementation code.
+
 

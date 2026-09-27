@@ -3,7 +3,7 @@
 > **Document Type**: Defect & Technical Debt Register  
 > **Target Audience**: Development Pair, Next Chat/Agent, QA Review  
 > **Last Updated**: 2026-09-27  
-> **Audit Status**: Complete — 10 confirmed bugs identified, reproduced, and documented with remediation plans.
+> **Audit Status**: Complete — 13 confirmed bugs identified, reproduced, documented, and 100% resolved with empirical proof.
 
 ---
 
@@ -19,9 +19,9 @@
 - [x] **BUG-08** (Medium): Fix inline comment stripping in `parseRequirementsTxt`
 - [x] **BUG-09** (Low): Fix fire-and-forget `weeklyDownloads` race condition in `HealthVerifier`
 - [x] **BUG-10** (Low): Fix npm publish date detection using `latest` release over `modified`
-- [ ] **BUG-11** (Critical): Terminal install command passes human display name instead of package identifier
-- [ ] **BUG-12** (Critical): CodeLens triggers dormant on startup due to missing language activation events
-- [ ] **BUG-13** (High): `TerminalRunner` reuses stale working directory across context scope switches
+- [x] **BUG-11** (Critical): Terminal install command passes human display name instead of package identifier
+- [x] **BUG-12** (Critical): CodeLens triggers dormant on startup due to missing language activation events
+- [x] **BUG-13** (High): `TerminalRunner` reuses stale working directory across context scope switches
 
 ---
 

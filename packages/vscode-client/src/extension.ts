@@ -241,12 +241,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
         const topSkill = result.skills[0]!;
         const names = result.skills.map((s) => s.name).join(', ');
+        const packageName = topSkill.stackIndicators?.[0] || topSkill.id;
         const installCmd = TerminalRunner.deriveInstallCommand(
-          topSkill.name,
+          packageName,
           topSkill.ecosystem
         );
 
-        const actionBtn = installCmd ? `Install ${topSkill.name}` : undefined;
+        const actionBtn = installCmd ? `Install ${packageName}` : undefined;
         const message = `SkillForge found ${count} skill${count === 1 ? '' : 's'}: ${names} (${result.timings.localMs}ms)`;
 
         if (actionBtn) {
