@@ -1,0 +1,2161 @@
+const fs = require('fs');
+const path = require('path');
+const { validateSkillsArray } = require('../../shared/dist/index.js');
+
+const skills = [
+  // --- 1. Frontend Frameworks (10) ---
+  {
+    id: 'react',
+    name: 'React',
+    category: 'frontend-framework',
+    difficulty: 'beginner',
+    description: 'A JavaScript library for building component-driven user interfaces with a declarative mental model.',
+    whyUseIt: 'The most popular frontend library in the industry with an enormous ecosystem and massive job market.',
+    tags: ['react', 'ui', 'frontend', 'components', 'spa', 'jsx', 'javascript'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://react.dev',
+    learnResources: [
+      { label: 'Official Tutorial', url: 'https://react.dev/learn', type: 'docs' },
+      { label: 'React Handbook', url: 'https://react.dev/reference/react', type: 'docs' }
+    ],
+    alternatives: ['vue', 'svelte', 'angular', 'solidjs'],
+    worksWellWith: ['nextjs', 'tailwind-css', 'zustand', 'tanstack-query'],
+    prerequisites: ['javascript', 'html', 'css'],
+    stackIndicators: ['react', 'react-dom']
+  },
+  {
+    id: 'vue',
+    name: 'Vue.js',
+    category: 'frontend-framework',
+    difficulty: 'beginner',
+    description: 'Progressive JavaScript framework that is approachable, performant, and versatile.',
+    whyUseIt: 'Gentle learning curve with clean template syntax and first-party routing and state tools.',
+    tags: ['vue', 'frontend', 'components', 'spa', 'templates', 'javascript'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://vuejs.org',
+    learnResources: [
+      { label: 'Vue Guide', url: 'https://vuejs.org/guide/introduction.html', type: 'docs' }
+    ],
+    alternatives: ['react', 'svelte', 'angular'],
+    worksWellWith: ['pinia', 'nuxt', 'tailwind-css'],
+    prerequisites: ['javascript', 'html', 'css'],
+    stackIndicators: ['vue']
+  },
+  {
+    id: 'svelte',
+    name: 'Svelte',
+    category: 'frontend-framework',
+    difficulty: 'beginner',
+    description: 'Cybernetically enhanced web apps that compile away into tiny, reactive vanilla JavaScript.',
+    whyUseIt: 'Zero virtual DOM overhead, concise syntax, and exceptional developer satisfaction.',
+    tags: ['svelte', 'frontend', 'compiler', 'reactive', 'performance', 'spa'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://svelte.dev',
+    learnResources: [
+      { label: 'Interactive Tutorial', url: 'https://svelte.dev/tutorial', type: 'tutorial' }
+    ],
+    alternatives: ['react', 'vue', 'solidjs'],
+    worksWellWith: ['sveltekit', 'tailwind-css'],
+    prerequisites: ['javascript', 'html', 'css'],
+    stackIndicators: ['svelte']
+  },
+  {
+    id: 'angular',
+    name: 'Angular',
+    category: 'frontend-framework',
+    difficulty: 'advanced',
+    description: 'Opinionated enterprise web framework with built-in dependency injection, routing, and forms.',
+    whyUseIt: 'Batteries-included enterprise standard for large engineering teams requiring strict conventions.',
+    tags: ['angular', 'frontend', 'enterprise', 'typescript', 'di', 'spa'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://angular.dev',
+    learnResources: [
+      { label: 'Angular Docs', url: 'https://angular.dev/overview', type: 'docs' }
+    ],
+    alternatives: ['react', 'vue'],
+    worksWellWith: ['rxjs', 'tailwind-css', 'ngrx'],
+    prerequisites: ['typescript', 'javascript', 'html', 'css'],
+    stackIndicators: ['@angular/core']
+  },
+  {
+    id: 'solidjs',
+    name: 'SolidJS',
+    category: 'frontend-framework',
+    difficulty: 'intermediate',
+    description: 'Simple and performant reactivity for building user interfaces without a Virtual DOM.',
+    whyUseIt: 'Combines the familiar JSX syntax of React with ultra-fast fine-grained reactivity.',
+    tags: ['solidjs', 'solid', 'reactive', 'jsx', 'performance', 'frontend'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://www.solidjs.com',
+    learnResources: [
+      { label: 'SolidJS Tutorial', url: 'https://www.solidjs.com/tutorial', type: 'tutorial' }
+    ],
+    alternatives: ['react', 'svelte'],
+    worksWellWith: ['tailwind-css', 'vite'],
+    prerequisites: ['javascript', 'jsx'],
+    stackIndicators: ['solid-js']
+  },
+  {
+    id: 'nextjs',
+    name: 'Next.js',
+    category: 'frontend-framework',
+    difficulty: 'intermediate',
+    description: 'The React framework for the web enabling hybrid static and server-rendered applications.',
+    whyUseIt: 'Industry standard for production React apps with App Router, SSR, and API routes.',
+    tags: ['nextjs', 'next', 'react', 'ssr', 'fullstack', 'server-components'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://nextjs.org',
+    learnResources: [
+      { label: 'Next.js Learn Course', url: 'https://nextjs.org/learn', type: 'tutorial' }
+    ],
+    alternatives: ['remix', 'astro', 'nuxt'],
+    worksWellWith: ['react', 'tailwind-css', 'prisma', 'next-auth'],
+    prerequisites: ['react', 'javascript', 'nodejs'],
+    stackIndicators: ['next']
+  },
+  {
+    id: 'nuxt',
+    name: 'Nuxt',
+    category: 'frontend-framework',
+    difficulty: 'intermediate',
+    description: 'The intuitive Vue framework providing universal rendering, file-system routing, and SEO optimization.',
+    whyUseIt: 'The premier full-stack solution for Vue.js developers with automatic imports and SSR.',
+    tags: ['nuxt', 'vue', 'ssr', 'fullstack', 'seo'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://nuxt.com',
+    learnResources: [
+      { label: 'Nuxt Documentation', url: 'https://nuxt.com/docs', type: 'docs' }
+    ],
+    alternatives: ['nextjs', 'sveltekit'],
+    worksWellWith: ['vue', 'pinia', 'tailwind-css'],
+    prerequisites: ['vue', 'javascript'],
+    stackIndicators: ['nuxt']
+  },
+  {
+    id: 'sveltekit',
+    name: 'SvelteKit',
+    category: 'frontend-framework',
+    difficulty: 'intermediate',
+    description: 'The official application framework for Svelte offering server-side rendering and routing.',
+    whyUseIt: 'Blazing fast full-stack framework with zero-effort build step and minimal boilerplate.',
+    tags: ['sveltekit', 'svelte', 'ssr', 'fullstack', 'router'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://kit.svelte.dev',
+    learnResources: [
+      { label: 'SvelteKit Docs', url: 'https://kit.svelte.dev/docs', type: 'docs' }
+    ],
+    alternatives: ['nextjs', 'nuxt'],
+    worksWellWith: ['svelte', 'tailwind-css'],
+    prerequisites: ['svelte', 'javascript'],
+    stackIndicators: ['@sveltejs/kit']
+  },
+  {
+    id: 'remix',
+    name: 'Remix',
+    category: 'frontend-framework',
+    difficulty: 'intermediate',
+    description: 'Full-stack web framework focused on web standards, resilient routing, and fast transitions.',
+    whyUseIt: 'Superb data loading and mutation model that leans into native HTTP forms and browser standards.',
+    tags: ['remix', 'react', 'ssr', 'fullstack', 'web-standards'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://remix.run',
+    learnResources: [
+      { label: 'Remix Quickstart', url: 'https://remix.run/docs/en/main/start/quickstart', type: 'tutorial' }
+    ],
+    alternatives: ['nextjs', 'astro'],
+    worksWellWith: ['react', 'tailwind-css', 'prisma'],
+    prerequisites: ['react', 'javascript'],
+    stackIndicators: ['@remix-run/react', '@remix-run/node']
+  },
+  {
+    id: 'astro',
+    name: 'Astro',
+    category: 'frontend-framework',
+    difficulty: 'beginner',
+    description: 'Content-driven web framework with Islands architecture delivering zero client-side JavaScript by default.',
+    whyUseIt: 'Best-in-class performance for blogs, documentation, portfolios, and content websites.',
+    tags: ['astro', 'ssg', 'islands', 'content', 'performance', 'markdown'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://astro.build',
+    learnResources: [
+      { label: 'Astro Tutorial', url: 'https://docs.astro.build/en/tutorial/0-introduction/', type: 'tutorial' }
+    ],
+    alternatives: ['nextjs', 'remix'],
+    worksWellWith: ['tailwind-css', 'react', 'vue', 'svelte'],
+    prerequisites: ['html', 'css', 'javascript'],
+    stackIndicators: ['astro']
+  },
+
+  // --- 2. UI Libraries & Styling (10) ---
+  {
+    id: 'tailwind-css',
+    name: 'Tailwind CSS',
+    category: 'ui-library',
+    difficulty: 'beginner',
+    description: 'A utility-first CSS framework for rapid and responsive UI development without leaving your markup.',
+    whyUseIt: 'Dominant modern CSS standard eliminating naming fatigue and ensuring high design consistency.',
+    tags: ['css', 'styling', 'utility-first', 'design', 'tailwind', 'ui'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://tailwindcss.com',
+    learnResources: [
+      { label: 'Tailwind Docs', url: 'https://tailwindcss.com/docs', type: 'docs' }
+    ],
+    alternatives: ['chakra-ui', 'bootstrap'],
+    worksWellWith: ['react', 'vue', 'nextjs', 'shadcn-ui'],
+    prerequisites: ['html', 'css'],
+    stackIndicators: ['tailwindcss']
+  },
+  {
+    id: 'chakra-ui',
+    name: 'Chakra UI',
+    category: 'ui-library',
+    difficulty: 'beginner',
+    description: 'Simple, modular and accessible component library that gives you the building blocks for React applications.',
+    whyUseIt: 'Accessible by default (WAI-ARIA compliant) with intuitive style props.',
+    tags: ['chakra', 'ui', 'components', 'react', 'accessible'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://chakra-ui.com',
+    learnResources: [
+      { label: 'Getting Started', url: 'https://chakra-ui.com/docs/get-started/overview', type: 'docs' }
+    ],
+    alternatives: ['material-ui', 'shadcn-ui', 'tailwind-css'],
+    worksWellWith: ['react', 'nextjs'],
+    prerequisites: ['react', 'javascript'],
+    stackIndicators: ['@chakra-ui/react']
+  },
+  {
+    id: 'shadcn-ui',
+    name: 'shadcn/ui',
+    category: 'ui-library',
+    difficulty: 'intermediate',
+    description: 'Beautifully designed, accessible components that you copy and paste into your applications.',
+    whyUseIt: 'Complete source ownership without lock-in, built on Radix UI and styled with Tailwind CSS.',
+    tags: ['shadcn', 'components', 'tailwind', 'radix', 'react', 'ui'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://ui.shadcn.com',
+    learnResources: [
+      { label: 'Component Library', url: 'https://ui.shadcn.com/docs', type: 'docs' }
+    ],
+    alternatives: ['chakra-ui', 'material-ui'],
+    worksWellWith: ['tailwind-css', 'radix-ui', 'react', 'nextjs'],
+    prerequisites: ['react', 'tailwind-css'],
+    stackIndicators: ['clsx', 'tailwind-merge']
+  },
+  {
+    id: 'material-ui',
+    name: 'Material UI (MUI)',
+    category: 'ui-library',
+    difficulty: 'intermediate',
+    description: 'Comprehensive library of foundational and advanced components implementing Google Material Design.',
+    whyUseIt: 'Vast enterprise ecosystem, battle-tested components, rich data grid and charts.',
+    tags: ['mui', 'material-design', 'react', 'components', 'enterprise'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://mui.com',
+    learnResources: [
+      { label: 'MUI Core Docs', url: 'https://mui.com/material-ui/getting-started/', type: 'docs' }
+    ],
+    alternatives: ['chakra-ui', 'ant-design'],
+    worksWellWith: ['react', 'emotion'],
+    prerequisites: ['react', 'javascript'],
+    stackIndicators: ['@mui/material']
+  },
+  {
+    id: 'radix-ui',
+    name: 'Radix UI',
+    category: 'ui-library',
+    difficulty: 'intermediate',
+    description: 'Unstyled, accessible component primitives for high-quality design systems and web apps.',
+    whyUseIt: 'Handles complex keyboard navigation, focus management, and ARIA attributes with zero styling constraints.',
+    tags: ['radix', 'primitives', 'headless', 'accessible', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://www.radix-ui.com',
+    learnResources: [
+      { label: 'Radix Primitives', url: 'https://www.radix-ui.com/primitives/docs/overview/introduction', type: 'docs' }
+    ],
+    alternatives: ['headless-ui'],
+    worksWellWith: ['tailwind-css', 'shadcn-ui', 'react'],
+    prerequisites: ['react'],
+    stackIndicators: ['@radix-ui/react-primitive', '@radix-ui/react-dialog']
+  },
+  {
+    id: 'ant-design',
+    name: 'Ant Design',
+    category: 'ui-library',
+    difficulty: 'intermediate',
+    description: 'An enterprise-class UI design language and React component library.',
+    whyUseIt: 'Extremely rich set of complex tables, forms, and widgets tailored for internal enterprise tooling.',
+    tags: ['antd', 'enterprise', 'table', 'forms', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://ant.design',
+    learnResources: [
+      { label: 'Ant Design Docs', url: 'https://ant.design/docs/react/introduce', type: 'docs' }
+    ],
+    alternatives: ['material-ui', 'chakra-ui'],
+    worksWellWith: ['react'],
+    prerequisites: ['react'],
+    stackIndicators: ['antd']
+  },
+  {
+    id: 'styled-components',
+    name: 'styled-components',
+    category: 'ui-library',
+    difficulty: 'intermediate',
+    description: 'Visual primitives for the component age using tagged template literals in JavaScript.',
+    whyUseIt: 'Pioneered CSS-in-JS, encapsulating component styles alongside component logic.',
+    tags: ['css-in-js', 'styling', 'components', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://styled-components.com',
+    learnResources: [
+      { label: 'Official Guide', url: 'https://styled-components.com/docs', type: 'docs' }
+    ],
+    alternatives: ['emotion', 'tailwind-css'],
+    worksWellWith: ['react'],
+    prerequisites: ['react', 'css'],
+    stackIndicators: ['styled-components']
+  },
+  {
+    id: 'emotion',
+    name: 'Emotion',
+    category: 'ui-library',
+    difficulty: 'intermediate',
+    description: 'Performant and flexible CSS-in-JS library supporting string and object styles.',
+    whyUseIt: 'Predictable styling engine with great source maps and SSR support, powers MUI.',
+    tags: ['emotion', 'css-in-js', 'styling', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://emotion.sh',
+    learnResources: [
+      { label: 'Emotion Docs', url: 'https://emotion.sh/docs/introduction', type: 'docs' }
+    ],
+    alternatives: ['styled-components', 'tailwind-css'],
+    worksWellWith: ['react', 'material-ui'],
+    prerequisites: ['css', 'javascript'],
+    stackIndicators: ['@emotion/react', '@emotion/styled']
+  },
+  {
+    id: 'daisyui',
+    name: 'daisyUI',
+    category: 'ui-library',
+    difficulty: 'beginner',
+    description: 'The most popular component library for Tailwind CSS with clean semantic class names.',
+    whyUseIt: 'Saves time by providing semantic classes (btn, card, modal) on top of pure Tailwind.',
+    tags: ['daisyui', 'tailwind', 'components', 'css'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://daisyui.com',
+    learnResources: [
+      { label: 'daisyUI Docs', url: 'https://daisyui.com/docs/use/', type: 'docs' }
+    ],
+    alternatives: ['shadcn-ui', 'bootstrap'],
+    worksWellWith: ['tailwind-css', 'react', 'vue', 'svelte'],
+    prerequisites: ['tailwind-css'],
+    stackIndicators: ['daisyui']
+  },
+  {
+    id: 'bootstrap',
+    name: 'Bootstrap',
+    category: 'ui-library',
+    difficulty: 'beginner',
+    description: 'The world’s most famous front-end open source toolkit for responsive web interfaces.',
+    whyUseIt: 'Reliable, battle-tested responsive grid system requiring zero CSS setup.',
+    tags: ['bootstrap', 'css', 'grid', 'responsive', 'ui'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://getbootstrap.com',
+    learnResources: [
+      { label: 'Bootstrap Getting Started', url: 'https://getbootstrap.com/docs/5.3/getting-started/introduction/', type: 'docs' }
+    ],
+    alternatives: ['tailwind-css', 'chakra-ui'],
+    worksWellWith: ['html', 'javascript'],
+    prerequisites: ['html', 'css'],
+    stackIndicators: ['bootstrap']
+  },
+
+  // --- 3. State Management (8) ---
+  {
+    id: 'redux-toolkit',
+    name: 'Redux Toolkit (RTK)',
+    category: 'state-management',
+    difficulty: 'intermediate',
+    description: 'The official, opinionated, batteries-included toolset for efficient Redux development.',
+    whyUseIt: 'Eliminates traditional Redux boilerplate with createSlice, RTK Query, and Immer built-in.',
+    tags: ['redux', 'rtk', 'state', 'store', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://redux-toolkit.js.org',
+    learnResources: [
+      { label: 'RTK Quickstart', url: 'https://redux-toolkit.js.org/tutorials/quick-start', type: 'tutorial' }
+    ],
+    alternatives: ['zustand', 'pinia'],
+    worksWellWith: ['react', 'nextjs'],
+    prerequisites: ['react', 'javascript'],
+    stackIndicators: ['@reduxjs/toolkit', 'react-redux']
+  },
+  {
+    id: 'zustand',
+    name: 'Zustand',
+    category: 'state-management',
+    difficulty: 'beginner',
+    description: 'A small, fast, and scalable bearbones state-management solution using simplified flux principles.',
+    whyUseIt: 'Tiny bundle footprint, zero boilerplate, hook-based, and no context providers required.',
+    tags: ['zustand', 'state', 'store', 'hooks', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://zustand-demo.pmnd.rs',
+    learnResources: [
+      { label: 'Zustand Documentation', url: 'https://github.com/pmndrs/zustand', type: 'docs' }
+    ],
+    alternatives: ['redux-toolkit', 'jotai'],
+    worksWellWith: ['react', 'nextjs'],
+    prerequisites: ['react'],
+    stackIndicators: ['zustand']
+  },
+  {
+    id: 'pinia',
+    name: 'Pinia',
+    category: 'state-management',
+    difficulty: 'beginner',
+    description: 'The intuitive, type-safe, and light store for Vue with Devtools support.',
+    whyUseIt: 'The official state management library for Vue 3, replacing Vuex with seamless TypeScript support.',
+    tags: ['pinia', 'vue', 'state', 'store'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://pinia.vuejs.org',
+    learnResources: [
+      { label: 'Pinia Getting Started', url: 'https://pinia.vuejs.org/getting-started.html', type: 'docs' }
+    ],
+    alternatives: ['vuex'],
+    worksWellWith: ['vue', 'nuxt'],
+    prerequisites: ['vue'],
+    stackIndicators: ['pinia']
+  },
+  {
+    id: 'mobx',
+    name: 'MobX',
+    category: 'state-management',
+    difficulty: 'intermediate',
+    description: 'Simple, scalable state management powered by transparent functional reactive programming.',
+    whyUseIt: 'Automatic dependency tracking allows updating observable state directly without action dispatches.',
+    tags: ['mobx', 'reactive', 'observables', 'state'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://mobx.js.org',
+    learnResources: [
+      { label: 'MobX Ten Minute Intro', url: 'https://mobx.js.org/getting-started', type: 'tutorial' }
+    ],
+    alternatives: ['redux-toolkit', 'zustand'],
+    worksWellWith: ['react'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['mobx', 'mobx-react-lite']
+  },
+  {
+    id: 'recoil',
+    name: 'Recoil',
+    category: 'state-management',
+    difficulty: 'intermediate',
+    description: 'Experimental state management library for React providing atomic state definitions.',
+    whyUseIt: 'Allows managing fine-grained derived data with atoms and selectors alongside React concurrent features.',
+    tags: ['recoil', 'atoms', 'state', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://recoiljs.org',
+    learnResources: [
+      { label: 'Recoil Docs', url: 'https://recoiljs.org/docs/introduction/getting-started', type: 'docs' }
+    ],
+    alternatives: ['jotai', 'zustand'],
+    worksWellWith: ['react'],
+    prerequisites: ['react'],
+    stackIndicators: ['recoil']
+  },
+  {
+    id: 'jotai',
+    name: 'Jotai',
+    category: 'state-management',
+    difficulty: 'beginner',
+    description: 'Primitive and flexible atomic state management for React.',
+    whyUseIt: 'Bottom-up atomic approach inspired by Recoil but with a minimal, unopinionated API.',
+    tags: ['jotai', 'atomic', 'state', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://jotai.org',
+    learnResources: [
+      { label: 'Jotai Documentation', url: 'https://jotai.org/docs/basics/introduction', type: 'docs' }
+    ],
+    alternatives: ['recoil', 'zustand'],
+    worksWellWith: ['react'],
+    prerequisites: ['react'],
+    stackIndicators: ['jotai']
+  },
+  {
+    id: 'tanstack-query',
+    name: 'TanStack Query (React Query)',
+    category: 'state-management',
+    difficulty: 'intermediate',
+    description: 'Powerful asynchronous state management for server state, data fetching, and caching.',
+    whyUseIt: 'Solves complex server state synchronization, background refetching, and pagination out of the box.',
+    tags: ['react-query', 'tanstack-query', 'fetching', 'caching', 'server-state'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://tanstack.com/query/latest',
+    learnResources: [
+      { label: 'Query Overview', url: 'https://tanstack.com/query/latest/docs/framework/react/overview', type: 'docs' }
+    ],
+    alternatives: ['swr'],
+    worksWellWith: ['react', 'vue', 'nextjs', 'axios'],
+    prerequisites: ['react', 'javascript'],
+    stackIndicators: ['@tanstack/react-query', 'react-query']
+  },
+  {
+    id: 'swr',
+    name: 'SWR',
+    category: 'state-management',
+    difficulty: 'beginner',
+    description: 'React Hooks for Data Fetching using the Stale-While-Revalidate caching strategy.',
+    whyUseIt: 'Created by Vercel; lightweight, straightforward data fetching with instant cache presentation.',
+    tags: ['swr', 'fetching', 'cache', 'react', 'hooks'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://swr.vercel.app',
+    learnResources: [
+      { label: 'SWR Documentation', url: 'https://swr.vercel.app/docs/getting-started', type: 'docs' }
+    ],
+    alternatives: ['tanstack-query'],
+    worksWellWith: ['react', 'nextjs'],
+    prerequisites: ['react'],
+    stackIndicators: ['swr']
+  },
+
+  // --- 4. Backend Frameworks (15) ---
+  {
+    id: 'express',
+    name: 'Express.js',
+    category: 'backend-framework',
+    difficulty: 'beginner',
+    description: 'Fast, unopinionated, minimalist web framework for Node.js.',
+    whyUseIt: 'The baseline standard for building REST APIs in Node.js with millions of compatible middlewares.',
+    tags: ['express', 'backend', 'rest', 'api', 'http', 'node'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://expressjs.com',
+    learnResources: [
+      { label: 'Express Getting Started', url: 'https://expressjs.com/en/starter/installing.html', type: 'docs' }
+    ],
+    alternatives: ['fastify', 'koa', 'nestjs', 'hono'],
+    worksWellWith: ['passport', 'prisma', 'cors', 'helmet'],
+    prerequisites: ['javascript', 'nodejs'],
+    stackIndicators: ['express']
+  },
+  {
+    id: 'fastify',
+    name: 'Fastify',
+    category: 'backend-framework',
+    difficulty: 'intermediate',
+    description: 'Fast and low overhead web framework for Node.js with built-in schema validation.',
+    whyUseIt: 'Significantly higher throughput than Express, built-in JSON schema validation, and first-class TypeScript support.',
+    tags: ['fastify', 'backend', 'performance', 'rest', 'api', 'node'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://fastify.dev',
+    learnResources: [
+      { label: 'Fastify Getting Started', url: 'https://fastify.dev/docs/latest/Guides/Getting-Started/', type: 'docs' }
+    ],
+    alternatives: ['express', 'hono'],
+    worksWellWith: ['pino', 'prisma', 'zod'],
+    prerequisites: ['javascript', 'nodejs'],
+    stackIndicators: ['fastify']
+  },
+  {
+    id: 'nestjs',
+    name: 'NestJS',
+    category: 'backend-framework',
+    difficulty: 'advanced',
+    description: 'A progressive Node.js framework for building efficient, reliable and scalable enterprise server-side applications.',
+    whyUseIt: 'Angular-inspired modular architecture with decorators, dependency injection, and enterprise structure.',
+    tags: ['nestjs', 'typescript', 'backend', 'enterprise', 'di'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://nestjs.com',
+    learnResources: [
+      { label: 'NestJS First Steps', url: 'https://docs.nestjs.com/first-steps', type: 'tutorial' }
+    ],
+    alternatives: ['express', 'fastify', 'spring-boot'],
+    worksWellWith: ['typeorm', 'prisma', 'class-validator'],
+    prerequisites: ['typescript', 'nodejs'],
+    stackIndicators: ['@nestjs/core']
+  },
+  {
+    id: 'koa',
+    name: 'Koa',
+    category: 'backend-framework',
+    difficulty: 'intermediate',
+    description: 'Next generation web framework designed by the team behind Express, leveraging async functions.',
+    whyUseIt: 'Ultra-lean core where middleware execution operates in a stack-like cascade.',
+    tags: ['koa', 'backend', 'middleware', 'node', 'async'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://koajs.com',
+    learnResources: [
+      { label: 'Koa Guide', url: 'https://github.com/koajs/koa/blob/master/docs/guide.md', type: 'docs' }
+    ],
+    alternatives: ['express', 'fastify'],
+    worksWellWith: ['koa-router'],
+    prerequisites: ['javascript', 'nodejs'],
+    stackIndicators: ['koa']
+  },
+  {
+    id: 'hono',
+    name: 'Hono',
+    category: 'backend-framework',
+    difficulty: 'beginner',
+    description: 'Ultrafast, lightweight web framework built on Web Standards that runs anywhere (Cloudflare, Deno, Bun, Node).',
+    whyUseIt: 'Edge-native, tiny bundle size, superb TypeScript types, and zero dependencies.',
+    tags: ['hono', 'edge', 'serverless', 'web-standards', 'cloudflare'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://hono.dev',
+    learnResources: [
+      { label: 'Hono Getting Started', url: 'https://hono.dev/docs/getting-started/basic', type: 'docs' }
+    ],
+    alternatives: ['express', 'fastify'],
+    worksWellWith: ['cloudflare-workers', 'zod', 'drizzle-orm'],
+    prerequisites: ['typescript', 'javascript'],
+    stackIndicators: ['hono']
+  },
+  {
+    id: 'django',
+    name: 'Django',
+    category: 'backend-framework',
+    difficulty: 'intermediate',
+    description: 'The high-level Python web framework that encourages rapid development and clean, pragmatic design.',
+    whyUseIt: 'Batteries-included with built-in ORM, admin dashboard, user authentication, and CSRF protection.',
+    tags: ['django', 'python', 'backend', 'orm', 'admin', 'batteries-included'],
+    ecosystem: 'python',
+    officialUrl: 'https://www.djangoproject.com',
+    learnResources: [
+      { label: 'Official Django Tutorial', url: 'https://docs.djangoproject.com/en/stable/intro/tutorial01/', type: 'tutorial' }
+    ],
+    alternatives: ['fastapi', 'flask', 'rails'],
+    worksWellWith: ['postgresql', 'celery'],
+    prerequisites: ['python'],
+    stackIndicators: ['django']
+  },
+  {
+    id: 'fastapi',
+    name: 'FastAPI',
+    category: 'backend-framework',
+    difficulty: 'beginner',
+    description: 'Modern, high-performance web framework for building APIs with Python 3.8+ based on standard Python type hints.',
+    whyUseIt: 'Automatic OpenAPI (Swagger) documentation, fast execution, and data validation with Pydantic.',
+    tags: ['fastapi', 'python', 'api', 'rest', 'pydantic', 'openapi'],
+    ecosystem: 'python',
+    officialUrl: 'https://fastapi.tiangolo.com',
+    learnResources: [
+      { label: 'FastAPI Tutorial', url: 'https://fastapi.tiangolo.com/tutorial/', type: 'tutorial' }
+    ],
+    alternatives: ['django', 'flask'],
+    worksWellWith: ['sqlalchemy', 'pydantic', 'uvicorn'],
+    prerequisites: ['python'],
+    stackIndicators: ['fastapi']
+  },
+  {
+    id: 'flask',
+    name: 'Flask',
+    category: 'backend-framework',
+    difficulty: 'beginner',
+    description: 'A lightweight WSGI micro web framework for Python with minimal dependencies.',
+    whyUseIt: 'Maximum flexibility for small web applications, microservices, and AI model inference servers.',
+    tags: ['flask', 'python', 'microframework', 'api', 'rest'],
+    ecosystem: 'python',
+    officialUrl: 'https://flask.palletsprojects.com',
+    learnResources: [
+      { label: 'Flask Quickstart', url: 'https://flask.palletsprojects.com/en/stable/quickstart/', type: 'docs' }
+    ],
+    alternatives: ['fastapi', 'django'],
+    worksWellWith: ['sqlalchemy', 'jinja2'],
+    prerequisites: ['python'],
+    stackIndicators: ['flask']
+  },
+  {
+    id: 'spring-boot',
+    name: 'Spring Boot',
+    category: 'backend-framework',
+    difficulty: 'advanced',
+    description: 'Enterprise Java framework that simplifies building stand-alone, production-grade Spring applications.',
+    whyUseIt: 'The backbone of enterprise Java engineering, providing unmatched scalability and integrations.',
+    tags: ['java', 'spring', 'spring-boot', 'enterprise', 'backend', 'microservices'],
+    ecosystem: 'java',
+    officialUrl: 'https://spring.io/projects/spring-boot',
+    learnResources: [
+      { label: 'Spring Quickstart', url: 'https://spring.io/quickstart', type: 'tutorial' }
+    ],
+    alternatives: ['nestjs', 'aspnet-core'],
+    worksWellWith: ['postgresql', 'hibernate', 'docker'],
+    prerequisites: ['java'],
+    stackIndicators: ['spring-boot-starter-web']
+  },
+  {
+    id: 'gin',
+    name: 'Gin Web Framework',
+    category: 'backend-framework',
+    difficulty: 'intermediate',
+    description: 'High-performance HTTP web framework written in Go (Golang) featuring a Martini-like API with fast routing.',
+    whyUseIt: 'Radix tree routing delivers extreme request performance and minimal memory usage in Go.',
+    tags: ['go', 'golang', 'gin', 'backend', 'api', 'performance'],
+    ecosystem: 'go',
+    officialUrl: 'https://gin-gonic.com',
+    learnResources: [
+      { label: 'Gin Quickstart', url: 'https://gin-gonic.com/docs/quickstart/', type: 'tutorial' }
+    ],
+    alternatives: ['go-chi'],
+    worksWellWith: ['gorm', 'docker'],
+    prerequisites: ['go'],
+    stackIndicators: ['github.com/gin-gonic/gin']
+  },
+  {
+    id: 'go-chi',
+    name: 'Chi',
+    category: 'backend-framework',
+    difficulty: 'beginner',
+    description: 'Lightweight, idiomatic and composable router for building Go HTTP services.',
+    whyUseIt: '100% compatible with standard library net/http while adding structured routing and middleware.',
+    tags: ['go', 'golang', 'router', 'net-http', 'rest'],
+    ecosystem: 'go',
+    officialUrl: 'https://github.com/go-chi/chi',
+    learnResources: [
+      { label: 'Chi Documentation', url: 'https://github.com/go-chi/chi#readme', type: 'docs' }
+    ],
+    alternatives: ['gin'],
+    worksWellWith: ['sqlx', 'net/http'],
+    prerequisites: ['go'],
+    stackIndicators: ['github.com/go-chi/chi']
+  },
+  {
+    id: 'actix-web',
+    name: 'Actix Web',
+    category: 'backend-framework',
+    difficulty: 'advanced',
+    description: 'A powerful, pragmatic, and extremely fast web framework for Rust.',
+    whyUseIt: 'Consistently ranks at the absolute top of web benchmarks with compile-time memory safety.',
+    tags: ['rust', 'actix', 'performance', 'backend', 'web'],
+    ecosystem: 'rust',
+    officialUrl: 'https://actix.rs',
+    learnResources: [
+      { label: 'Actix Getting Started', url: 'https://actix.rs/docs/getting-started', type: 'docs' }
+    ],
+    alternatives: ['axum'],
+    worksWellWith: ['diesel', 'tokio'],
+    prerequisites: ['rust'],
+    stackIndicators: ['actix-web']
+  },
+  {
+    id: 'axum',
+    name: 'Axum',
+    category: 'backend-framework',
+    difficulty: 'intermediate',
+    description: 'Ergonomic and modular web application framework built with Tokio, Tower, and Hyper in Rust.',
+    whyUseIt: 'Official Tokio project web framework offering seamless async Rust patterns without macros.',
+    tags: ['rust', 'tokio', 'axum', 'async', 'backend'],
+    ecosystem: 'rust',
+    officialUrl: 'https://github.com/tokio-rs/axum',
+    learnResources: [
+      { label: 'Axum Docs', url: 'https://docs.rs/axum/latest/axum/', type: 'docs' }
+    ],
+    alternatives: ['actix-web'],
+    worksWellWith: ['tokio', 'tower', 'sqlx'],
+    prerequisites: ['rust'],
+    stackIndicators: ['axum']
+  },
+  {
+    id: 'aspnet-core',
+    name: 'ASP.NET Core',
+    category: 'backend-framework',
+    difficulty: 'intermediate',
+    description: 'Cross-platform, high-performance, open-source framework for building modern, cloud-enabled web applications.',
+    whyUseIt: 'World-class throughput, exceptional tooling in C#, and first-party enterprise support from Microsoft.',
+    tags: ['dotnet', 'csharp', 'aspnet', 'backend', 'microsoft'],
+    ecosystem: 'dotnet',
+    officialUrl: 'https://dotnet.microsoft.com/apps/aspnet',
+    learnResources: [
+      { label: 'ASP.NET Core Tutorial', url: 'https://learn.microsoft.com/en-us/aspnet/core/getting-started/', type: 'tutorial' }
+    ],
+    alternatives: ['spring-boot', 'nestjs'],
+    worksWellWith: ['entity-framework', 'sql-server'],
+    prerequisites: ['csharp'],
+    stackIndicators: ['Microsoft.AspNetCore.App']
+  },
+  {
+    id: 'ruby-on-rails',
+    name: 'Ruby on Rails',
+    category: 'backend-framework',
+    difficulty: 'beginner',
+    description: 'A web-application framework that includes everything needed to create database-backed web applications.',
+    whyUseIt: 'Convention over configuration philosophy enabling unparalleled startup prototyping speed.',
+    tags: ['rails', 'ruby', 'fullstack', 'mvc', 'convention-over-configuration'],
+    ecosystem: 'ruby',
+    officialUrl: 'https://rubyonrails.org',
+    learnResources: [
+      { label: 'Rails Guides', url: 'https://guides.rubyonrails.org/getting_started.html', type: 'tutorial' }
+    ],
+    alternatives: ['django', 'laravel'],
+    worksWellWith: ['postgresql', 'redis'],
+    prerequisites: ['ruby'],
+    stackIndicators: ['rails']
+  },
+
+  // --- 5. Databases (13) ---
+  {
+    id: 'postgresql',
+    name: 'PostgreSQL',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'A powerful, open source object-relational database system with over 35 years of active development.',
+    whyUseIt: 'The undisputed default relational database with JSON support, ACID guarantees, and rich extensions (pgvector).',
+    tags: ['postgres', 'sql', 'database', 'rdbms', 'acid', 'relational'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.postgresql.org',
+    learnResources: [
+      { label: 'PostgreSQL Tutorial', url: 'https://www.postgresql.org/docs/current/tutorial.html', type: 'docs' }
+    ],
+    alternatives: ['mysql', 'sqlite'],
+    worksWellWith: ['prisma', 'drizzle-orm', 'docker'],
+    prerequisites: ['sql'],
+    stackIndicators: ['pg', 'postgres']
+  },
+  {
+    id: 'mysql',
+    name: 'MySQL',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'The world’s most popular open-source relational database management system.',
+    whyUseIt: 'Proven reliability, broad hosting availability, and powers major platforms like WordPress and GitHub.',
+    tags: ['mysql', 'sql', 'database', 'rdbms'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.mysql.com',
+    learnResources: [
+      { label: 'MySQL Tutorial', url: 'https://dev.mysql.com/doc/refman/8.0/en/tutorial.html', type: 'docs' }
+    ],
+    alternatives: ['postgresql', 'mariadb'],
+    worksWellWith: ['prisma', 'typeorm'],
+    prerequisites: ['sql'],
+    stackIndicators: ['mysql2', 'mysql']
+  },
+  {
+    id: 'sqlite',
+    name: 'SQLite',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'A small, fast, self-contained, high-reliability, full-featured SQL database engine.',
+    whyUseIt: 'Zero configuration, serverless file-based database ideal for mobile apps, CLI tools, and development.',
+    tags: ['sqlite', 'embedded', 'sql', 'database', 'lightweight'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.sqlite.org',
+    learnResources: [
+      { label: 'SQLite Tutorial', url: 'https://www.sqlite.org/quickstart.html', type: 'docs' }
+    ],
+    alternatives: ['postgresql'],
+    worksWellWith: ['better-sqlite3', 'prisma'],
+    prerequisites: ['sql'],
+    stackIndicators: ['better-sqlite3', 'sqlite3']
+  },
+  {
+    id: 'mongodb',
+    name: 'MongoDB',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'Source-available, cross-platform, document-oriented database program storing data in flexible BSON.',
+    whyUseIt: 'Flexible schema allows rapid prototyping with nested JSON structures without migration overhead.',
+    tags: ['mongodb', 'nosql', 'document-store', 'json', 'database'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.mongodb.com',
+    learnResources: [
+      { label: 'MongoDB University', url: 'https://www.mongodb.com/docs/manual/tutorial/getting-started/', type: 'docs' }
+    ],
+    alternatives: ['postgresql', 'dynamodb'],
+    worksWellWith: ['mongoose', 'express'],
+    prerequisites: ['json'],
+    stackIndicators: ['mongodb', 'mongoose']
+  },
+  {
+    id: 'redis',
+    name: 'Redis',
+    category: 'database',
+    difficulty: 'intermediate',
+    description: 'In-memory data structure store used as a distributed, in-memory key-value database, cache, and message broker.',
+    whyUseIt: 'Sub-millisecond latency for caching, session stores, rate limiting, and Pub/Sub queues.',
+    tags: ['redis', 'cache', 'in-memory', 'pubsub', 'key-value'],
+    ecosystem: 'multi',
+    officialUrl: 'https://redis.io',
+    learnResources: [
+      { label: 'Redis Quickstart', url: 'https://redis.io/docs/latest/get-started/', type: 'docs' }
+    ],
+    alternatives: ['memcached'],
+    worksWellWith: ['express', 'socket-io', 'bullmq'],
+    prerequisites: ['networking'],
+    stackIndicators: ['ioredis', 'redis']
+  },
+  {
+    id: 'dynamodb',
+    name: 'Amazon DynamoDB',
+    category: 'database',
+    difficulty: 'intermediate',
+    description: 'Fast, flexible NoSQL database service for single-digit millisecond performance at any scale.',
+    whyUseIt: 'Fully managed serverless database with automatic scaling in the AWS ecosystem.',
+    tags: ['aws', 'dynamodb', 'nosql', 'serverless', 'cloud'],
+    ecosystem: 'multi',
+    officialUrl: 'https://aws.amazon.com/dynamodb/',
+    learnResources: [
+      { label: 'DynamoDB Getting Started', url: 'https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html', type: 'docs' }
+    ],
+    alternatives: ['mongodb', 'cassandra'],
+    worksWellWith: ['aws-sdk'],
+    prerequisites: ['aws'],
+    stackIndicators: ['@aws-sdk/client-dynamodb']
+  },
+  {
+    id: 'cassandra',
+    name: 'Apache Cassandra',
+    category: 'database',
+    difficulty: 'advanced',
+    description: 'Open source distributed NoSQL database designed to handle large amounts of data across many commodity servers.',
+    whyUseIt: 'Linear horizontal scalability with zero single point of failure for massive write-heavy applications.',
+    tags: ['cassandra', 'nosql', 'distributed', 'big-data'],
+    ecosystem: 'multi',
+    officialUrl: 'https://cassandra.apache.org',
+    learnResources: [
+      { label: 'Cassandra Quickstart', url: 'https://cassandra.apache.org/doc/latest/cassandra/getting_started/index.html', type: 'docs' }
+    ],
+    alternatives: ['dynamodb'],
+    worksWellWith: ['docker'],
+    prerequisites: ['distributed-systems'],
+    stackIndicators: ['cassandra-driver']
+  },
+  {
+    id: 'supabase',
+    name: 'Supabase',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'An open source Firebase alternative providing Postgres database, Authentication, instant APIs, and Realtime.',
+    whyUseIt: 'Instant backend with a real Postgres DB under the hood, Row-Level Security, and instant auth.',
+    tags: ['supabase', 'baas', 'postgres', 'auth', 'serverless'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://supabase.com',
+    learnResources: [
+      { label: 'Supabase Quickstart', url: 'https://supabase.com/docs/guides/getting-started', type: 'docs' }
+    ],
+    alternatives: ['firebase-auth', 'neon'],
+    worksWellWith: ['nextjs', 'react', 'tailwind-css'],
+    prerequisites: ['sql'],
+    stackIndicators: ['@supabase/supabase-js']
+  },
+  {
+    id: 'neon',
+    name: 'Neon',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'Serverless, fault-tolerant open-source Postgres designed for the cloud with instant branching.',
+    whyUseIt: 'Scale-to-zero serverless PostgreSQL with database branching identical to Git branches.',
+    tags: ['neon', 'serverless', 'postgres', 'database', 'cloud'],
+    ecosystem: 'multi',
+    officialUrl: 'https://neon.tech',
+    learnResources: [
+      { label: 'Neon Docs', url: 'https://neon.tech/docs/introduction', type: 'docs' }
+    ],
+    alternatives: ['supabase', 'postgresql'],
+    worksWellWith: ['prisma', 'drizzle-orm', 'nextjs'],
+    prerequisites: ['sql'],
+    stackIndicators: ['@neondatabase/serverless']
+  },
+  {
+    id: 'elasticsearch',
+    name: 'Elasticsearch',
+    category: 'database',
+    difficulty: 'intermediate',
+    description: 'Distributed, RESTful search and analytics engine capable of addressing a growing number of use cases.',
+    whyUseIt: 'Full-text search, complex log aggregation, and real-time analytical indexing.',
+    tags: ['elasticsearch', 'search', 'fulltext', 'analytics', 'elk'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.elastic.co/elasticsearch',
+    learnResources: [
+      { label: 'Elasticsearch Quickstart', url: 'https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started.html', type: 'docs' }
+    ],
+    alternatives: ['meilisearch'],
+    worksWellWith: ['docker', 'kibana'],
+    prerequisites: ['json'],
+    stackIndicators: ['@elastic/elasticsearch']
+  },
+  {
+    id: 'meilisearch',
+    name: 'Meilisearch',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'A lightning-fast, ultra relevant, and typo-tolerant search engine that fits into any application.',
+    whyUseIt: 'Instant search-as-you-type with zero complex configuration compared to Elasticsearch.',
+    tags: ['search', 'meilisearch', 'fulltext', 'typo-tolerance'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.meilisearch.com',
+    learnResources: [
+      { label: 'Meilisearch Getting Started', url: 'https://www.meilisearch.com/docs/learn/getting_started/quick_start', type: 'docs' }
+    ],
+    alternatives: ['elasticsearch'],
+    worksWellWith: ['react', 'nextjs', 'vue'],
+    prerequisites: ['json'],
+    stackIndicators: ['meilisearch']
+  },
+  {
+    id: 'chromadb',
+    name: 'ChromaDB',
+    category: 'database',
+    difficulty: 'beginner',
+    description: 'The AI-native open-source embedding database designed to make it easy to build LLM apps.',
+    whyUseIt: 'Simple, lightweight vector store for semantic search and retrieval-augmented generation (RAG).',
+    tags: ['chromadb', 'vector', 'embeddings', 'ai', 'rag'],
+    ecosystem: 'python',
+    officialUrl: 'https://www.trychroma.com',
+    learnResources: [
+      { label: 'Chroma Getting Started', url: 'https://docs.trychroma.com/getting-started', type: 'tutorial' }
+    ],
+    alternatives: ['pinecone'],
+    worksWellWith: ['langchain', 'openai-sdk'],
+    prerequisites: ['python'],
+    stackIndicators: ['chromadb']
+  },
+  {
+    id: 'pinecone',
+    name: 'Pinecone',
+    category: 'database',
+    difficulty: 'intermediate',
+    description: 'Managed, cloud-native vector database with ultra-low latency for production machine learning.',
+    whyUseIt: 'Handles billions of vectors with high throughput without managing vector infrastructure.',
+    tags: ['pinecone', 'vector', 'database', 'embeddings', 'ai'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.pinecone.io',
+    learnResources: [
+      { label: 'Pinecone Docs', url: 'https://docs.pinecone.io/guides/get-started/quickstart', type: 'docs' }
+    ],
+    alternatives: ['chromadb'],
+    worksWellWith: ['langchain', 'openai-sdk'],
+    prerequisites: ['ai-concepts'],
+    stackIndicators: ['@pinecone-database/pinecone', 'pinecone-client']
+  },
+
+  // --- 6. ORMs & Data Access (10) ---
+  {
+    id: 'prisma',
+    name: 'Prisma',
+    category: 'orm',
+    difficulty: 'beginner',
+    description: 'Next-generation Node.js and TypeScript ORM with an intuitive data model and automated migrations.',
+    whyUseIt: 'Exceptional developer experience with auto-generated typesafe database client and visual schema file.',
+    tags: ['prisma', 'orm', 'database', 'typescript', 'migrations'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://www.prisma.io',
+    learnResources: [
+      { label: 'Prisma Quickstart', url: 'https://www.prisma.io/docs/getting-started/quickstart', type: 'tutorial' }
+    ],
+    alternatives: ['drizzle-orm', 'typeorm'],
+    worksWellWith: ['postgresql', 'mysql', 'nextjs', 'express'],
+    prerequisites: ['typescript', 'sql'],
+    stackIndicators: ['@prisma/client', 'prisma']
+  },
+  {
+    id: 'drizzle-orm',
+    name: 'Drizzle ORM',
+    category: 'orm',
+    difficulty: 'intermediate',
+    description: 'Lightweight and performant TypeScript ORM that feels like writing type-safe SQL.',
+    whyUseIt: 'Zero dependencies, maximum query speed, serverless-ready, and SQL-like syntax without abstraction magic.',
+    tags: ['drizzle', 'orm', 'sql', 'typescript', 'serverless'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://orm.drizzle.team',
+    learnResources: [
+      { label: 'Drizzle Quickstart', url: 'https://orm.drizzle.team/docs/quick-start', type: 'tutorial' }
+    ],
+    alternatives: ['prisma', 'typeorm'],
+    worksWellWith: ['postgresql', 'sqlite', 'neon', 'nextjs'],
+    prerequisites: ['sql', 'typescript'],
+    stackIndicators: ['drizzle-orm']
+  },
+  {
+    id: 'typeorm',
+    name: 'TypeORM',
+    category: 'orm',
+    difficulty: 'intermediate',
+    description: 'ORM that can run in NodeJS, Browser, Cordova, and supports both Active Record and Data Mapper patterns.',
+    whyUseIt: 'Familiar decorator-based syntax for developers coming from Java (Hibernate) or C#.',
+    tags: ['typeorm', 'orm', 'decorators', 'typescript'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://typeorm.io',
+    learnResources: [
+      { label: 'TypeORM Guide', url: 'https://typeorm.io/#/', type: 'docs' }
+    ],
+    alternatives: ['prisma', 'drizzle-orm'],
+    worksWellWith: ['nestjs', 'postgresql'],
+    prerequisites: ['typescript', 'decorators'],
+    stackIndicators: ['typeorm']
+  },
+  {
+    id: 'mongoose',
+    name: 'Mongoose',
+    category: 'orm',
+    difficulty: 'beginner',
+    description: 'Elegant MongoDB object modeling for Node.js with built-in type casting and validation.',
+    whyUseIt: 'The standard ODM for managing MongoDB relationships and schema validations in Node.js.',
+    tags: ['mongoose', 'mongodb', 'odm', 'nosql', 'schemas'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://mongoosejs.com',
+    learnResources: [
+      { label: 'Mongoose Quickstart', url: 'https://mongoosejs.com/docs/', type: 'docs' }
+    ],
+    alternatives: ['prisma'],
+    worksWellWith: ['mongodb', 'express'],
+    prerequisites: ['javascript', 'mongodb'],
+    stackIndicators: ['mongoose']
+  },
+  {
+    id: 'sqlalchemy',
+    name: 'SQLAlchemy',
+    category: 'orm',
+    difficulty: 'intermediate',
+    description: 'The Python SQL Toolkit and Object Relational Mapper that gives application developers the full power of SQL.',
+    whyUseIt: 'The gold standard ORM in Python combining high-level abstractions with raw SQL execution power.',
+    tags: ['sqlalchemy', 'python', 'orm', 'sql', 'database'],
+    ecosystem: 'python',
+    officialUrl: 'https://www.sqlalchemy.org',
+    learnResources: [
+      { label: 'SQLAlchemy Unified Tutorial', url: 'https://docs.sqlalchemy.org/en/20/tutorial/', type: 'tutorial' }
+    ],
+    alternatives: ['tortoise-orm'],
+    worksWellWith: ['fastapi', 'flask', 'alembic'],
+    prerequisites: ['python', 'sql'],
+    stackIndicators: ['sqlalchemy']
+  },
+  {
+    id: 'tortoise-orm',
+    name: 'Tortoise ORM',
+    category: 'orm',
+    difficulty: 'beginner',
+    description: 'An easy-to-use asyncio ORM for Python inspired by Django.',
+    whyUseIt: 'Built from ground up for async Python (FastAPI / Sanic) with clean Django-like model syntax.',
+    tags: ['tortoise', 'python', 'async', 'orm'],
+    ecosystem: 'python',
+    officialUrl: 'https://tortoise.github.io',
+    learnResources: [
+      { label: 'Tortoise Getting Started', url: 'https://tortoise.github.io/getting_started.html', type: 'docs' }
+    ],
+    alternatives: ['sqlalchemy'],
+    worksWellWith: ['fastapi', 'postgresql'],
+    prerequisites: ['python', 'asyncio'],
+    stackIndicators: ['tortoise-orm']
+  },
+  {
+    id: 'gorm',
+    name: 'GORM',
+    category: 'orm',
+    difficulty: 'intermediate',
+    description: 'The fantastic ORM library for Golang aiming to be developer friendly.',
+    whyUseIt: 'Full-featured Go ORM supporting associations, hooks, preloading, and transactions.',
+    tags: ['gorm', 'go', 'golang', 'orm', 'database'],
+    ecosystem: 'go',
+    officialUrl: 'https://gorm.io',
+    learnResources: [
+      { label: 'GORM Quickstart', url: 'https://gorm.io/docs/index.html', type: 'docs' }
+    ],
+    alternatives: ['sqlx'],
+    worksWellWith: ['gin', 'postgresql'],
+    prerequisites: ['go', 'sql'],
+    stackIndicators: ['gorm.io/gorm']
+  },
+  {
+    id: 'diesel',
+    name: 'Diesel',
+    category: 'orm',
+    difficulty: 'advanced',
+    description: 'A Safe, Extensible ORM and Query Builder for Rust.',
+    whyUseIt: 'Eliminates runtime database errors by enforcing SQL correctness and schema validation at compile time.',
+    tags: ['diesel', 'rust', 'orm', 'typesafe', 'database'],
+    ecosystem: 'rust',
+    officialUrl: 'https://diesel.rs',
+    learnResources: [
+      { label: 'Diesel Getting Started', url: 'https://diesel.rs/guides/getting-started', type: 'tutorial' }
+    ],
+    alternatives: ['sqlx'],
+    worksWellWith: ['actix-web', 'postgresql'],
+    prerequisites: ['rust', 'sql'],
+    stackIndicators: ['diesel']
+  },
+  {
+    id: 'flyway',
+    name: 'Flyway',
+    category: 'orm',
+    difficulty: 'intermediate',
+    description: 'Open source database migration tool strongly favoring simplicity and convention over configuration.',
+    whyUseIt: 'Database migrations using plain SQL scripts across CI/CD and production environments.',
+    tags: ['flyway', 'migrations', 'sql', 'database', 'devops'],
+    ecosystem: 'multi',
+    officialUrl: 'https://flywaydb.org',
+    learnResources: [
+      { label: 'Flyway Quickstart', url: 'https://documentation.red-gate.com/fd/quickstart-184127404.html', type: 'docs' }
+    ],
+    alternatives: ['liquibase'],
+    worksWellWith: ['postgresql', 'mysql', 'spring-boot'],
+    prerequisites: ['sql'],
+    stackIndicators: ['flyway-core']
+  },
+  {
+    id: 'liquibase',
+    name: 'Liquibase',
+    category: 'orm',
+    difficulty: 'intermediate',
+    description: 'Database change management solution that tracks, versions, and deploys database code changes.',
+    whyUseIt: 'Supports declaring database migrations in YAML, XML, JSON, or SQL with rollbacks.',
+    tags: ['liquibase', 'migrations', 'database', 'ci-cd'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.liquibase.com',
+    learnResources: [
+      { label: 'Liquibase Getting Started', url: 'https://docs.liquibase.com/start/home.html', type: 'docs' }
+    ],
+    alternatives: ['flyway'],
+    worksWellWith: ['spring-boot', 'postgresql'],
+    prerequisites: ['sql'],
+    stackIndicators: ['liquibase-core']
+  },
+
+  // --- 7. Authentication & Security (10) ---
+  {
+    id: 'passport',
+    name: 'Passport.js',
+    category: 'authentication',
+    difficulty: 'beginner',
+    description: 'Simple, unobtrusive authentication middleware for Node.js supporting 500+ strategies.',
+    whyUseIt: 'Extensive strategy ecosystem covering username/password, Google, GitHub, OAuth, and SAML.',
+    tags: ['passport', 'auth', 'authentication', 'oauth', 'middleware'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://www.passportjs.org',
+    learnResources: [
+      { label: 'Passport Guide', url: 'https://www.passportjs.org/docs/', type: 'docs' }
+    ],
+    alternatives: ['next-auth', 'lucia'],
+    worksWellWith: ['express', 'bcrypt', 'express-session'],
+    prerequisites: ['express', 'javascript'],
+    stackIndicators: ['passport']
+  },
+  {
+    id: 'next-auth',
+    name: 'Auth.js (NextAuth)',
+    category: 'authentication',
+    difficulty: 'beginner',
+    description: 'Complete open-source authentication solution for Next.js and modern web frameworks.',
+    whyUseIt: 'Zero-configuration social OAuth providers, email magic links, and JWT session handling for Next.js.',
+    tags: ['auth', 'nextauth', 'oauth', 'nextjs', 'security'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://authjs.dev',
+    learnResources: [
+      { label: 'Auth.js Getting Started', url: 'https://authjs.dev/getting-started', type: 'tutorial' }
+    ],
+    alternatives: ['clerk', 'lucia'],
+    worksWellWith: ['nextjs', 'prisma'],
+    prerequisites: ['nextjs'],
+    stackIndicators: ['next-auth', '@auth/core']
+  },
+  {
+    id: 'lucia',
+    name: 'Lucia Auth',
+    category: 'authentication',
+    difficulty: 'intermediate',
+    description: 'An open-source library that handles session-based authentication in modern full-stack web frameworks.',
+    whyUseIt: 'Teaches and implements clear, unbloated session management without magical blackbox layers.',
+    tags: ['lucia', 'sessions', 'auth', 'security', 'typescript'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://lucia-auth.com',
+    learnResources: [
+      { label: 'Lucia Getting Started', url: 'https://lucia-auth.com/getting-started/', type: 'docs' }
+    ],
+    alternatives: ['next-auth', 'passport'],
+    worksWellWith: ['drizzle-orm', 'prisma', 'sveltekit'],
+    prerequisites: ['typescript'],
+    stackIndicators: ['lucia']
+  },
+  {
+    id: 'firebase-auth',
+    name: 'Firebase Authentication',
+    category: 'authentication',
+    difficulty: 'beginner',
+    description: 'Complete backend service for authenticating users using passwords, phone numbers, and popular OAuth providers.',
+    whyUseIt: 'Drop-in authentication requiring zero server maintenance with built-in email verification and password reset.',
+    tags: ['firebase', 'auth', 'google', 'oauth', 'serverless'],
+    ecosystem: 'multi',
+    officialUrl: 'https://firebase.google.com/products/auth',
+    learnResources: [
+      { label: 'Firebase Auth Guide', url: 'https://firebase.google.com/docs/auth', type: 'docs' }
+    ],
+    alternatives: ['clerk', 'supabase'],
+    worksWellWith: ['react', 'nextjs'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['firebase', 'firebase-admin']
+  },
+  {
+    id: 'clerk',
+    name: 'Clerk',
+    category: 'authentication',
+    difficulty: 'beginner',
+    description: 'Complete user management platform offering pre-built UI components and authentication for React/Next.js.',
+    whyUseIt: 'Beautiful pre-built Sign-In and User-Profile UI components ready in 5 minutes.',
+    tags: ['clerk', 'auth', 'components', 'user-management', 'saas'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://clerk.com',
+    learnResources: [
+      { label: 'Clerk Quickstart', url: 'https://clerk.com/docs/quickstarts/nextjs', type: 'tutorial' }
+    ],
+    alternatives: ['next-auth', 'auth0'],
+    worksWellWith: ['nextjs', 'react'],
+    prerequisites: ['react'],
+    stackIndicators: ['@clerk/nextjs', '@clerk/clerk-react']
+  },
+  {
+    id: 'auth0',
+    name: 'Auth0 by Okta',
+    category: 'authentication',
+    difficulty: 'intermediate',
+    description: 'Enterprise identity platform for web, mobile, and legacy applications with universal login.',
+    whyUseIt: 'Enterprise compliance, single sign-on (SSO), MFA, and federated identity out of the box.',
+    tags: ['auth0', 'sso', 'identity', 'enterprise', 'oauth'],
+    ecosystem: 'multi',
+    officialUrl: 'https://auth0.com',
+    learnResources: [
+      { label: 'Auth0 Quickstart', url: 'https://auth0.com/docs/quickstarts', type: 'docs' }
+    ],
+    alternatives: ['clerk', 'firebase-auth'],
+    worksWellWith: ['express', 'nextjs', 'react'],
+    prerequisites: ['oauth'],
+    stackIndicators: ['@auth0/nextjs-auth0', 'auth0']
+  },
+  {
+    id: 'jose',
+    name: 'jose',
+    category: 'authentication',
+    difficulty: 'intermediate',
+    description: 'Universal JSON Web Tokens (JWT), JWS, JWE, and JWK library with zero external dependencies.',
+    whyUseIt: 'Lightweight, modern replacement for jsonwebtoken that runs in Node, browsers, and Edge runtimes.',
+    tags: ['jwt', 'jose', 'crypto', 'token', 'security'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/panva/jose',
+    learnResources: [
+      { label: 'jose Documentation', url: 'https://github.com/panva/jose#readme', type: 'docs' }
+    ],
+    alternatives: ['jsonwebtoken'],
+    worksWellWith: ['hono', 'nextjs', 'express'],
+    prerequisites: ['crypto-basics'],
+    stackIndicators: ['jose']
+  },
+  {
+    id: 'bcrypt',
+    name: 'bcrypt',
+    category: 'authentication',
+    difficulty: 'beginner',
+    description: 'A library to help you hash passwords using the adaptive bcrypt key derivation function.',
+    whyUseIt: 'Essential security practice: prevents credential theft via salted, work-factor controlled hashes.',
+    tags: ['bcrypt', 'password', 'hashing', 'security', 'crypto'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/kelektiv/node.bcrypt.js',
+    learnResources: [
+      { label: 'bcrypt Guide', url: 'https://github.com/kelektiv/node.bcrypt.js#readme', type: 'docs' }
+    ],
+    alternatives: ['argon2'],
+    worksWellWith: ['express', 'passport', 'prisma'],
+    prerequisites: ['nodejs'],
+    stackIndicators: ['bcrypt', 'bcryptjs']
+  },
+  {
+    id: 'helmet',
+    name: 'Helmet',
+    category: 'security',
+    difficulty: 'beginner',
+    description: 'Secures Express and Connect apps by setting various HTTP headers.',
+    whyUseIt: 'Single-line middleware preventing XSS, clickjacking, and MIME-sniffing by setting standard HTTP headers.',
+    tags: ['helmet', 'security', 'http-headers', 'xss', 'express'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://helmetjs.github.io',
+    learnResources: [
+      { label: 'Helmet Documentation', url: 'https://helmetjs.github.io/', type: 'docs' }
+    ],
+    alternatives: ['cors'],
+    worksWellWith: ['express', 'cors'],
+    prerequisites: ['express'],
+    stackIndicators: ['helmet']
+  },
+  {
+    id: 'cors',
+    name: 'CORS Middleware',
+    category: 'security',
+    difficulty: 'beginner',
+    description: 'Node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.',
+    whyUseIt: 'Solves Cross-Origin Resource Sharing browser errors when frontend and backend run on different domains.',
+    tags: ['cors', 'security', 'http', 'express', 'browser'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/expressjs/cors',
+    learnResources: [
+      { label: 'CORS Documentation', url: 'https://github.com/expressjs/cors#readme', type: 'docs' }
+    ],
+    alternatives: ['helmet'],
+    worksWellWith: ['express', 'fastify'],
+    prerequisites: ['http-basics'],
+    stackIndicators: ['cors']
+  },
+
+  // --- 8. API Protocols & Real-time (10) ---
+  {
+    id: 'socket-io',
+    name: 'Socket.io',
+    category: 'api-protocol',
+    difficulty: 'beginner',
+    description: 'Bidirectional, low-latency, event-based communication between client and server.',
+    whyUseIt: 'Simplest way to build real-time chat, collaborative cursors, and live alerts with fallback transports.',
+    tags: ['socketio', 'websocket', 'realtime', 'chat', 'events'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://socket.io',
+    learnResources: [
+      { label: 'Socket.io Tutorial', url: 'https://socket.io/get-started/chat', type: 'tutorial' }
+    ],
+    alternatives: ['ws', 'pusher'],
+    worksWellWith: ['express', 'react', 'redis'],
+    prerequisites: ['javascript', 'nodejs'],
+    stackIndicators: ['socket.io', 'socket.io-client']
+  },
+  {
+    id: 'ws',
+    name: 'ws (WebSocket)',
+    category: 'api-protocol',
+    difficulty: 'intermediate',
+    description: 'Simple to use, blazing fast and thoroughly tested WebSocket client and server for Node.js.',
+    whyUseIt: 'Standard RFC-compliant WebSocket server without Socket.io’s extra protocol overhead.',
+    tags: ['ws', 'websocket', 'realtime', 'protocol'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/websockets/ws',
+    learnResources: [
+      { label: 'ws Documentation', url: 'https://github.com/websockets/ws#readme', type: 'docs' }
+    ],
+    alternatives: ['socket-io'],
+    worksWellWith: ['express', 'fastify'],
+    prerequisites: ['websockets'],
+    stackIndicators: ['ws']
+  },
+  {
+    id: 'apollo-graphql',
+    name: 'Apollo GraphQL',
+    category: 'api-protocol',
+    difficulty: 'intermediate',
+    description: 'Industry-standard GraphQL platform unifying APIs into a strongly typed graph.',
+    whyUseIt: 'Eliminates over-fetching and under-fetching by letting clients query exact fields needed.',
+    tags: ['graphql', 'apollo', 'api', 'schema'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://www.apollographql.com',
+    learnResources: [
+      { label: 'Apollo Odyssey', url: 'https://www.apollographql.com/tutorials', type: 'tutorial' }
+    ],
+    alternatives: ['trpc'],
+    worksWellWith: ['react', 'express'],
+    prerequisites: ['graphql'],
+    stackIndicators: ['@apollo/client', '@apollo/server']
+  },
+  {
+    id: 'trpc',
+    name: 'tRPC',
+    category: 'api-protocol',
+    difficulty: 'intermediate',
+    description: 'End-to-end typesafe APIs made easy without code generation or schemas.',
+    whyUseIt: 'Share TypeScript types between client and server for instant full-stack autocomplete and type safety.',
+    tags: ['trpc', 'typescript', 'typesafe', 'api', 'rpc'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://trpc.io',
+    learnResources: [
+      { label: 'tRPC Quickstart', url: 'https://trpc.io/docs/quickstart', type: 'tutorial' }
+    ],
+    alternatives: ['apollo-graphql'],
+    worksWellWith: ['nextjs', 'zod', 'tanstack-query'],
+    prerequisites: ['typescript'],
+    stackIndicators: ['@trpc/server', '@trpc/client']
+  },
+  {
+    id: 'grpc',
+    name: 'gRPC',
+    category: 'api-protocol',
+    difficulty: 'advanced',
+    description: 'A high performance, open source universal RPC framework based on HTTP/2 and Protocol Buffers.',
+    whyUseIt: 'Microservice inter-process communication with strict contract definitions and low binary serialization overhead.',
+    tags: ['grpc', 'protobuf', 'rpc', 'microservices', 'performance'],
+    ecosystem: 'multi',
+    officialUrl: 'https://grpc.io',
+    learnResources: [
+      { label: 'gRPC Basics', url: 'https://grpc.io/docs/what-is-grpc/introduction/', type: 'docs' }
+    ],
+    alternatives: ['trpc'],
+    worksWellWith: ['go', 'java', 'docker'],
+    prerequisites: ['protobuf'],
+    stackIndicators: ['@grpc/grpc-js']
+  },
+  {
+    id: 'pusher',
+    name: 'Pusher Channels',
+    category: 'api-protocol',
+    difficulty: 'beginner',
+    description: 'Hosted real-time WebSocket messaging service with client SDKs for every major platform.',
+    whyUseIt: 'Real-time notifications and chat without hosting, maintaining, or scaling WebSocket infrastructure.',
+    tags: ['pusher', 'realtime', 'websockets', 'saas', 'notifications'],
+    ecosystem: 'multi',
+    officialUrl: 'https://pusher.com',
+    learnResources: [
+      { label: 'Pusher Docs', url: 'https://pusher.com/docs/channels', type: 'docs' }
+    ],
+    alternatives: ['socket-io', 'ably'],
+    worksWellWith: ['react', 'nextjs'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['pusher-js', 'pusher']
+  },
+  {
+    id: 'webrtc',
+    name: 'WebRTC',
+    category: 'api-protocol',
+    difficulty: 'advanced',
+    description: 'Web Real-Time Communication technology enabling peer-to-peer audio, video, and data transmission in browsers.',
+    whyUseIt: 'The fundamental standard for in-browser video calling, voice conferencing, and P2P data channels.',
+    tags: ['webrtc', 'p2p', 'video', 'audio', 'streaming'],
+    ecosystem: 'multi',
+    officialUrl: 'https://webrtc.org',
+    learnResources: [
+      { label: 'WebRTC Getting Started', url: 'https://webrtc.org/getting-started/overview', type: 'docs' }
+    ],
+    alternatives: ['socket-io'],
+    worksWellWith: ['socket-io', 'javascript'],
+    prerequisites: ['networking'],
+    stackIndicators: ['simple-peer', 'peerjs']
+  },
+  {
+    id: 'axios',
+    name: 'Axios',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'Promise based HTTP client for the browser and node.js with automatic JSON transformation.',
+    whyUseIt: 'The most popular HTTP client with request/response interceptors, timeout handling, and auto error rejection.',
+    tags: ['axios', 'http', 'fetching', 'rest', 'client'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://axios-http.com',
+    learnResources: [
+      { label: 'Axios Getting Started', url: 'https://axios-http.com/docs/intro', type: 'docs' }
+    ],
+    alternatives: ['ky', 'got'],
+    worksWellWith: ['react', 'tanstack-query'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['axios']
+  },
+  {
+    id: 'ky',
+    name: 'Ky',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'Tiny and elegant HTTP client based on the browser Fetch API.',
+    whyUseIt: 'Modern alternative to Axios that is smaller, uses native Fetch, and handles retries gracefully.',
+    tags: ['ky', 'fetch', 'http', 'client', 'lightweight'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/sindresorhus/ky',
+    learnResources: [
+      { label: 'Ky Documentation', url: 'https://github.com/sindresorhus/ky#readme', type: 'docs' }
+    ],
+    alternatives: ['axios', 'got'],
+    worksWellWith: ['react', 'typescript'],
+    prerequisites: ['fetch'],
+    stackIndicators: ['ky']
+  },
+  {
+    id: 'got',
+    name: 'Got',
+    category: 'utility',
+    difficulty: 'intermediate',
+    description: 'Human-friendly and powerful HTTP request library for Node.js.',
+    whyUseIt: 'Feature-complete Node.js HTTP client supporting HTTP/2, pagination, and stream piping.',
+    tags: ['got', 'http', 'node', 'client', 'streams'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/sindresorhus/got',
+    learnResources: [
+      { label: 'Got Docs', url: 'https://github.com/sindresorhus/got#readme', type: 'docs' }
+    ],
+    alternatives: ['axios', 'ky'],
+    worksWellWith: ['nodejs'],
+    prerequisites: ['nodejs'],
+    stackIndicators: ['got']
+  },
+
+  // --- 9. DevOps, Containers & Cloud (12) ---
+  {
+    id: 'docker',
+    name: 'Docker',
+    category: 'devops-container',
+    difficulty: 'beginner',
+    description: 'Platform for developing, shipping, and running applications inside isolated lightweight containers.',
+    whyUseIt: 'Eliminates "works on my machine" issues by packaging apps with all dependencies and system binaries.',
+    tags: ['docker', 'containers', 'devops', 'deployment'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.docker.com',
+    learnResources: [
+      { label: 'Docker 101 Tutorial', url: 'https://www.docker.com/101-tutorial/', type: 'tutorial' }
+    ],
+    alternatives: ['kubernetes'],
+    worksWellWith: ['docker-compose', 'github-actions'],
+    prerequisites: ['cli'],
+    stackIndicators: ['Dockerfile', 'docker-compose.yml']
+  },
+  {
+    id: 'docker-compose',
+    name: 'Docker Compose',
+    category: 'devops-container',
+    difficulty: 'beginner',
+    description: 'Tool for defining and running multi-container Docker applications via a single YAML file.',
+    whyUseIt: 'Spins up your entire local development stack (app, Postgres, Redis, frontend) with one command.',
+    tags: ['docker-compose', 'containers', 'multi-container', 'devops'],
+    ecosystem: 'multi',
+    officialUrl: 'https://docs.docker.com/compose/',
+    learnResources: [
+      { label: 'Compose Getting Started', url: 'https://docs.docker.com/compose/gettingstarted/', type: 'tutorial' }
+    ],
+    alternatives: ['kubernetes'],
+    worksWellWith: ['docker', 'postgresql', 'redis'],
+    prerequisites: ['docker'],
+    stackIndicators: ['docker-compose.yml', 'compose.yaml']
+  },
+  {
+    id: 'kubernetes',
+    name: 'Kubernetes (K8s)',
+    category: 'devops-container',
+    difficulty: 'advanced',
+    description: 'Automated container orchestration platform for deploying, scaling, and managing containerized applications.',
+    whyUseIt: 'The industry standard for orchestrating massive distributed services across cloud clusters.',
+    tags: ['kubernetes', 'k8s', 'orchestration', 'cloud', 'devops'],
+    ecosystem: 'multi',
+    officialUrl: 'https://kubernetes.io',
+    learnResources: [
+      { label: 'Kubernetes Basics', url: 'https://kubernetes.io/docs/tutorials/kubernetes-basics/', type: 'tutorial' }
+    ],
+    alternatives: ['docker-compose'],
+    worksWellWith: ['docker', 'terraform'],
+    prerequisites: ['docker', 'networking'],
+    stackIndicators: ['k8s', 'deployment.yaml']
+  },
+  {
+    id: 'terraform',
+    name: 'Terraform',
+    category: 'devops-container',
+    difficulty: 'intermediate',
+    description: 'Infrastructure as Code (IaC) tool that lets you build, change, and version cloud infrastructure safely.',
+    whyUseIt: 'Declarative configuration of AWS, GCP, Azure, and Cloudflare resources committed to Git.',
+    tags: ['terraform', 'iac', 'cloud', 'infrastructure', 'devops'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.terraform.io',
+    learnResources: [
+      { label: 'Terraform Tutorials', url: 'https://developer.hashicorp.com/terraform/tutorials', type: 'tutorial' }
+    ],
+    alternatives: ['aws-cdk'],
+    worksWellWith: ['aws-cdk', 'docker'],
+    prerequisites: ['cloud-concepts'],
+    stackIndicators: ['main.tf']
+  },
+  {
+    id: 'github-actions',
+    name: 'GitHub Actions',
+    category: 'devops-container',
+    difficulty: 'beginner',
+    description: 'Continuous integration and continuous delivery (CI/CD) platform integrated natively into GitHub repositories.',
+    whyUseIt: 'Automates testing, linting, Docker builds, and deployment workflows directly on git push.',
+    tags: ['github-actions', 'ci-cd', 'automation', 'devops', 'testing'],
+    ecosystem: 'multi',
+    officialUrl: 'https://github.com/features/actions',
+    learnResources: [
+      { label: 'Actions Quickstart', url: 'https://docs.github.com/en/actions/quickstart', type: 'tutorial' }
+    ],
+    alternatives: ['gitlab-ci'],
+    worksWellWith: ['docker', 'vitest'],
+    prerequisites: ['git'],
+    stackIndicators: ['.github/workflows']
+  },
+  {
+    id: 'aws-cdk',
+    name: 'AWS CDK',
+    category: 'devops-container',
+    difficulty: 'intermediate',
+    description: 'Cloud Development Kit to define cloud infrastructure using familiar programming languages like TypeScript.',
+    whyUseIt: 'Write real code (types, loops, functions) to generate CloudFormation templates on AWS.',
+    tags: ['aws', 'cdk', 'iac', 'cloud', 'typescript'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://aws.amazon.com/cdk/',
+    learnResources: [
+      { label: 'AWS CDK Workshop', url: 'https://cdkworkshop.com', type: 'tutorial' }
+    ],
+    alternatives: ['terraform'],
+    worksWellWith: ['typescript', 'docker'],
+    prerequisites: ['aws'],
+    stackIndicators: ['aws-cdk-lib']
+  },
+  {
+    id: 'vercel',
+    name: 'Vercel',
+    category: 'cloud-hosting',
+    difficulty: 'beginner',
+    description: 'Frontend cloud platform delivering speed and reliability for modern web applications.',
+    whyUseIt: 'The absolute easiest deployment path for Next.js, React, and Svelte apps with instant preview URLs.',
+    tags: ['vercel', 'hosting', 'serverless', 'frontend', 'cloud'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://vercel.com',
+    learnResources: [
+      { label: 'Vercel Docs', url: 'https://vercel.com/docs', type: 'docs' }
+    ],
+    alternatives: ['railway', 'render'],
+    worksWellWith: ['nextjs', 'react'],
+    prerequisites: ['git'],
+    stackIndicators: ['vercel.json']
+  },
+  {
+    id: 'railway',
+    name: 'Railway',
+    category: 'cloud-hosting',
+    difficulty: 'beginner',
+    description: 'Infrastructure platform where you can provision databases, microservices, and web servers effortlessly.',
+    whyUseIt: 'Modern PaaS alternative to Heroku for deploying backend code, databases, and cron workers.',
+    tags: ['railway', 'paas', 'hosting', 'backend', 'cloud'],
+    ecosystem: 'multi',
+    officialUrl: 'https://railway.app',
+    learnResources: [
+      { label: 'Railway Docs', url: 'https://docs.railway.app', type: 'docs' }
+    ],
+    alternatives: ['render', 'fly-io'],
+    worksWellWith: ['docker', 'postgresql'],
+    prerequisites: ['git'],
+    stackIndicators: ['railway.json']
+  },
+  {
+    id: 'render',
+    name: 'Render',
+    category: 'cloud-hosting',
+    difficulty: 'beginner',
+    description: 'Unified cloud to build and run all your apps and websites with free SSL, global CDN, and auto git deploys.',
+    whyUseIt: 'Zero-fuss hosting with generous free tiers for static sites, web services, and managed Postgres.',
+    tags: ['render', 'hosting', 'paas', 'backend', 'cloud'],
+    ecosystem: 'multi',
+    officialUrl: 'https://render.com',
+    learnResources: [
+      { label: 'Render Quickstarts', url: 'https://render.com/docs/quickstarts', type: 'docs' }
+    ],
+    alternatives: ['railway', 'fly-io'],
+    worksWellWith: ['postgresql', 'docker'],
+    prerequisites: ['git'],
+    stackIndicators: ['render.yaml']
+  },
+  {
+    id: 'fly-io',
+    name: 'Fly.io',
+    category: 'cloud-hosting',
+    difficulty: 'intermediate',
+    description: 'Deploy app servers close to your users globally on physical hardware with Firecracker microVMs.',
+    whyUseIt: 'Runs Docker apps right at the network edge with real full-stack capabilities and persistent volumes.',
+    tags: ['flyio', 'edge', 'vms', 'hosting', 'cloud'],
+    ecosystem: 'multi',
+    officialUrl: 'https://fly.io',
+    learnResources: [
+      { label: 'Fly.io Hands-on', url: 'https://fly.io/docs/hands-on/', type: 'docs' }
+    ],
+    alternatives: ['railway', 'render'],
+    worksWellWith: ['docker'],
+    prerequisites: ['docker'],
+    stackIndicators: ['fly.toml']
+  },
+  {
+    id: 'cloudflare-workers',
+    name: 'Cloudflare Workers',
+    category: 'cloud-hosting',
+    difficulty: 'intermediate',
+    description: 'Serverless execution environment that allows you to create entirely new applications at the edge.',
+    whyUseIt: '0ms cold starts across hundreds of global data centers with built-in key-value and D1 SQL storage.',
+    tags: ['cloudflare', 'workers', 'edge', 'serverless'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://workers.cloudflare.com',
+    learnResources: [
+      { label: 'Workers Getting Started', url: 'https://developers.cloudflare.com/workers/get-started/guide/', type: 'tutorial' }
+    ],
+    alternatives: ['vercel'],
+    worksWellWith: ['hono', 'typescript'],
+    prerequisites: ['typescript'],
+    stackIndicators: ['wrangler.toml']
+  },
+  {
+    id: 'nginx',
+    name: 'Nginx',
+    category: 'devops-container',
+    difficulty: 'intermediate',
+    description: 'High-performance HTTP server, reverse proxy, and load balancer powering a third of the web.',
+    whyUseIt: 'Industry standard for reverse proxying traffic to backend ports, SSL termination, and static caching.',
+    tags: ['nginx', 'reverse-proxy', 'web-server', 'load-balancer'],
+    ecosystem: 'multi',
+    officialUrl: 'https://nginx.org',
+    learnResources: [
+      { label: 'Nginx Beginner’s Guide', url: 'https://nginx.org/en/docs/beginners_guide.html', type: 'docs' }
+    ],
+    alternatives: ['caddy'],
+    worksWellWith: ['docker', 'express'],
+    prerequisites: ['linux-networking'],
+    stackIndicators: ['nginx.conf']
+  },
+
+  // --- 10. Testing Frameworks (8) ---
+  {
+    id: 'vitest',
+    name: 'Vitest',
+    category: 'testing',
+    difficulty: 'beginner',
+    description: 'Next-generation testing framework powered by Vite with out-of-the-box ESM and TypeScript support.',
+    whyUseIt: 'Blazing fast test execution, compatible with Jest assertions, and instant watch mode re-runs.',
+    tags: ['vitest', 'testing', 'unit-test', 'vite', 'typescript'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://vitest.dev',
+    learnResources: [
+      { label: 'Vitest Getting Started', url: 'https://vitest.dev/guide/', type: 'docs' }
+    ],
+    alternatives: ['jest'],
+    worksWellWith: ['vite', 'react', 'typescript'],
+    prerequisites: ['typescript'],
+    stackIndicators: ['vitest']
+  },
+  {
+    id: 'jest',
+    name: 'Jest',
+    category: 'testing',
+    difficulty: 'beginner',
+    description: 'Delightful JavaScript testing framework with a focus on simplicity and comprehensive mocking.',
+    whyUseIt: 'Massive adoption, zero-config for standard React projects, and integrated snapshot testing.',
+    tags: ['jest', 'testing', 'unit-test', 'mocking', 'react'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://jestjs.io',
+    learnResources: [
+      { label: 'Getting Started with Jest', url: 'https://jestjs.io/docs/getting-started', type: 'tutorial' }
+    ],
+    alternatives: ['vitest'],
+    worksWellWith: ['react', 'testing-library'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['jest']
+  },
+  {
+    id: 'playwright',
+    name: 'Playwright',
+    category: 'testing',
+    difficulty: 'intermediate',
+    description: 'Fast, reliable end-to-end testing for modern web apps across Chromium, Firefox, and WebKit.',
+    whyUseIt: 'Superior auto-waiting, parallel test execution, multi-browser engine support, and trace viewer.',
+    tags: ['playwright', 'e2e', 'testing', 'browser-automation', 'qa'],
+    ecosystem: 'multi',
+    officialUrl: 'https://playwright.dev',
+    learnResources: [
+      { label: 'Playwright Getting Started', url: 'https://playwright.dev/docs/intro', type: 'tutorial' }
+    ],
+    alternatives: ['cypress'],
+    worksWellWith: ['react', 'nextjs', 'github-actions'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['@playwright/test']
+  },
+  {
+    id: 'cypress',
+    name: 'Cypress',
+    category: 'testing',
+    difficulty: 'beginner',
+    description: 'Fast, easy and reliable testing for anything that runs in a browser with real-time test runner UI.',
+    whyUseIt: 'Interactive time-travel debugging and visual runner that simplifies E2E tests for beginners.',
+    tags: ['cypress', 'e2e', 'testing', 'browser', 'ui'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://www.cypress.io',
+    learnResources: [
+      { label: 'Cypress Tutorial', url: 'https://docs.cypress.io/guides/getting-started/opening-the-app', type: 'tutorial' }
+    ],
+    alternatives: ['playwright'],
+    worksWellWith: ['react', 'vue'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['cypress']
+  },
+  {
+    id: 'supertest',
+    name: 'Supertest',
+    category: 'testing',
+    difficulty: 'beginner',
+    description: 'High-level abstraction for testing HTTP servers using fluent API assertions.',
+    whyUseIt: 'The standard library for testing Node.js Express/Fastify REST endpoints without manual port listening.',
+    tags: ['supertest', 'api-testing', 'http', 'integration-testing'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/ladjs/supertest',
+    learnResources: [
+      { label: 'Supertest Guide', url: 'https://github.com/ladjs/supertest#readme', type: 'docs' }
+    ],
+    alternatives: ['playwright'],
+    worksWellWith: ['express', 'vitest', 'jest'],
+    prerequisites: ['express'],
+    stackIndicators: ['supertest']
+  },
+  {
+    id: 'pytest',
+    name: 'Pytest',
+    category: 'testing',
+    difficulty: 'beginner',
+    description: 'The pytest framework makes it easy to write small, readable tests, and can scale to support complex testing.',
+    whyUseIt: 'Simple assert statements without boilerplate self.assert, powerful fixtures, and rich plugins.',
+    tags: ['pytest', 'python', 'testing', 'unit-test'],
+    ecosystem: 'python',
+    officialUrl: 'https://docs.pytest.org',
+    learnResources: [
+      { label: 'Pytest Getting Started', url: 'https://docs.pytest.org/en/stable/getting-started.html', type: 'docs' }
+    ],
+    alternatives: ['unittest'],
+    worksWellWith: ['fastapi', 'django'],
+    prerequisites: ['python'],
+    stackIndicators: ['pytest']
+  },
+  {
+    id: 'mockito',
+    name: 'Mockito',
+    category: 'testing',
+    difficulty: 'intermediate',
+    description: 'Most popular Mocking framework for unit tests written in Java.',
+    whyUseIt: 'Clean, readable API for isolating and mocking dependencies in Java unit and integration tests.',
+    tags: ['mockito', 'java', 'mocking', 'testing'],
+    ecosystem: 'java',
+    officialUrl: 'https://site.mockito.org',
+    learnResources: [
+      { label: 'Mockito Docs', url: 'https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html', type: 'docs' }
+    ],
+    alternatives: ['easymock'],
+    worksWellWith: ['spring-boot', 'junit'],
+    prerequisites: ['java'],
+    stackIndicators: ['mockito-core']
+  },
+  {
+    id: 'testing-library',
+    name: 'Testing Library',
+    category: 'testing',
+    difficulty: 'beginner',
+    description: 'Simple and complete testing utilities that encourage good testing practices by querying DOM as users do.',
+    whyUseIt: 'Prevents brittle implementation-detail testing by targeting accessible user-visible elements.',
+    tags: ['testing-library', 'dom', 'react', 'accessible-testing'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://testing-library.com',
+    learnResources: [
+      { label: 'Testing Library Intro', url: 'https://testing-library.com/docs/', type: 'docs' }
+    ],
+    alternatives: ['enzyme'],
+    worksWellWith: ['react', 'vitest', 'jest'],
+    prerequisites: ['react'],
+    stackIndicators: ['@testing-library/react']
+  },
+
+  // --- 11. AI/ML, Search & Utilities (12) ---
+  {
+    id: 'langchain',
+    name: 'LangChain',
+    category: 'ai-ml',
+    difficulty: 'intermediate',
+    description: 'Framework for developing applications powered by large language models (LLMs) with chains and agents.',
+    whyUseIt: 'Connects LLMs to data sources, tools, memory, and multi-step agentic workflows.',
+    tags: ['langchain', 'ai', 'llm', 'agents', 'rag'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.langchain.com',
+    learnResources: [
+      { label: 'LangChain Quickstart', url: 'https://js.langchain.com/docs/introduction/', type: 'tutorial' }
+    ],
+    alternatives: ['llamaindex'],
+    worksWellWith: ['openai-sdk', 'chromadb'],
+    prerequisites: ['python-or-typescript'],
+    stackIndicators: ['langchain', '@langchain/core']
+  },
+  {
+    id: 'llamaindex',
+    name: 'LlamaIndex',
+    category: 'ai-ml',
+    difficulty: 'intermediate',
+    description: 'Data framework for LLM applications to ingest, structure, and query private or domain-specific data.',
+    whyUseIt: 'The specialized standard for Retrieval-Augmented Generation (RAG) and document indexing.',
+    tags: ['llamaindex', 'rag', 'embeddings', 'ai', 'data'],
+    ecosystem: 'multi',
+    officialUrl: 'https://www.llamaindex.ai',
+    learnResources: [
+      { label: 'LlamaIndex Docs', url: 'https://docs.llamaindex.ai/en/stable/', type: 'docs' }
+    ],
+    alternatives: ['langchain'],
+    worksWellWith: ['chromadb', 'openai-sdk'],
+    prerequisites: ['python'],
+    stackIndicators: ['llamaindex', 'llama-index']
+  },
+  {
+    id: 'openai-sdk',
+    name: 'OpenAI SDK',
+    category: 'ai-ml',
+    difficulty: 'beginner',
+    description: 'Official library providing convenient access to the OpenAI REST API from TypeScript and Python.',
+    whyUseIt: 'Direct access to GPT-4o, embeddings, audio, and function calling without wrapper frameworks.',
+    tags: ['openai', 'gpt', 'ai', 'llm', 'api'],
+    ecosystem: 'multi',
+    officialUrl: 'https://platform.openai.com/docs',
+    learnResources: [
+      { label: 'OpenAI API Quickstart', url: 'https://platform.openai.com/docs/quickstart', type: 'tutorial' }
+    ],
+    alternatives: ['anthropic-sdk', 'google-genai'],
+    worksWellWith: ['zod', 'nextjs'],
+    prerequisites: ['api-keys'],
+    stackIndicators: ['openai']
+  },
+  {
+    id: 'zod',
+    name: 'Zod',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'TypeScript-first schema declaration and validation library with static type inference.',
+    whyUseIt: 'Single source of truth for runtime validation that automatically exports TypeScript types.',
+    tags: ['zod', 'validation', 'typescript', 'schema', 'type-safety'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://zod.dev',
+    learnResources: [
+      { label: 'Zod Basic Usage', url: 'https://zod.dev/?id=basic-usage', type: 'docs' }
+    ],
+    alternatives: ['yup', 'joi', 'valibot'],
+    worksWellWith: ['react-hook-form', 'trpc', 'fastify'],
+    prerequisites: ['typescript'],
+    stackIndicators: ['zod']
+  },
+  {
+    id: 'lodash',
+    name: 'Lodash',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'A modern JavaScript utility library delivering modularity, performance, & extras.',
+    whyUseIt: 'Convenient helpers for deep cloning, debouncing, throttling, and nested object manipulation.',
+    tags: ['lodash', 'utility', 'javascript', 'debounce', 'helpers'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://lodash.com',
+    learnResources: [
+      { label: 'Lodash Docs', url: 'https://lodash.com/docs/4.17.15', type: 'docs' }
+    ],
+    alternatives: ['ramda'],
+    worksWellWith: ['javascript'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['lodash', 'lodash-es']
+  },
+  {
+    id: 'date-fns',
+    name: 'date-fns',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'Modern JavaScript date utility library with modular functions and immutable parsing.',
+    whyUseIt: 'Lightweight alternative to Moment.js with tree-shakable functions and full timezone support.',
+    tags: ['date-fns', 'dates', 'utility', 'time', 'formatting'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://date-fns.org',
+    learnResources: [
+      { label: 'date-fns Getting Started', url: 'https://date-fns.org/docs/Getting-Started', type: 'docs' }
+    ],
+    alternatives: ['dayjs', 'luxon'],
+    worksWellWith: ['typescript'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['date-fns']
+  },
+  {
+    id: 'sharp',
+    name: 'Sharp',
+    category: 'utility',
+    difficulty: 'intermediate',
+    description: 'High performance Node.js image processing using the libvips library.',
+    whyUseIt: 'Resizes, converts (WebP/AVIF), and optimizes images 4x-5x faster than ImageMagick in Node.js.',
+    tags: ['sharp', 'image-processing', 'resize', 'performance', 'node'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://sharp.pixelplumbing.com',
+    learnResources: [
+      { label: 'Sharp Documentation', url: 'https://sharp.pixelplumbing.com/install', type: 'docs' }
+    ],
+    alternatives: ['jimp'],
+    worksWellWith: ['express', 'nextjs'],
+    prerequisites: ['nodejs'],
+    stackIndicators: ['sharp']
+  },
+  {
+    id: 'winston',
+    name: 'Winston',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'A versatile logging library for Node.js with multiple transport and formatting options.',
+    whyUseIt: 'Structured JSON logging for microservices with file, console, and remote log rotation.',
+    tags: ['winston', 'logging', 'logger', 'node', 'monitoring'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/winstonjs/winston',
+    learnResources: [
+      { label: 'Winston Guide', url: 'https://github.com/winstonjs/winston#readme', type: 'docs' }
+    ],
+    alternatives: ['pino'],
+    worksWellWith: ['express'],
+    prerequisites: ['nodejs'],
+    stackIndicators: ['winston']
+  },
+  {
+    id: 'pino',
+    name: 'Pino',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'Extremely fast Node.js logger, inspired by Bunyan, with low overhead.',
+    whyUseIt: '5x faster than Winston, designed for high-concurrency microservices and Fastify.',
+    tags: ['pino', 'logger', 'logging', 'performance', 'fastify'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://getpino.io',
+    learnResources: [
+      { label: 'Pino Documentation', url: 'https://getpino.io/#/docs/quickstart', type: 'docs' }
+    ],
+    alternatives: ['winston'],
+    worksWellWith: ['fastify', 'express'],
+    prerequisites: ['nodejs'],
+    stackIndicators: ['pino']
+  },
+  {
+    id: 'dotenv',
+    name: 'dotenv',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'Zero-dependency module that loads environment variables from a .env file into process.env.',
+    whyUseIt: 'The universal convention for managing API keys and secrets in local development.',
+    tags: ['dotenv', 'env', 'config', 'secrets', 'environment'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/motdotla/dotenv',
+    learnResources: [
+      { label: 'dotenv Readme', url: 'https://github.com/motdotla/dotenv#readme', type: 'docs' }
+    ],
+    alternatives: ['env-cmd'],
+    worksWellWith: ['nodejs', 'express'],
+    prerequisites: ['nodejs'],
+    stackIndicators: ['dotenv']
+  },
+  {
+    id: 'uuid',
+    name: 'uuid',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'RFC4122 UUID generator for JavaScript with cryptographically strong pseudo-random IDs.',
+    whyUseIt: 'Generates universal unique identifiers (v4 random, v7 time-sorted) with zero dependencies.',
+    tags: ['uuid', 'id', 'crypto', 'utility'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://github.com/uuidjs/uuid',
+    learnResources: [
+      { label: 'uuid Guide', url: 'https://github.com/uuidjs/uuid#readme', type: 'docs' }
+    ],
+    alternatives: ['nanoid'],
+    worksWellWith: ['javascript'],
+    prerequisites: ['javascript'],
+    stackIndicators: ['uuid']
+  },
+  {
+    id: 'prettier',
+    name: 'Prettier',
+    category: 'utility',
+    difficulty: 'beginner',
+    description: 'An opinionated code formatter supporting JavaScript, TypeScript, CSS, HTML, and more.',
+    whyUseIt: 'Completely ends code formatting debates on teams by automatically styling code on save.',
+    tags: ['prettier', 'formatter', 'code-quality', 'dx', 'tooling'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://prettier.io',
+    learnResources: [
+      { label: 'Prettier Docs', url: 'https://prettier.io/docs/en/', type: 'docs' }
+    ],
+    alternatives: ['biome'],
+    worksWellWith: ['eslint', 'typescript'],
+    prerequisites: ['tooling'],
+    stackIndicators: ['prettier']
+  }
+];
+
+// Validate the full array against the Zod schema
+console.log(`[Seed Skills] Validating ${skills.length} curated skills against Zod schema...`);
+const validated = validateSkillsArray(skills);
+console.log(`[Seed Skills] All ${validated.length} skills successfully validated!`);
+
+const targetPath = path.join(__dirname, '..', 'src', 'data', 'skills.json');
+fs.writeFileSync(targetPath, JSON.stringify(validated, null, 2), 'utf-8');
+console.log(`[Seed Skills] Written ${validated.length} skills to: ${targetPath}`);

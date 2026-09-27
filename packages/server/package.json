@@ -6,7 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -b",
+    "validate:skills": "node scripts/validate-skills.cjs",
+    "build": "node scripts/validate-skills.cjs && tsc -b && node -e \"const fs = require('fs'); fs.mkdirSync('dist/data', { recursive: true }); fs.copyFileSync('src/data/skills.json', 'dist/data/skills.json');\"",
     "clean": "rimraf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {

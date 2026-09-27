@@ -8,89 +8,25 @@ import {
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
   type PingResult,
+  type Skill,
   type SkillSuggestionParams,
   type SkillSuggestionResult,
   type SuggestedSkill,
 } from '@skillforge/shared';
-
-/**
- * Baseline foundation skills for initial bootstrap responses
- */
-const BASELINE_SKILLS: SuggestedSkill[] = [
-  {
-    id: 'express',
-    name: 'Express.js',
-    category: 'backend-framework',
-    difficulty: 'beginner',
-    description: 'Fast, unopinionated, minimalist web framework for Node.js.',
-    whyUseIt: 'The de facto standard for building REST APIs in Node.js with huge community support.',
-    tags: ['rest', 'api', 'backend', 'http', 'routing', 'node'],
-    ecosystem: 'javascript',
-    officialUrl: 'https://expressjs.com',
-    learnResources: [
-      { label: 'Official Guide', url: 'https://expressjs.com/en/starter/installing.html', type: 'docs' },
-    ],
-    alternatives: ['fastify', 'koa', 'nest'],
-    worksWellWith: ['socket.io', 'pg', 'prisma'],
-    prerequisites: ['javascript', 'nodejs'],
-    stackIndicators: ['express'],
-    trustTier: 'verified',
-    confidence: 0.95,
-    reasoning: 'Essential for Node.js REST API and server architecture.',
-    isInstalledInWorkspace: false,
-  },
-  {
-    id: 'socket-io',
-    name: 'Socket.io',
-    category: 'api-protocol',
-    difficulty: 'beginner',
-    description: 'Bidirectional, low-latency and event-based communication between client and server.',
-    whyUseIt: 'Ideal for real-time messaging, chat applications, and live collaborative updates.',
-    tags: ['websocket', 'realtime', 'chat', 'events'],
-    ecosystem: 'javascript',
-    officialUrl: 'https://socket.io',
-    learnResources: [
-      { label: 'Get Started Guide', url: 'https://socket.io/get-started/chat', type: 'tutorial' },
-    ],
-    alternatives: ['ws', 'pusher'],
-    worksWellWith: ['express', 'react'],
-    prerequisites: ['javascript', 'nodejs'],
-    stackIndicators: ['socket.io', 'socket.io-client'],
-    trustTier: 'verified',
-    confidence: 0.92,
-    reasoning: 'Standard library for real-time event communication.',
-    isInstalledInWorkspace: false,
-  },
-  {
-    id: 'react',
-    name: 'React',
-    category: 'frontend-framework',
-    difficulty: 'beginner',
-    description: 'A JavaScript library for building component-driven user interfaces.',
-    whyUseIt: 'Declarative component architecture suitable for single-page applications and web apps.',
-    tags: ['frontend', 'ui', 'components', 'spa'],
-    ecosystem: 'javascript',
-    officialUrl: 'https://react.dev',
-    learnResources: [
-      { label: 'React Documentation', url: 'https://react.dev/learn', type: 'docs' },
-    ],
-    alternatives: ['vue', 'svelte', 'angular'],
-    worksWellWith: ['tailwind', 'zustand', 'tanstack-query'],
-    prerequisites: ['javascript', 'html', 'css'],
-    stackIndicators: ['react', 'react-dom'],
-    trustTier: 'verified',
-    confidence: 0.9,
-    reasoning: 'Most widely used library for interactive web UIs.',
-    isInstalledInWorkspace: false,
-  },
-];
+import { SkillsRepository } from './data/skills-repository.js';
 
 export class SkillForgeServer {
   private connection: Connection;
+  private repository: SkillsRepository;
 
-  constructor(connection: Connection) {
+  constructor(connection: Connection, repository?: SkillsRepository) {
     this.connection = connection;
+    this.repository = repository ?? new SkillsRepository();
     this.registerHandlers();
+  }
+
+  public getRepository(): SkillsRepository {
+    return this.repository;
   }
 
   private registerHandlers(): void {
@@ -110,7 +46,9 @@ export class SkillForgeServer {
 
     // 2. Lifecycle: Initialized
     this.connection.onInitialized(() => {
-      this.connection.console.log('[SkillForge LSP] Server initialized and ready.');
+      this.connection.console.log(
+        `[SkillForge LSP] Server initialized with ${this.repository.count} verified skills.`
+      );
     });
 
     // 3. Custom ping request
@@ -140,25 +78,36 @@ export class SkillForgeServer {
           };
         }
 
-        const lowerIntent = intent.toLowerCase();
-        // Match against baseline tags or return all baseline if general query
-        let matched = BASELINE_SKILLS.filter((skill) => {
-          return (
-            skill.tags.some((tag) => lowerIntent.includes(tag)) ||
-            lowerIntent.includes(skill.name.toLowerCase()) ||
-            lowerIntent.includes(skill.category.toLowerCase())
-          );
+        const scored = this.repository.search(intent, {
+          difficulty: params.options?.difficulty,
+          maxResults: params.options?.maxResults ?? 5,
         });
 
-        // Fallback to top baseline skills if no direct keyword match
-        const fallbackUsed = matched.length === 0;
-        if (fallbackUsed) {
-          matched = BASELINE_SKILLS.slice(0, 2);
-        }
+        let results: SuggestedSkill[];
+        let fallbackUsed = false;
 
-        // Apply maxResults limit if provided
-        const maxResults = params.options?.maxResults ?? 5;
-        const results = matched.slice(0, maxResults);
+        if (scored.length > 0) {
+          results = scored.map(({ skill, score, matchReasons }) => ({
+            ...skill,
+            trustTier: 'verified',
+            confidence: Math.min(0.99, Number((0.6 + Math.min(score, 40) / 100).toFixed(2))),
+            reasoning: matchReasons.length > 0 ? matchReasons.join('. ') : skill.whyUseIt,
+            isInstalledInWorkspace: false,
+          }));
+        } else {
+          fallbackUsed = true;
+          const fallbackIds = ['react', 'express', 'postgresql'];
+          results = fallbackIds
+            .map((id) => this.repository.getSkillById(id))
+            .filter((s): s is Skill => Boolean(s))
+            .map((skill) => ({
+              ...skill,
+              trustTier: 'verified',
+              confidence: 0.65,
+              reasoning: 'Baseline recommendation matching general application development.',
+              isInstalledInWorkspace: false,
+            }));
+        }
 
         const elapsed = Date.now() - startTime;
         return {

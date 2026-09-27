@@ -122,6 +122,21 @@ describe('SkillForge Headless LSP Server Integration', () => {
     expect(hasExpress).toBe(true);
   });
 
+  it('handles skillforge/suggest for database orm intent', async () => {
+    const params: SkillSuggestionParams = {
+      intent: 'PostgreSQL database ORM',
+    };
+
+    const result = await clientConn.sendRequest<SkillSuggestionResult>(
+      SKILLFORGE_SUGGEST_METHOD,
+      params
+    );
+
+    expect(result.skills.length).toBeGreaterThan(0);
+    const ids = result.skills.map((s) => s.id);
+    expect(ids.some((id) => id === 'prisma' || id === 'postgresql' || id === 'drizzle-orm')).toBe(true);
+  });
+
   it('handles skillforge/suggest with empty intent gracefully', async () => {
     const params: SkillSuggestionParams = {
       intent: '   ',
