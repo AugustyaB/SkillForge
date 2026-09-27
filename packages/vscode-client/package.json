@@ -14,10 +14,43 @@
   ],
   "main": "./dist/extension.js",
   "activationEvents": [
+    "onView:skillforge.contextView",
+    "onView:skillforge.quickActionsView",
+    "onView:skillforge.recentQueriesView",
     "onCommand:skillforge.testConnection",
-    "onCommand:skillforge.suggest"
+    "onCommand:skillforge.suggest",
+    "onCommand:skillforge.selectScope",
+    "onCommand:skillforge.rescanWorkspace",
+    "onCommand:skillforge.suggestForCurrentFile",
+    "onCommand:skillforge.runInstallCommand",
+    "onCommand:skillforge.clearRecentQueries"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "skillforge-activitybar",
+          "title": "SkillForge",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "skillforge-activitybar": [
+        {
+          "id": "skillforge.contextView",
+          "name": "Context & Stack"
+        },
+        {
+          "id": "skillforge.quickActionsView",
+          "name": "Quick Actions"
+        },
+        {
+          "id": "skillforge.recentQueriesView",
+          "name": "Recent Discoveries"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "skillforge.testConnection",
@@ -28,8 +61,56 @@
         "command": "skillforge.suggest",
         "title": "SkillForge: Suggest Skills for My Idea",
         "category": "SkillForge"
+      },
+      {
+        "command": "skillforge.selectScope",
+        "title": "Select Context Scope",
+        "category": "SkillForge",
+        "icon": "$(folder)"
+      },
+      {
+        "command": "skillforge.rescanWorkspace",
+        "title": "Re-scan Project Stack",
+        "category": "SkillForge",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "skillforge.suggestForCurrentFile",
+        "title": "SkillForge: Suggest Skills for Active File",
+        "category": "SkillForge",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "skillforge.runInstallCommand",
+        "title": "SkillForge: Run Install Command in Terminal",
+        "category": "SkillForge"
+      },
+      {
+        "command": "skillforge.clearRecentQueries",
+        "title": "Clear Discoveries History",
+        "category": "SkillForge",
+        "icon": "$(clear-all)"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "skillforge.selectScope",
+          "when": "view == skillforge.contextView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "skillforge.rescanWorkspace",
+          "when": "view == skillforge.contextView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "skillforge.clearRecentQueries",
+          "when": "view == skillforge.recentQueriesView",
+          "group": "navigation@1"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "SkillForge",

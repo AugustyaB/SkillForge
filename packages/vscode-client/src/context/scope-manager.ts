@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import type { WorkspaceContext } from '@skillforge/shared';
+import type { WorkspaceContext, DetectedPackage } from '@skillforge/shared';
 import {
   findCandidateScopes,
   resolveScopePath,
   normalizePath,
   detectManifestInDir,
+  readInstalledPackagesFromScope,
+  type InstalledPackageInfo,
 } from './scope-utils.js';
 
 export interface ScopeSelection {
@@ -160,10 +162,20 @@ export class ScopeManager {
   }
 
   /**
+   * Reads dependencies and packages detected in the active scope.
+   */
+  public getInstalledPackages(): InstalledPackageInfo[] {
+    if (!this.currentScope.absolutePath) {
+      return [];
+    }
+    return readInstalledPackagesFromScope(this.currentScope.absolutePath);
+  }
+
+  /**
    * Generates a partial WorkspaceContext payload reflecting the active scope and editor state.
    */
   public buildWorkspaceContext(
-    alreadyInstalled: string[] = []
+    alreadyInstalled?: string[]
   ): WorkspaceContext {
     const activeEditor = vscode.window.activeTextEditor;
     const activeSignals: WorkspaceContext['activeFileSignals'] = [];
@@ -181,6 +193,19 @@ export class ScopeManager {
       ? [this.currentScope.absolutePath]
       : [];
 
+    const pkgs = this.getInstalledPackages();
+    const detectedStack: DetectedPackage[] = pkgs.map((p) => ({
+      name: p.name,
+      version: p.version,
+      ecosystem: p.ecosystem || this.currentScope.ecosystem || 'multi',
+      sourceFile: p.sourceFile || 'package.json',
+    }));
+
+    const installed =
+      alreadyInstalled !== undefined
+        ? alreadyInstalled
+        : detectedStack.map((p) => p.name);
+
     return {
       scope: {
         mode: this.currentScope.isRoot ? 'auto' : 'folder',
@@ -188,10 +213,11 @@ export class ScopeManager {
         label: this.currentScope.label,
       },
       ecosystem: this.currentScope.ecosystem || 'multi',
-      alreadyInstalled,
-      detectedStack: [],
+      alreadyInstalled: installed,
+      detectedStack,
       technologies: [],
       activeFileSignals: activeSignals,
     };
   }
 }
+

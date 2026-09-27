@@ -7,6 +7,7 @@ import {
   detectManifestInDir,
   findCandidateScopes,
   resolveScopePath,
+  readInstalledPackagesFromScope,
 } from '../context/scope-utils.js';
 
 describe('ScopeUtils', () => {
@@ -115,4 +116,81 @@ describe('ScopeUtils', () => {
       expect(res.absolutePath).toBe(normalizePath(tempDir));
     });
   });
+
+  describe('readInstalledPackagesFromScope', () => {
+    it('reads dependencies and devDependencies from package.json', () => {
+      const pkgJson = {
+        name: 'my-app',
+        dependencies: {
+          express: '^4.18.2',
+          zod: '~3.22.0',
+        },
+        devDependencies: {
+          typescript: '^5.0.0',
+        },
+      };
+      fs.writeFileSync(path.join(tempDir, 'package.json'), JSON.stringify(pkgJson, null, 2));
+
+      const pkgs = readInstalledPackagesFromScope(tempDir);
+      expect(pkgs).toEqual([
+        { name: 'express', version: '^4.18.2', ecosystem: 'javascript', sourceFile: 'package.json' },
+        { name: 'zod', version: '~3.22.0', ecosystem: 'javascript', sourceFile: 'package.json' },
+        { name: 'typescript', version: '^5.0.0', ecosystem: 'javascript', sourceFile: 'package.json' },
+      ]);
+    });
+
+    it('reads packages from requirements.txt with version operators and comments', () => {
+      const reqTxt = `
+# Comment line
+fastapi==0.100.0
+uvicorn>=0.22.0
+pytest
+-r other-requirements.txt
+`;
+      fs.writeFileSync(path.join(tempDir, 'requirements.txt'), reqTxt);
+
+      const pkgs = readInstalledPackagesFromScope(tempDir);
+      expect(pkgs).toEqual([
+        { name: 'fastapi', version: '==0.100.0', ecosystem: 'python', sourceFile: 'requirements.txt' },
+        { name: 'uvicorn', version: '>=0.22.0', ecosystem: 'python', sourceFile: 'requirements.txt' },
+        { name: 'pytest', version: undefined, ecosystem: 'python', sourceFile: 'requirements.txt' },
+      ]);
+    });
+
+    it('reads dependencies from Cargo.toml', () => {
+      const cargoToml = `
+[package]
+name = "my-crate"
+version = "0.1.0"
+
+[dependencies]
+serde = "1.0"
+tokio = { version = "1.28", features = ["full"] }
+
+[dev-dependencies]
+criterion = "0.5"
+`;
+      fs.writeFileSync(path.join(tempDir, 'Cargo.toml'), cargoToml);
+
+      const pkgs = readInstalledPackagesFromScope(tempDir);
+      expect(pkgs).toEqual([
+        { name: 'serde', version: '1.0', ecosystem: 'rust', sourceFile: 'Cargo.toml' },
+        { name: 'tokio', version: '1.28', ecosystem: 'rust', sourceFile: 'Cargo.toml' },
+        { name: 'criterion', version: '0.5', ecosystem: 'rust', sourceFile: 'Cargo.toml' },
+      ]);
+    });
+
+    it('handles corrupt JSON in package.json gracefully without crashing', () => {
+      fs.writeFileSync(path.join(tempDir, 'package.json'), '{ invalid json ...');
+      const pkgs = readInstalledPackagesFromScope(tempDir);
+      expect(pkgs).toEqual([]);
+    });
+
+    it('handles empty, nonexistent, or hostile paths gracefully', () => {
+      expect(readInstalledPackagesFromScope('')).toEqual([]);
+      expect(readInstalledPackagesFromScope(null as unknown as string)).toEqual([]);
+      expect(readInstalledPackagesFromScope('/non/existent/path/9999')).toEqual([]);
+    });
+  });
 });
+

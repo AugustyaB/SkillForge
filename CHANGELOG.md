@@ -14,6 +14,35 @@ The project follows a structured version & phase sequence:
   - `Phase 7`: Polish, Packaging & Production Readiness (⬜ Pending)
   - `Phase 8`: E2E Verification & Release Sign-Off (⬜ Pending)
 
+## Phase 5.1: VS Code Client — The Command Center (2026-09-27)
+
+### Deliverables
+- **Custom Activity Bar & ViewContainer (`packages/vscode-client/resources/icon.svg`, `package.json`)**:
+  - Theme-adaptive anvil/forge Activity Bar icon with amber ember accents (`resources/icon.svg`).
+  - Registered `skillforge-activitybar` ViewContainer with three dedicated views:
+    - `skillforge.contextView`: Context & Stack
+    - `skillforge.quickActionsView`: Quick Actions
+    - `skillforge.recentQueriesView`: Recent Discoveries
+- **Active Context Folder Scope Selector (`packages/vscode-client/src/context/`)**:
+  - Pure `scope-utils.ts` for monorepo package discovery (`maxDepth: 3`, excludes `node_modules`, `dist`, `.git`), manifest detection (`package.json`, `requirements.txt`, `Cargo.toml`, etc.), and graceful root fallback.
+  - Dependency inspection via `readInstalledPackagesFromScope` extracting installed packages, versions, and source manifests.
+  - `ScopeManager` with `workspaceState` persistence, interactive QuickPick (`skillforge.selectScope`), and automated `WorkspaceContext` signal extraction.
+- **Sidebar Tree Views (`packages/vscode-client/src/views/`)**:
+  - Decoupled pure `tree-view-models.ts` for isolated unit testing without VS Code mocks.
+  - `ContextTreeProvider`: Displays active scope, detected ecosystem, and expandable list of detected packages with versions.
+  - `QuickActionsTreeProvider`: High-frequency shortcuts ("Suggest for Current File", "Search 118 Skills", "Re-scan Project Stack").
+  - `RecentQueriesTreeProvider`: Persists up to 15 recent queries with one-click re-query execution and clear history.
+- **Inline CodeLens Provider (`packages/vscode-client/src/providers/`)**:
+  - `comment-parser.ts`: Multi-language comment trigger parser (`// IDEA:`, `// SKILL:`, `# IDEA:`, `# SKILL:`) with line offset calculation and hostile input guards.
+  - `SkillForgeCodeLensProvider`: Debounced (300ms) inline CodeLens across 11 programming languages triggering instant suggestions.
+- **Integrated Terminal Runner (`packages/vscode-client/src/terminal/`)**:
+  - `TerminalRunner`: Dedicated `"SkillForge"` terminal manager for executing derived install commands (`pnpm add`, `pip install`, `cargo add`, etc.) directly from suggestion notifications.
+
+### Verification Proof
+- `pnpm typecheck` (`tsc -b`): Passed with 0 diagnostics.
+- `pnpm test` (`vitest run`): 134/134 tests passing across 14 test suites in 690ms.
+- `pnpm build`: Clean build across all monorepo workspaces (`@skillforge/shared`, `@skillforge/server`, `@skillforge/vscode-client`).
+
 ---
 
 ## Bug Remediation & Hardening: 100% Defect Resolution (BUG-01 to BUG-10) (2026-09-27)

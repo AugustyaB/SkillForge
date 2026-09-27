@@ -1,36 +1,33 @@
 # STATE.md — Session Memory
 
 > **Last Updated**: 2026-09-27
-> **Current Phase**: Bug Remediation (BUG-01 to BUG-10) — COMPLETE (100% Resolved)
+> **Current Phase**: Phase 5.1 (VS Code Client: The Command Center) — COMPLETE
 > **Context Health**: PEAK
 
 ## Active Session
 
-- **Status**: All 10 defects from `BUGS.md` (BUG-01 through BUG-10) resolved and empirically verified.
-- **Verification Proof**: 102/102 tests passing across 11 test suites in 383ms; clean typecheck and build.
-- **Next Action**: Gate 1 planning for Phase 5 (VS Code Client UX).
+- **Status**: Phase 5.1 (The Command Center) fully implemented, empirically verified, and integrated into VS Code extension package.
+- **Verification Proof**: 134/134 tests passing across 14 test suites in 690ms; clean typecheck and build across all 3 workspaces.
+- **Next Action**: Gate 1 planning for Phase 5.2 (The Suggestion Canvas: Interactive Webview with rich cards, trust seals, and CSS token design system).
 
 ## Current Position
 
-- **Phase**: Bug Remediation (Complete) → Phase 5
-- **Task**: 100% of BUGS.md defect registry resolved and verified.
-- **Status**: Hardened & Ready for Phase 5.
+- **Phase**: Phase 5.1 (Complete) → Phase 5.2
+- **Task**: The Command Center (Sidebar ViewContainer, Context Folder Scope Selector, Inline CodeLens, Terminal Runner, Quick Actions, Recent Discoveries) delivered.
+- **Status**: Verified & Integrated.
 
 ## Last Session Summary
-- Fully resolved all 10 confirmed defects in `BUGS.md`:
-  - BUG-01: Guarded regex word boundary matching with `/^\w+$/` and `escapeRegExp` in `SkillsRepository`.
-  - BUG-02: Added `indicatorIndex` in `SkillsRepository` and resolved manifest package names to canonical skill IDs.
-  - BUG-03: Flipped ecosystem precedence in `SuggestionEngine` (explicit query > ambient context).
-  - BUG-04: Updated `QueryCache.generateKey` to hash full request options and context.
-  - BUG-05: Provided valid URL fallback and default learning resource entry in `GroundTruthAnchor.buildUnanchored()`.
-  - BUG-06: Fixed stale cache retention test in `health-verifier.test.ts`.
-  - BUG-07: Added defensive null/undefined guards across `SkillForgeServer` and `SuggestionEngine`.
-  - BUG-08: Stripped inline `#` comments in `parseRequirementsTxt`.
-  - BUG-09: Awaited download counts in `HealthVerifier` within timeout budget.
-  - BUG-10: Prioritized `dist-tags.latest` publish date over `modified` date in `HealthVerifier`.
-- Maintained 100% green verification: 102 tests passing across 11 suites in ~380ms.
+- Delivered Phase 5.1 (The Command Center) in two focused waves:
+  - **Activity Bar & ViewContainer**: Added theme-adaptive anvil/forge SVG icon and registered `skillforge-activitybar` with 3 views: Context & Stack, Quick Actions, Recent Discoveries.
+  - **Context Folder Scope Selector**: Built `scope-utils.ts` (monorepo scan, manifest detection, `readInstalledPackagesFromScope`) and `ScopeManager` (`workspaceState` persistence, QuickPick selection, auto-injection into `WorkspaceContext`).
+  - **Inline CodeLens Provider**: Implemented `comment-parser.ts` supporting `// IDEA:`, `// SKILL:`, `# IDEA:`, `# SKILL:` across 11 languages with 300ms debounced updates.
+  - **Integrated Terminal Runner**: Created `TerminalRunner` with dedicated `"SkillForge"` terminal and automated command derivation (`pnpm add`, `pip install`, `cargo add`).
+  - **Sidebar Tree Providers**: Implemented `ContextTreeProvider`, `QuickActionsTreeProvider`, and `RecentQueriesTreeProvider` powered by decoupled pure `tree-view-models.ts`.
+  - **Command Integrations**: Wired `skillforge.selectScope`, `skillforge.rescanWorkspace`, `skillforge.suggestForCurrentFile`, `skillforge.runInstallCommand`, `skillforge.clearRecentQueries`, and enhanced `skillforge.suggest` with terminal install buttons and recent query recording.
+- Full verification: 134/134 tests passing (100% green), clean `tsc -b`, and clean multi-package build.
 
 ## Next Steps
 
-1. Present Gate 1 Implementation Plan for Phase 5: VS Code Client UX (Command Palette, Sidebar with context scope selector, inline CodeLens, Webview results panel).
-2. Halt for user approval before writing Phase 5 implementation code.
+1. Present Gate 1 Implementation Plan for Phase 5.2: The Suggestion Canvas (Interactive Webview results panel, CSS token design system, trust seals, collapsible "Why Use It" cards, and one-click install triggers).
+2. Halt for user approval before writing Phase 5.2 implementation code.
+

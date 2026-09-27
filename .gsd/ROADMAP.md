@@ -10,7 +10,7 @@
 - [x] 100+ curated skills database with categories, relationships, and metadata validation
 - [x] Suggestion engine with natural language intent parsing and scoped workspace dependency scanning
 - [x] Reliability engine with Zod schema contracts, package existence checks, health indicators, and trust tiers
-- [ ] VS Code UX with Command Palette, Sidebar (including context folder selector), and inline CodeLens triggers
+- [x] VS Code UX with Command Palette, Sidebar (including context folder selector), and inline CodeLens triggers
 - [ ] Interactive Webview results panel with skill cards, "WHY" explanations, and trust badges
 - [ ] BYOK LLM integration (OpenAI-compatible & Gemini) securely using SecretStorage with optional Validator mode
 - [ ] Duplicate query detection, "already installed" detection, and graceful fallback cascade
@@ -69,18 +69,32 @@
 **Requirements**: REQ-Reliability, REQ-Fallbacks
 **Depends on**: Phase 3
 
-### Phase 5: VS Code Client UX — Entry Points & Webview Panel
-**Status**: ⬜ Not Started
-**Objective**: Build the complete user-facing frontend in VS Code: Command Palette, Sidebar with context scope selector, inline CodeLens, and rich Webview results panel with strict security.
+### Phase 5.1: VS Code Client UX — The Command Center
+**Status**: ✅ Complete
+**Objective**: Build the core workbench integration: Command Palette, Activity Bar ViewContainer, Sidebar treeviews, Context Scope selector, inline CodeLens, and integrated terminal runner.
 **Deliverables**:
-- Command Palette quick-query flow (`SkillForge: Suggest Skills`)
-- Sidebar treeview panel with context scope dropdown, recent queries, and stack overview
-- CodeLens provider for `// IDEA:` and `// SKILL:` comments with debouncing
-- Secure Webview results panel with strict Content Security Policy (CSP) and nonces
-- Interactive skill cards displaying trust badges, difficulty, "WHY" explanations, and health signals
-- Context selector allowing users to toggle between entire workspace and specific subfolders
-**Requirements**: REQ-UI, REQ-Security
+- Custom Activity Bar forge icon and dedicated ViewContainer (`skillforge-activitybar`)
+- Context & Stack view showing active scope, detected ecosystem, and installed packages with versions
+- Quick Actions view with one-click triggers
+- Recent Discoveries view persisting past queries in `workspaceState` with instant replay
+- Active Context Folder Scope Selector with monorepo auto-discovery and manifest inspection
+- Inline CodeLens provider for `// IDEA:` and `// SKILL:` comments across 11 languages with 300ms debounce
+- Dedicated SkillForge integrated terminal runner for 1-click install execution
+**Requirements**: REQ-UI, REQ-Context
 **Depends on**: Phase 1, Phase 4
+
+### Phase 5.2: VS Code Client UX — The Suggestion Canvas
+**Status**: ⬜ In Progress (Next)
+**Objective**: Build the rich, interactive Webview panel featuring the SkillForge CSS token design system, trust seals, collapsible "Why Use It" cards, health indicators, conflict alerts, and copy/install actions.
+**Deliverables**:
+- Secure Webview panel with strict Content Security Policy (CSP), nonces, and `asWebviewUri` asset loading
+- SkillForge Design System: typography, light/dark/high-contrast VS Code theme integration, responsive CSS grid
+- Skill Cards with category chips, difficulty tags, trust tier badges (🟢 Verified, 🟡 Validated, etc.)
+- Deep Dive drawer / collapsible details ("Why Use It", learning resources, alternatives, caveats)
+- One-click copy and terminal install triggers communicating via typed webview message passing
+- Empty states, loading skeletons, and category browsing drawer when fallback cascade triggers
+**Requirements**: REQ-UI, REQ-Security
+**Depends on**: Phase 5.1
 
 ### Phase 6: LLM Providers & BYOK Integration
 **Status**: ⬜ Not Started
