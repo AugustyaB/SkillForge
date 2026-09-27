@@ -8,11 +8,41 @@ The project follows a structured version & phase sequence:
   - `Phase 1`: Foundation — LSP Server & Monorepo Scaffold (✅ Complete)
   - `Phase 2`: Skills Database & Schema — The Knowledge Base (✅ Complete)
   - `Phase 3`: Suggestion Engine & Context Scoping (✅ Complete)
-  - `Phase 4`: Reliability Engine & Trust Verification (⬜ Pending)
+  - `Phase 4`: Reliability Engine & Trust Verification (✅ Complete)
   - `Phase 5`: VS Code UI & Experience (⬜ Pending)
   - `Phase 6`: Fallback Cascade & Advanced Capabilities (⬜ Pending)
   - `Phase 7`: Polish, Packaging & Production Readiness (⬜ Pending)
   - `Phase 8`: E2E Verification & Release Sign-Off (⬜ Pending)
+
+---
+
+## Phase 4: Reliability Engine & Trust Verification (2026-09-27)
+
+### Deliverables
+- **Runtime Schema Validation (`@skillforge/shared/src/schemas.ts`)**:
+  - `RawSuggestionSchema` enforces Zod contracts on untrusted inputs (LLM, external).
+  - Validates name, optional ID format, URL validity, confidence bounds (0-1).
+  - `validateRawSuggestion()` and `safeValidateRawSuggestion()` helpers.
+- **Ground-Truth Anchoring (`@skillforge/server/src/reliability/ground-truth-anchor.ts`)**:
+  - Cross-references suggestions against curated 118-skill database via 3 match strategies.
+  - Matched skills elevated to `verified` trust tier with full curated metadata.
+- **Conflict & Alternative Detector (`@skillforge/server/src/reliability/conflict-detector.ts`)**:
+  - Detects installed conflicts and co-suggestion conflicts.
+  - Annotates skills with `conflictWith` IDs and beginner-friendly `conflictWarning` messages.
+- **Registry Health Verification (`@skillforge/server/src/reliability/health-verifier.ts`)**:
+  - Queries npm registry with injectable `fetch`, classifies packages as healthy/aging/abandoned/risky.
+  - In-memory cache with 24-hour TTL, AbortSignal timeout protection, offline-safe fallback.
+- **Trust Tier Classification (`@skillforge/server/src/reliability/trust-tier-classifier.ts`)**:
+  - 4-tier system: verified, validated, suggested, deprecated. Filtering via `filterByMinTier()`.
+- **Fallback Cascade (`@skillforge/server/src/reliability/fallback-cascade.ts`)**:
+  - Multi-level fallback: broader tag search then curated category browser starter packs.
+- **Full SuggestionEngine Integration**: Wired all reliability components into `suggest()` pipeline.
+- **Protocol Extensions**: `conflictWith`, `conflictWarning` on `SuggestedSkill`; `categoryRecommendations` on `SkillSuggestionResult`.
+
+### Verification Proof
+- `pnpm typecheck` (`tsc -b`): Passed with 0 TypeScript diagnostics.
+- `pnpm test`: Passed 92/92 tests across 11 test suites.
+- `pnpm build`: Clean build across all packages with 118-skill dataset validation.
 
 ---
 

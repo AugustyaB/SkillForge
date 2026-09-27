@@ -12,6 +12,7 @@ This document records the major architectural, technical, and design decisions m
 - [ADR-004: Zod Runtime Schema Validation & Single Source of Truth](#adr-004-zod-runtime-schema-validation--single-source-of-truth)
 - [ADR-005: In-Memory Inverted Indexing for Curated Knowledge Base](#adr-005-in-memory-inverted-indexing-for-curated-knowledge-base)
 - [ADR-006: Scoped Multi-Ecosystem Dependency Scanning & Deterministic Caching](#adr-006-scoped-multi-ecosystem-dependency-scanning--deterministic-caching)
+- [ADR-007: Layered Reliability Pipeline with Injectable Health Verification](#adr-007-layered-reliability-pipeline-with-injectable-health-verification)
 
 ---
 
@@ -95,3 +96,17 @@ This document records the major architectural, technical, and design decisions m
   - Implement `QueryCache` using SHA-256 hashes of `query + scopePaths + installedPackages` with a 10-minute TTL to serve duplicate queries in `0ms`.
 - **Rationale**: Eliminates editor lag, prevents runaway disk I/O in monorepos, and ensures repeat queries return instantaneously.
 - **Trade-offs**: Nested dependencies inside subdirectories are not discovered unless the user scopes to that subfolder.
+
+---
+
+## ADR-007: Layered Reliability Pipeline with Injectable Health Verification
+
+- **Date**: 2026-09-27
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 4)
+- **Context**: SkillForge is an advisor targeting beginners who cannot independently verify tool quality. Suggesting abandoned, deprecated, or conflicting packages causes outsized harm. LLM-generated suggestions may hallucinate nonexistent packages or produce structurally malformed outputs. The system must remain fully functional offline without live network access.
+- **Decision**:
+  - Implement a 6-layer reliability pipeline: (1) Zod schema validation on raw inputs, (2) Ground-truth anchoring against the curated 118-skill database, (3) Registry health verification with injectable `fetch` and 24-hour TTL cache, (4) 4-tier trust classification (verified/validated/suggested/deprecated), (5) Conflict and alternative detection, (6) Fallback cascade with category browser.
+  - Use dependency injection (`FetchFunction` type) for the `HealthVerifier` to enable deterministic zero-network unit tests and seamless offline fallback.
+  - Integrate all reliability components as injectable dependencies into `SuggestionEngine`, allowing individual layers to be replaced or disabled.
+- **Rationale**: Layered architecture isolates each concern for independent testing and extension. DI for fetch eliminates flaky network-dependent tests. The fallback cascade guarantees the user never sees an empty screen. The trust tier system provides transparent confidence signals.
+- **Trade-offs**: All 6 layers run synchronously in the suggestion pipeline, adding marginal latency (~1-5ms for local operations). Health verification against live registries requires async network calls that are deferred to future LLM integration phases. The curated DB is the only source of `verified` tier — expanding coverage requires manual curation.
