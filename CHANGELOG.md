@@ -34,7 +34,7 @@ The project follows a structured version & phase sequence:
   - **Registry Health Bar**: Displays GitHub stars, weekly download counts, last publish recency, and maintenance status with SVG indicators.
   - **Conflict Warning Banners**: Highlights conflicting packages/tools with SVG warning indicator.
   - **Deep Dive Drawer**: Collapsible accordion revealing alternatives, complementary tools, and validated documentation links.
-  - **Fallback Category Catalog**: Structured browsing cards for software domains when direct keyword matches are sparse.
+  - **Fallback Cascade & Starter Skills UX**: When fallback suggestions are triggered for zero-match queries, renders a clear amber explanation banner (`No direct skill matches found for "<query>". Showing recommended starter tools:`) and displays interactive category exploration cards below starter tools.
   - **Interactive Action Bar**: One-click terminal install in active scope, clipboard command copying with animated `"Copied"` feedback, and docs launcher.
 - **CodeLens Refinement (`packages/vscode-client/src/providers/codelens-provider.ts`)**:
   - Replaced decorative sparkles with clean developer-focused prompt: `SkillForge: Suggest libraries for "..."`.
@@ -44,8 +44,9 @@ The project follows a structured version & phase sequence:
 
 ### Verification Proof
 - `pnpm typecheck` (`tsc -b`): Passed with 0 diagnostics.
-- `pnpm test` (`vitest run`): 166/166 tests passing across 16 test suites in 843ms.
+- `pnpm test` (`vitest run`): 169/169 tests passing across 16 test suites in 858ms.
 - `pnpm build`: Clean build across all monorepo workspaces (`@skillforge/shared`, `@skillforge/server`, `@skillforge/vscode-client`).
+- **Playwright E2E Suite**: 8/8 automated UI tests passing across full rendering pipeline, theme variables, micro-interactions, XSS sanitization, and Fallback Cascade dual rendering.
 
 ---
 

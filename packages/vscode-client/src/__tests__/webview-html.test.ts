@@ -14,6 +14,28 @@ import {
 import type { SuggestedSkill, SkillSuggestionResult } from '@skillforge/shared';
 
 describe('WebviewHtml (Clean Developer UI)', () => {
+  const mockSkill: SuggestedSkill = {
+    id: 'nextjs',
+    name: 'Next.js',
+    category: 'frontend-framework',
+    difficulty: 'beginner',
+    description: 'The React Framework for the Web',
+    whyUseIt: 'Built-in SSR, routing, and optimization',
+    tags: ['react', 'ssr'],
+    ecosystem: 'javascript',
+    officialUrl: 'https://nextjs.org',
+    learnResources: [
+      { label: 'Next.js Documentation', url: 'https://nextjs.org/docs', type: 'docs' },
+    ],
+    alternatives: ['remix', 'astro'],
+    worksWellWith: ['tailwind-css', 'prisma'],
+    prerequisites: ['react'],
+    stackIndicators: ['next'],
+    trustTier: 'verified',
+    confidence: 0.98,
+    reasoning: 'Matches full-stack React requirement',
+  };
+
   describe('escapeHtml', () => {
     it('escapes dangerous HTML characters', () => {
       expect(escapeHtml('<script>alert("xss")</script>')).toBe(
@@ -135,28 +157,6 @@ describe('WebviewHtml (Clean Developer UI)', () => {
   });
 
   describe('renderSkillCard (Developer-grade Action Buttons)', () => {
-    const mockSkill: SuggestedSkill = {
-      id: 'nextjs',
-      name: 'Next.js',
-      category: 'frontend-framework',
-      difficulty: 'beginner',
-      description: 'The React Framework for the Web',
-      whyUseIt: 'Built-in SSR, routing, and optimization',
-      tags: ['react', 'ssr'],
-      ecosystem: 'javascript',
-      officialUrl: 'https://nextjs.org',
-      learnResources: [
-        { label: 'Next.js Documentation', url: 'https://nextjs.org/docs', type: 'docs' },
-      ],
-      alternatives: ['remix', 'astro'],
-      worksWellWith: ['tailwind-css', 'prisma'],
-      prerequisites: ['react'],
-      stackIndicators: ['next'],
-      trustTier: 'verified',
-      confidence: 0.98,
-      reasoning: 'Matches full-stack React requirement',
-    };
-
     it('renders card title, package identifier, install button with terminal icon, and copy button', () => {
       const html = renderSkillCard(mockSkill);
       expect(html).toContain('Next.js');
@@ -273,6 +273,84 @@ describe('WebviewHtml (Clean Developer UI)', () => {
       expect(html).toContain('sf-spinner');
       expect(html).toContain('Analyzing intent and workspace context...');
       expect(html).not.toContain('⏳');
+    });
+
+    it('renders fallback banner and category recommendations when fallback is used with starter skills', () => {
+      const result: SkillSuggestionResult = {
+        skills: [mockSkill],
+        queryEcho: 'nonexistent-tool',
+        fallbackUsed: true,
+        categoryRecommendations: [
+          {
+            category: 'database',
+            label: 'Databases',
+            description: 'Storage and persistence',
+            skillIds: ['postgresql'],
+          },
+        ],
+        timings: { localMs: 2, totalMs: 2 },
+      };
+
+      const html = generateWebviewHtml({
+        nonce: 'nonce',
+        cspSource: 'vscode-webview:',
+        result,
+      });
+
+      expect(html).toContain('sf-fallback-banner');
+      expect(html).toContain('No direct skill matches found for');
+      expect(html).toContain('nonexistent-tool');
+      expect(html).toContain('sf-card-grid');
+      expect(html).toContain('Next.js');
+      expect(html).toContain('sf-category-section');
+      expect(html).toContain('Databases');
+      expect(html).toContain('Storage and persistence');
+    });
+
+    it('safely escapes hostile query strings in fallback banner', () => {
+      const result: SkillSuggestionResult = {
+        skills: [mockSkill],
+        queryEcho: '<script>alert("xss")</script> & "c++"',
+        fallbackUsed: true,
+        timings: { localMs: 1, totalMs: 1 },
+      };
+
+      const html = generateWebviewHtml({
+        nonce: 'nonce',
+        cspSource: 'vscode-webview:',
+        result,
+      });
+
+      expect(html).toContain('sf-fallback-banner');
+      expect(html).not.toContain('<script>alert("xss")</script>');
+      expect(html).toContain('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;');
+      expect(html).toContain('&amp; &quot;c++&quot;');
+    });
+
+    it('omits fallback banner and category recommendations when fallbackUsed is false', () => {
+      const result: SkillSuggestionResult = {
+        skills: [mockSkill],
+        queryEcho: 'react router',
+        fallbackUsed: false,
+        categoryRecommendations: [
+          {
+            category: 'database',
+            label: 'Databases',
+            description: 'Storage and persistence',
+            skillIds: ['postgresql'],
+          },
+        ],
+        timings: { localMs: 1, totalMs: 1 },
+      };
+
+      const html = generateWebviewHtml({
+        nonce: 'nonce',
+        cspSource: 'vscode-webview:',
+        result,
+      });
+
+      expect(html).not.toContain('<div class="sf-fallback-banner">');
+      expect(html).not.toContain('<div class="sf-category-section">');
     });
   });
 });

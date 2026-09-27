@@ -410,6 +410,18 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
   `
       : skills.length > 0
         ? `
+    ${
+      result?.fallbackUsed
+        ? `
+    <div class="sf-fallback-banner">
+      <span class="sf-fallback-icon sf-icon">${ICON_INFO}</span>
+      <span>
+        No direct skill matches found for <strong>"${escapeHtml(query)}"</strong>. Showing recommended starter tools for your ecosystem:
+      </span>
+    </div>
+    `
+        : ''
+    }
     <div class="sf-toolbar">
       <div class="sf-filter-group">
         <button class="sf-filter-btn active" data-filter="all">All (${skills.length})</button>
@@ -427,6 +439,12 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
     <main class="sf-card-grid" id="cardGrid">
       ${skills.map((s) => renderSkillCard(s)).join('')}
     </main>
+
+    ${
+      result?.fallbackUsed && result.categoryRecommendations && result.categoryRecommendations.length > 0
+        ? renderCategoryRecommendations(result.categoryRecommendations)
+        : ''
+    }
   `
         : `
     <div class="sf-empty-state">

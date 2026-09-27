@@ -559,6 +559,60 @@ export const WEBVIEW_STYLES = `
     text-decoration: underline;
   }
 
+  /* Fallback Notification Banner */
+  .sf-fallback-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.28);
+    border-radius: 6px;
+    color: var(--sf-fg);
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+
+  .sf-fallback-banner strong {
+    color: var(--vscode-charts-orange, #f59e0b);
+  }
+
+  .sf-fallback-banner .sf-fallback-icon {
+    color: var(--vscode-charts-orange, #f59e0b);
+    flex-shrink: 0;
+  }
+
+  /* Category Recommendations Section */
+  .sf-category-section {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--sf-card-border);
+  }
+
+  .sf-category-section .sf-empty-title {
+    font-size: 14px;
+    margin-bottom: 4px;
+    text-align: left;
+  }
+
+  .sf-category-section .sf-empty-desc {
+    margin-bottom: 12px;
+    text-align: left;
+    max-width: none;
+  }
+
+  .sf-empty-state .sf-category-section {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 16px;
+  }
+
+  .sf-empty-state .sf-category-section .sf-empty-title,
+  .sf-empty-state .sf-category-section .sf-empty-desc {
+    text-align: center;
+  }
+
   /* Empty & Fallback States */
   .sf-empty-state {
     text-align: center;
