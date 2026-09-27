@@ -25,17 +25,19 @@ The project follows a structured version & phase sequence:
   - Bidirectional typed IPC (`webview-messages.ts`) handling terminal install execution, clipboard copy, safe external URL navigation, and in-canvas re-querying.
 - **Visual Design System & Theme Integration (`packages/vscode-client/src/webview/design-tokens.ts`)**:
   - 100% native VS Code CSS variable binding across Dark+, Light+, GitHub Dark/Light, and High Contrast.
-  - Distinctive SkillForge amber ember branding (`#F59E0B`), card elevation hover effects, and responsive auto-fill grid layout.
-  - High-contrast accessibility compliance (`@media (forced-colors: active)` and `.vscode-high-contrast`).
+  - Minimalist, senior-developer aesthetic: eliminated all decorative unicode emojis in favor of crisp, embedded SVG codicons (`ICON_TERMINAL`, `ICON_COPY`, `ICON_CHECK`, `ICON_EXTERNAL`, `ICON_STAR`, `ICON_DOWNLOAD`, `ICON_CLOCK`, `ICON_WARNING`, `ICON_INFO`, `ICON_FORGE`).
+  - Sleek card hover elevation, responsive auto-fill grid layout, CSS ring spinner, and high-contrast accessibility compliance.
 - **Interactive Skill Cards & Components (`packages/vscode-client/src/webview/webview-html.ts`)**:
-  - **Trust Seals**: Transparent trust badges (🟢 Verified, 🟡 Validated, 🟠 Suggested, ⛔ Deprecated).
-  - **Match Confidence**: Percentage match score pills (e.g. `⚡ 96% Match`).
-  - **"Why Use It" Callouts**: Prominent rationale boxes explaining why the tool fits the user's intent.
-  - **Registry Health Bar**: Displays GitHub stars, weekly download counts, last publish recency, and maintenance status.
-  - **Conflict Warning Banners**: Highlights conflicting packages/tools with clear explanation.
-  - **Deep Dive Drawer**: Collapsible accordion revealing alternatives, complementary tools, and validated learning links.
+  - **Trust Seals**: Engineered status badges with vector icons (`Verified`, `Validated`, `Suggested`, `Deprecated`).
+  - **Match Confidence**: Clean percentage score pills (`96% match`).
+  - **"Why this tool" Rationale**: Understated rationale boxes explaining why the tool fits the user's intent.
+  - **Registry Health Bar**: Displays GitHub stars, weekly download counts, last publish recency, and maintenance status with SVG indicators.
+  - **Conflict Warning Banners**: Highlights conflicting packages/tools with SVG warning indicator.
+  - **Deep Dive Drawer**: Collapsible accordion revealing alternatives, complementary tools, and validated documentation links.
   - **Fallback Category Catalog**: Structured browsing cards for software domains when direct keyword matches are sparse.
-  - **Interactive Action Bar**: One-click terminal install in active scope, clipboard command copying with animated `"✓ Copied!"` feedback, and docs launcher.
+  - **Interactive Action Bar**: One-click terminal install in active scope, clipboard command copying with animated `"Copied"` feedback, and docs launcher.
+- **CodeLens Refinement (`packages/vscode-client/src/providers/codelens-provider.ts`)**:
+  - Replaced decorative sparkles with clean developer-focused prompt: `SkillForge: Suggest libraries for "..."`.
 - **Workbench Integration**:
   - Registered `skillforge.showCanvas` command and view/title menu action on the Sidebar view.
   - Integrated with `skillforge.suggest` to stream loading skeletons and results directly into the canvas.

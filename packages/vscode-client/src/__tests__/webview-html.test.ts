@@ -13,7 +13,7 @@ import {
 } from '../webview/webview-html.js';
 import type { SuggestedSkill, SkillSuggestionResult } from '@skillforge/shared';
 
-describe('WebviewHtml', () => {
+describe('WebviewHtml (Clean Developer UI)', () => {
   describe('escapeHtml', () => {
     it('escapes dangerous HTML characters', () => {
       expect(escapeHtml('<script>alert("xss")</script>')).toBe(
@@ -44,32 +44,45 @@ describe('WebviewHtml', () => {
     });
   });
 
-  describe('renderTrustSeal', () => {
-    it('renders correct seal for each trust tier', () => {
-      expect(renderTrustSeal('verified')).toContain('sf-seal-verified');
-      expect(renderTrustSeal('verified')).toContain('Verified');
+  describe('renderTrustSeal (No Emojis)', () => {
+    it('renders clean badges with embedded SVG icons for each trust tier', () => {
+      const verified = renderTrustSeal('verified');
+      expect(verified).toContain('sf-seal-verified');
+      expect(verified).toContain('Verified');
+      expect(verified).toContain('<svg');
+      expect(verified).not.toContain('🟢');
 
-      expect(renderTrustSeal('validated')).toContain('sf-seal-validated');
-      expect(renderTrustSeal('validated')).toContain('Validated');
+      const validated = renderTrustSeal('validated');
+      expect(validated).toContain('sf-seal-validated');
+      expect(validated).toContain('Validated');
+      expect(validated).toContain('<svg');
+      expect(validated).not.toContain('🟡');
 
-      expect(renderTrustSeal('suggested')).toContain('sf-seal-suggested');
-      expect(renderTrustSeal('suggested')).toContain('Suggested');
+      const suggested = renderTrustSeal('suggested');
+      expect(suggested).toContain('sf-seal-suggested');
+      expect(suggested).toContain('Suggested');
+      expect(suggested).not.toContain('🟠');
 
-      expect(renderTrustSeal('deprecated')).toContain('sf-seal-deprecated');
-      expect(renderTrustSeal('deprecated')).toContain('Deprecated');
+      const deprecated = renderTrustSeal('deprecated');
+      expect(deprecated).toContain('sf-seal-deprecated');
+      expect(deprecated).toContain('Deprecated');
+      expect(deprecated).toContain('<svg');
+      expect(deprecated).not.toContain('⛔');
     });
   });
 
-  describe('renderConfidence', () => {
-    it('clamps and rounds confidence score to percentage', () => {
-      expect(renderConfidence(0.956)).toContain('96% Match');
-      expect(renderConfidence(1.2)).toContain('100% Match');
-      expect(renderConfidence(-0.1)).toContain('0% Match');
+  describe('renderConfidence (No Emojis)', () => {
+    it('formats confidence score cleanly as percentage match without lightning emojis', () => {
+      const conf = renderConfidence(0.956);
+      expect(conf).toContain('96% match');
+      expect(conf).not.toContain('⚡');
+      expect(renderConfidence(1.2)).toContain('100% match');
+      expect(renderConfidence(-0.1)).toContain('0% match');
     });
   });
 
-  describe('renderHealthBar', () => {
-    it('renders stars, downloads, and health status when metrics are present', () => {
+  describe('renderHealthBar (Clean Metrics & SVGs)', () => {
+    it('renders stars, downloads, and health status with vector icons', () => {
       const html = renderHealthBar({
         packageExists: true,
         githubStars: 15400,
@@ -78,9 +91,12 @@ describe('WebviewHtml', () => {
         lastPublished: '2026-09-01T00:00:00.000Z',
       });
 
-      expect(html).toContain('15.4k Stars');
-      expect(html).toContain('2.3M dl/wk');
+      expect(html).toContain('15.4k');
+      expect(html).toContain('2.3M/wk');
       expect(html).toContain('Healthy');
+      expect(html).toContain('<svg');
+      expect(html).not.toContain('★');
+      expect(html).not.toContain('📥');
     });
 
     it('renders fallback when health object is missing or unverified', () => {
@@ -90,10 +106,12 @@ describe('WebviewHtml', () => {
   });
 
   describe('renderConflictBanner', () => {
-    it('renders conflict message if warning is provided', () => {
+    it('renders conflict message with warning SVG icon', () => {
       const html = renderConflictBanner('Conflicts with fastify', ['fastify']);
       expect(html).toContain('Conflicts with fastify');
       expect(html).toContain('sf-conflict-banner');
+      expect(html).toContain('<svg');
+      expect(html).not.toContain('⚠');
     });
 
     it('returns empty string when there are no conflicts', () => {
@@ -103,10 +121,11 @@ describe('WebviewHtml', () => {
   });
 
   describe('renderWhyUseIt', () => {
-    it('renders why-use-it callout box', () => {
+    it('renders why-use-it callout box with clean info icon and label', () => {
       const html = renderWhyUseIt('Great for real-time applications');
-      expect(html).toContain('Why Use It');
+      expect(html).toContain('Why this tool');
       expect(html).toContain('Great for real-time applications');
+      expect(html).not.toContain('💡');
     });
 
     it('returns empty string for empty input', () => {
@@ -115,7 +134,7 @@ describe('WebviewHtml', () => {
     });
   });
 
-  describe('renderSkillCard', () => {
+  describe('renderSkillCard (Developer-grade Action Buttons)', () => {
     const mockSkill: SuggestedSkill = {
       id: 'nextjs',
       name: 'Next.js',
@@ -138,15 +157,19 @@ describe('WebviewHtml', () => {
       reasoning: 'Matches full-stack React requirement',
     };
 
-    it('renders card title, package identifier, install button, and copy button', () => {
+    it('renders card title, package identifier, install button with terminal icon, and copy button', () => {
       const html = renderSkillCard(mockSkill);
       expect(html).toContain('Next.js');
       expect(html).toContain('next');
       expect(html).toContain('data-cmd="pnpm add next"');
-      expect(html).toContain('⚡ Install in Terminal');
-      expect(html).toContain('📖 Docs ↗');
+      expect(html).toContain('Install via terminal');
+      expect(html).toContain('Copy command');
+      expect(html).toContain('Docs');
       expect(html).toContain('remix');
       expect(html).toContain('tailwind-css');
+      expect(html).not.toContain('⚡ Install');
+      expect(html).not.toContain('📋 Copy');
+      expect(html).not.toContain('📖 Docs');
     });
 
     it('derives correct package manager based on ecosystem', () => {
@@ -167,7 +190,7 @@ describe('WebviewHtml', () => {
         officialUrl: 'javascript:alert(1)',
       };
       const html = renderSkillCard(unsafeSkill);
-      expect(html).not.toContain('📖 Docs ↗');
+      expect(html).not.toContain('Docs');
     });
   });
 
@@ -182,7 +205,7 @@ describe('WebviewHtml', () => {
         },
       ]);
 
-      expect(html).toContain('Browse By Category');
+      expect(html).toContain('Browse by Category');
       expect(html).toContain('Frontend Frameworks');
       expect(html).toContain('3 tools available');
     });
@@ -193,8 +216,8 @@ describe('WebviewHtml', () => {
     });
   });
 
-  describe('generateWebviewHtml', () => {
-    it('generates complete HTML document with CSP and nonce', () => {
+  describe('generateWebviewHtml (Zero-Emoji Verification)', () => {
+    it('generates complete HTML document with CSP, nonce, and clean typography', () => {
       const result: SkillSuggestionResult = {
         skills: [],
         queryEcho: 'chat app',
@@ -214,6 +237,13 @@ describe('WebviewHtml', () => {
       expect(html).toContain('Scope: packages/server');
       expect(html).toContain('chat app');
       expect(html).toContain('No direct skill matches found');
+
+      // Verify zero unicode emojis in generated HTML
+      expect(html).not.toContain('✨');
+      expect(html).not.toContain('⚡');
+      expect(html).not.toContain('📦');
+      expect(html).not.toContain('🔍');
+      expect(html).not.toContain('⏳');
     });
 
     it('sanitizes hostile query strings in header', () => {
@@ -233,14 +263,16 @@ describe('WebviewHtml', () => {
       expect(html).toContain('&lt;script&gt;alert(&quot;pwned&quot;)&lt;/script&gt;');
     });
 
-    it('renders loading state when isLoading is true', () => {
+    it('renders clean spinner loading state without hourglass emoji', () => {
       const html = generateWebviewHtml({
         nonce: 'nonce',
         cspSource: 'vscode-webview:',
         isLoading: true,
       });
 
-      expect(html).toContain('Analyzing intent and project context...');
+      expect(html).toContain('sf-spinner');
+      expect(html).toContain('Analyzing intent and workspace context...');
+      expect(html).not.toContain('⏳');
     });
   });
 });

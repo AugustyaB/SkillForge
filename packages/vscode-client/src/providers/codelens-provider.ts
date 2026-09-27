@@ -49,7 +49,7 @@ export class SkillForgeCodeLensProvider implements vscode.CodeLensProvider {
         new vscode.Position(trigger.lineNumber, trigger.endCharacter)
       );
 
-      const title = `✨ SkillForge: Suggest tools for "${trigger.intent}"`;
+      const title = `SkillForge: Suggest libraries for "${trigger.intent}"`;
       const lens = new vscode.CodeLens(range, {
         title,
         command: 'skillforge.suggest',
