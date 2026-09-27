@@ -33,6 +33,9 @@ describe('SkillForge Zod Schemas', () => {
     expect(result.id).toBe('fastify');
     expect(result.name).toBe('Fastify');
     expect(result.category).toBe('backend-framework');
+
+    const directParsed = SkillSchema.parse(validSkill);
+    expect(directParsed.id).toBe('fastify');
   });
 
   it('rejects skill with invalid ID format (uppercase or spaces)', () => {
