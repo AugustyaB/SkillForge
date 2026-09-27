@@ -6,6 +6,8 @@ import {
   validateSkill,
   validateSkillsArray,
   safeValidateSkill,
+  validateRawSuggestion,
+  safeValidateRawSuggestion,
 } from '../index.js';
 
 describe('SkillForge Zod Schemas', () => {
@@ -124,5 +126,72 @@ describe('SkillForge Zod Schemas', () => {
 
     const duplicateList = [validSkill, { ...validSkill, name: 'Duplicate Fastify' }];
     expect(() => validateSkillsArray(duplicateList)).toThrow(/Duplicate skill ID/);
+  });
+});
+
+describe('RawSuggestionSchema', () => {
+  it('accepts a valid minimal raw suggestion (name only)', () => {
+    const result = validateRawSuggestion({ name: 'Express' });
+    expect(result.name).toBe('Express');
+    expect(result.id).toBeUndefined();
+    expect(result.confidence).toBeUndefined();
+  });
+
+  it('accepts a fully populated raw suggestion', () => {
+    const raw = {
+      name: 'Fastify',
+      id: 'fastify',
+      category: 'backend-framework',
+      difficulty: 'intermediate',
+      description: 'Fast and low overhead web framework for Node.js',
+      whyUseIt: 'High throughput, built-in schema validation, and TypeScript support.',
+      officialUrl: 'https://fastify.dev',
+      confidence: 0.92,
+      reasoning: 'Great for building REST APIs',
+      ecosystem: 'javascript',
+      tags: ['backend', 'api'],
+    };
+
+    const result = validateRawSuggestion(raw);
+    expect(result.name).toBe('Fastify');
+    expect(result.confidence).toBe(0.92);
+    expect(result.category).toBe('backend-framework');
+  });
+
+  it('rejects raw suggestion with invalid URL', () => {
+    expect(() =>
+      validateRawSuggestion({
+        name: 'BadUrl',
+        officialUrl: 'not-a-url',
+      })
+    ).toThrow();
+  });
+
+  it('rejects raw suggestion with confidence > 1', () => {
+    const safeResult = safeValidateRawSuggestion({
+      name: 'TooConfident',
+      confidence: 1.5,
+    });
+    expect(safeResult.success).toBe(false);
+  });
+
+  it('rejects raw suggestion with confidence < 0', () => {
+    const safeResult = safeValidateRawSuggestion({
+      name: 'NegativeConfidence',
+      confidence: -0.1,
+    });
+    expect(safeResult.success).toBe(false);
+  });
+
+  it('rejects raw suggestion with missing name', () => {
+    expect(() => validateRawSuggestion({ id: 'no-name' })).toThrow();
+  });
+
+  it('rejects raw suggestion with invalid ID format', () => {
+    const safeResult = safeValidateRawSuggestion({
+      name: 'BadId',
+      id: 'Invalid ID!',
+    });
+    expect(safeResult.success).toBe(false);
   });
 });

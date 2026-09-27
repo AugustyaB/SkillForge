@@ -7,6 +7,7 @@ import type {
   InferredDifficulty,
   InferredLearnLink,
   InferredPackageHealth,
+  InferredRawSuggestion,
   InferredSkill,
   InferredSkillCategory,
   InferredTrustTier,
@@ -18,6 +19,7 @@ export type TrustTier = InferredTrustTier;
 export type LearnLink = InferredLearnLink;
 export type Skill = InferredSkill;
 export type PackageHealth = InferredPackageHealth;
+export type RawSuggestion = InferredRawSuggestion;
 
 export interface DetectedPackage {
   name: string;

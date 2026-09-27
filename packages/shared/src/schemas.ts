@@ -65,6 +65,44 @@ export type InferredLearnLink = z.infer<typeof LearnLinkSchema>;
 export type InferredPackageHealth = z.infer<typeof PackageHealthSchema>;
 
 /**
+ * Schema for validating raw/untrusted suggestion inputs from external
+ * sources (LLM, user-provided, etc.) before entering the reliability pipeline.
+ */
+export const RawSuggestionSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  id: z
+    .string()
+    .regex(/^[a-z0-9-]+$/, 'ID must be lowercase alphanumeric with hyphens')
+    .optional(),
+  category: SkillCategorySchema.optional(),
+  difficulty: DifficultySchema.optional(),
+  description: z.string().min(10, 'Description must be at least 10 characters').optional(),
+  whyUseIt: z.string().min(10, 'whyUseIt must be at least 10 characters').optional(),
+  officialUrl: z.string().url('Must be a valid URL').optional(),
+  confidence: z.number().min(0).max(1).optional(),
+  reasoning: z.string().min(1).optional(),
+  ecosystem: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+});
+
+export type InferredRawSuggestion = z.infer<typeof RawSuggestionSchema>;
+
+/**
+ * Validates a raw suggestion input against the schema.
+ * Throws on invalid data.
+ */
+export function validateRawSuggestion(data: unknown): InferredRawSuggestion {
+  return RawSuggestionSchema.parse(data);
+}
+
+/**
+ * Safely parses a raw suggestion input, returning success/failure result.
+ */
+export function safeValidateRawSuggestion(data: unknown) {
+  return RawSuggestionSchema.safeParse(data);
+}
+
+/**
  * Validates a single skill record against the schema
  */
 export function validateSkill(data: unknown): InferredSkill {

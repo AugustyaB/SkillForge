@@ -26,6 +26,18 @@ export interface SuggestedSkill extends Skill {
   caveats?: string;
   health?: PackageHealth;
   isInstalledInWorkspace?: boolean;
+  /** IDs of skills or installed packages that conflict with this suggestion */
+  conflictWith?: string[];
+  /** User-facing conflict warning message */
+  conflictWarning?: string;
+}
+
+/** Structured recommendation for a skill category (used in fallback/browse) */
+export interface CategoryRecommendation {
+  category: string;
+  label: string;
+  description: string;
+  skillIds: string[];
 }
 
 export interface SkillSuggestionResult {
@@ -36,6 +48,8 @@ export interface SkillSuggestionResult {
   };
   fallbackUsed?: boolean;
   queryEcho: string;
+  /** Structured category browsing recommendations (populated on fallback) */
+  categoryRecommendations?: CategoryRecommendation[];
 }
 
 export interface PingResult {
