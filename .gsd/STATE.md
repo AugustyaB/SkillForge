@@ -6,22 +6,21 @@
 
 ## Active Session
 
-- **Status**: Phase 2 (Skills Database & Schema) completed and verified (PASS). Ready for Phase 3.
-- **Next Action**: `/plan 3` (Gate 1 Planning for Phase 3)
+- **Status**: Phase 3 planned (2 plans across 2 waves). Awaiting Gate 1 user approval.
+- **Next Action**: Execute Phase 3 upon user approval.
 
 ## Current Position
 
-- **Phase**: 2 (Completed ✅)
-- **Task**: All plans, tasks, and documentation synced
-- **Status**: Verified
+- **Phase**: 3
+- **Task**: Planning complete (Gate 1 Lock)
+- **Status**: Ready for approval
 
 ## Last Session Summary
-Phase 2 executed successfully across 2 waves:
-- Wave 1 (Plan 2.1): Zod runtime schemas in `@skillforge/shared` (`SkillSchema`, `CategorySchema`, etc.), schema-derived TypeScript types, validation helpers (`validateSkillsArray`), and 8 unit tests.
-- Wave 2 (Plan 2.2): Curated 118 developer skills across 15 engineering domains, created `SkillsRepository` with $O(1)$ ID lookups, inverted tag index, category and ecosystem indices, automated build-time integrity validation script (`validate-skills.cjs`), and connected `SkillForgeServer` to the live repository.
-- Gate 2 Audit passed: `pnpm typecheck` (0 errors), `pnpm test` (26/26 tests passing in 442ms), `pnpm build` (clean build with dataset validation).
-- Gate 3 Documentation synced: `CHANGELOG.md` updated, `DECISIONS.md` updated with ADR-004 and ADR-005, `.gsd/ROADMAP.md` marked Phase 2 complete.
+Phase 2 completed and verified (118 vetted skills, in-memory indexing, build-time integrity validation, 26 passing tests).
+Phase 3 planning completed following `PROJECT_RULES.md` and GSD standards.
 
 ## Next Steps
 
-1. `/plan 3` — Plan Phase 3: Suggestion Engine & Context Scoping (Intent Parsing, Scoped Workspace Scanner, Active File Signals)
+1. Await user confirmation for Phase 3 implementation plan.
+2. Execute Plan 3.1 (Wave 1: Scoped Workspace Dependency Scanner & Context Extractor).
+3. Execute Plan 3.2 (Wave 2: Suggestion Engine, Context-Aware Ranking & Query Cache).
