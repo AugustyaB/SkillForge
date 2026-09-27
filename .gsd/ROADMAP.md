@@ -7,7 +7,7 @@
 ## Must-Haves (from SPEC)
 
 - [x] Monorepo with pnpm workspaces + Turborepo + LSP server booting cleanly
-- [ ] 100+ curated skills database with categories, relationships, and metadata validation
+- [x] 100+ curated skills database with categories, relationships, and metadata validation
 - [ ] Suggestion engine with natural language intent parsing and scoped workspace dependency scanning
 - [ ] Reliability engine with Zod schema contracts, package existence checks, health indicators, and trust tiers
 - [ ] VS Code UX with Command Palette, Sidebar (including context folder selector), and inline CodeLens triggers
@@ -34,7 +34,7 @@
 **Depends on**: Nothing
 
 ### Phase 2: Skills Database & Schema — The Knowledge Base
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Build a typed, validated, and queryable database of 100+ developer skills and technologies across major engineering domains with relationships and indicators.
 **Deliverables**:
 - TypeScript schema and Zod validation for `Skill`, `Category`, `Relationship`
