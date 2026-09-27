@@ -1,0 +1,65 @@
+{
+  "name": "skillforge",
+  "displayName": "SkillForge",
+  "description": "Cross-IDE skill suggestion engine for developers",
+  "version": "0.1.0",
+  "publisher": "skillforge",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onCommand:skillforge.testConnection",
+    "onCommand:skillforge.suggest"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "skillforge.testConnection",
+        "title": "SkillForge: Test Server Connection",
+        "category": "SkillForge"
+      },
+      {
+        "command": "skillforge.suggest",
+        "title": "SkillForge: Suggest Skills for My Idea",
+        "category": "SkillForge"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "SkillForge",
+      "properties": {
+        "skillforge.maxResults": {
+          "type": "number",
+          "default": 5,
+          "description": "Maximum number of skill suggestions to display."
+        },
+        "skillforge.defaultDifficulty": {
+          "type": "string",
+          "enum": ["all", "beginner", "intermediate", "advanced"],
+          "default": "all",
+          "description": "Default difficulty tier for skill recommendations."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rimraf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@skillforge/shared": "workspace:*",
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.19",
+    "@types/vscode": "^1.85.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  }
+}
