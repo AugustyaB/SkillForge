@@ -1,5 +1,4 @@
 import type {
-  Skill,
   SkillSuggestionParams,
   SkillSuggestionResult,
   SuggestedSkill,
@@ -7,22 +6,36 @@ import type {
 import { SkillsRepository } from '../data/skills-repository.js';
 import { IntentParser } from './intent-parser.js';
 import { QueryCache } from './query-cache.js';
+import { ConflictDetector } from '../reliability/conflict-detector.js';
+import { TrustTierClassifier } from '../reliability/trust-tier-classifier.js';
+import { FallbackCascade } from '../reliability/fallback-cascade.js';
 
 export interface SuggestionEngineOptions {
   repository?: SkillsRepository;
   intentParser?: IntentParser;
   cache?: QueryCache;
+  conflictDetector?: ConflictDetector;
+  trustTierClassifier?: TrustTierClassifier;
+  fallbackCascade?: FallbackCascade;
 }
 
 export class SuggestionEngine {
   private repository: SkillsRepository;
   private intentParser: IntentParser;
   private cache: QueryCache;
+  private conflictDetector: ConflictDetector;
+  private trustTierClassifier: TrustTierClassifier;
+  private fallbackCascade: FallbackCascade;
 
   constructor(options?: SuggestionEngineOptions) {
     this.repository = options?.repository ?? new SkillsRepository();
     this.intentParser = options?.intentParser ?? new IntentParser();
     this.cache = options?.cache ?? new QueryCache();
+    this.conflictDetector = options?.conflictDetector ?? new ConflictDetector();
+    this.trustTierClassifier =
+      options?.trustTierClassifier ?? new TrustTierClassifier();
+    this.fallbackCascade =
+      options?.fallbackCascade ?? new FallbackCascade(this.repository);
   }
 
   public getRepository(): SkillsRepository {
@@ -132,12 +145,16 @@ export class SuggestionEngine {
           Number((0.6 + Math.min(finalScore, 40) / 100).toFixed(2))
         );
 
+        // 5. Trust Tier Classification — all curated DB skills are 'verified'
+        const isCurated = this.repository.getSkillById(skill.id) !== undefined;
+        const trustTier = this.trustTierClassifier.classify(isCurated);
+
         return {
           skill,
           score: finalScore,
           suggestedSkill: {
             ...skill,
-            trustTier: 'verified' as const,
+            trustTier,
             confidence,
             reasoning: reasons.length > 0 ? reasons.join('. ') : skill.whyUseIt,
             isInstalledInWorkspace: isInstalled,
@@ -148,20 +165,34 @@ export class SuggestionEngine {
       // Sort by adjusted score
       adjusted.sort((a, b) => b.score - a.score);
       results = adjusted.slice(0, maxResults).map((a) => a.suggestedSkill);
+
+      // 6. Conflict Detection — annotate mutually exclusive alternatives
+      results = this.conflictDetector.detectConflicts(
+        results,
+        Array.from(alreadyInstalled)
+      );
+
+      // 7. Filter by minimum trust tier if specified
+      if (options?.minTrustTier) {
+        results = this.trustTierClassifier.filterByMinTier(
+          results,
+          options.minTrustTier
+        );
+      }
     } else {
-      // 5. Fallback recommendations
+      // 8. Fallback Cascade — guaranteed non-empty response
       fallbackUsed = true;
-      const fallbackIds = ['react', 'express', 'postgresql'];
-      results = fallbackIds
-        .map((id) => this.repository.getSkillById(id))
-        .filter((s): s is Skill => Boolean(s))
-        .map((skill) => ({
-          ...skill,
-          trustTier: 'verified' as const,
-          confidence: 0.65,
-          reasoning: 'Baseline recommendation matching general application development.',
-          isInstalledInWorkspace: alreadyInstalled.has(skill.id),
-        }));
+      const fallbackResult = this.fallbackCascade.executeFallback(intent, context);
+      const elapsed = Date.now() - startTime;
+      const finalResult: SkillSuggestionResult = {
+        ...fallbackResult,
+        timings: {
+          localMs: elapsed,
+          totalMs: elapsed,
+        },
+      };
+      this.cache.set(cacheKey, finalResult);
+      return finalResult;
     }
 
     const elapsed = Date.now() - startTime;
