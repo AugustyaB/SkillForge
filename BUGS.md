@@ -19,6 +19,9 @@
 - [x] **BUG-08** (Medium): Fix inline comment stripping in `parseRequirementsTxt`
 - [x] **BUG-09** (Low): Fix fire-and-forget `weeklyDownloads` race condition in `HealthVerifier`
 - [x] **BUG-10** (Low): Fix npm publish date detection using `latest` release over `modified`
+- [ ] **BUG-11** (Critical): Terminal install command passes human display name instead of package identifier
+- [ ] **BUG-12** (Critical): CodeLens triggers dormant on startup due to missing language activation events
+- [ ] **BUG-13** (High): `TerminalRunner` reuses stale working directory across context scope switches
 
 ---
 
@@ -259,6 +262,66 @@
 
 ---
 
+### BUG-11: Terminal Install Command Passes Human Display Name Instead of Package Identifier
+
+- **Severity**: Critical (Shell syntax crash / package installation failure)
+- **File Affected**: [`packages/vscode-client/src/extension.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/extension.ts#L244-L248) (Lines 244–248)
+- **Root Cause**:
+  `extension.ts` calls `TerminalRunner.deriveInstallCommand(topSkill.name, topSkill.ecosystem)`.
+  `topSkill.name` is the human-facing name (e.g. `"Next.js"`, `"Tailwind CSS"`, `"TanStack Query (React Query)"`, `"Vue.js"`).
+  This generates shell commands like:
+  ```bash
+  pnpm add TanStack Query (React Query)
+  ```
+  which crashes with shell syntax errors on parentheses, or installs nonexistent packages.
+- **Remediation**:
+  Derive the install command from `topSkill.stackIndicators?.[0] || topSkill.id`:
+  ```ts
+  const packageName = topSkill.stackIndicators?.[0] || topSkill.id;
+  const installCmd = TerminalRunner.deriveInstallCommand(
+    packageName,
+    topSkill.ecosystem
+  );
+  ```
+
+---
+
+### BUG-12: CodeLens Provider Dormant on Fresh Startup (Missing Activation Events)
+
+- **Severity**: Critical (Feature Dormant on Startup)
+- **File Affected**: [`packages/vscode-client/package.json`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/package.json#L16-L27) (Lines 16–27)
+- **Root Cause**:
+  `activationEvents` only includes views (`onView:skillforge.*`) and commands (`onCommand:skillforge.*`).
+  It lacks language activation events (`onLanguage:typescript`, `onLanguage:javascript`, `onLanguage:python`, etc.).
+  CodeLens is registered via `vscode.languages.registerCodeLensProvider` in `activate()`, which is never invoked when a developer opens a source code file.
+- **Remediation**:
+  Add `onLanguage` entries for all 11 supported languages or `onStartupFinished` in `activationEvents`.
+
+---
+
+### BUG-13: `TerminalRunner` Reuses Stale CWD on Context Scope Switch
+
+- **Severity**: High (Silent state misdirection)
+- **File Affected**: [`packages/vscode-client/src/terminal/terminal-runner.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/terminal/terminal-runner.ts#L9-L21) (Lines 9–21)
+- **Root Cause**:
+  `TerminalRunner.getOrCreateTerminal(cwd)` reuses any open terminal named `"SkillForge"`.
+  If the terminal was initially opened with root `cwd`, and the user switches scope to `packages/server`, `getOrCreateTerminal` returns the root terminal without updating the directory.
+- **Remediation**:
+  Navigate to `cwd` if specified before executing commands:
+  ```ts
+  public static runCommand(command: string, cwd?: string): void {
+    if (!command || !command.trim()) return;
+    const terminal = TerminalRunner.getOrCreateTerminal(cwd);
+    terminal.show(false);
+    if (cwd) {
+      terminal.sendText(`cd "${cwd}"`, true);
+    }
+    terminal.sendText(command.trim(), true);
+  }
+  ```
+
+---
+
 ## 🛠️ Instructions for Next Chat / Developer
 
 When picking up these bug fixes:
@@ -268,4 +331,4 @@ When picking up these bug fixes:
    - Implement the fixes.
    - Run `pnpm typecheck` and `pnpm test` for empirical verification (Gate 2).
    - Sync `CHANGELOG.md` and check off items in this document (Gate 3).
-2. Start with **BUG-01** (Critical crash bug) and **BUG-02 / BUG-03** (Matching engine accuracy).
+2. Start with **BUG-11** (Terminal install name bug), **BUG-12** (Activation events), and **BUG-13** (TerminalRunner CWD).
