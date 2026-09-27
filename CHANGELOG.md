@@ -7,12 +7,38 @@ The project follows a structured version & phase sequence:
 - **Phase Subsections (`Phase 1` through `Phase 8`)**:
   - `Phase 1`: Foundation — LSP Server & Monorepo Scaffold (✅ Complete)
   - `Phase 2`: Skills Database & Schema — The Knowledge Base (✅ Complete)
-  - `Phase 3`: Suggestion Engine & Context Scoping (⬜ Pending)
+  - `Phase 3`: Suggestion Engine & Context Scoping (✅ Complete)
   - `Phase 4`: Reliability Engine & Trust Verification (⬜ Pending)
   - `Phase 5`: VS Code UI & Experience (⬜ Pending)
   - `Phase 6`: Fallback Cascade & Advanced Capabilities (⬜ Pending)
   - `Phase 7`: Polish, Packaging & Production Readiness (⬜ Pending)
   - `Phase 8`: E2E Verification & Release Sign-Off (⬜ Pending)
+
+---
+
+## Phase 3: Suggestion Engine & Context Scoping (2026-09-27)
+
+### Deliverables
+- **Natural Language Intent Parser (`@skillforge/server/src/engine/intent-parser.ts`)**:
+  - Extracts action verbs ("build", "create", "integrate", "test", "secure", "deploy").
+  - Maps domain keywords to 15 canonical skill categories with synonym mapping.
+  - Strips stop words and extracts explicit ecosystems and difficulty preferences.
+- **Multi-Ecosystem Scoped Workspace Scanner (`@skillforge/server/src/context/workspace-scanner.ts`)**:
+  - Parsers for `package.json`, `requirements.txt` (with extras handling), `Cargo.toml`, `go.mod`, and `pom.xml`.
+  - Non-recursive scoped folder discovery preventing I/O overhead in large monorepos.
+  - Aggregates detected packages into `DetectedPackage[]` and identifies ecosystem.
+- **Context-Aware Multi-Factor Scorer (`@skillforge/server/src/engine/suggestion-engine.ts`)**:
+  - Compatibility Boost (+30 pts): Detects when a skill's `worksWellWith` matches already-installed tools and updates reasoning.
+  - Already-Installed Detection: Identifies existing project tools and flags them with `isInstalledInWorkspace: true`.
+  - Wired into `SkillForgeServer` to handle live `skillforge/suggest` requests.
+- **In-Memory Query Cache (`@skillforge/server/src/engine/query-cache.ts`)**:
+  - SHA-256 deterministic key generation from query, scoped paths, and installed tools.
+  - 10-minute TTL with auto-pruning, serving repeat queries in `0ms`.
+
+### Verification Proof
+- `pnpm typecheck` (`tsc -b`): Passed with 0 TypeScript diagnostics.
+- `pnpm test`: Passed 44/44 tests across 6 test suites in 511ms.
+- `pnpm build`: Clean build across all packages with dataset integrity validation.
 
 ---
 

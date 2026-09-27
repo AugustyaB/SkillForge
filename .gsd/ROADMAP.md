@@ -8,7 +8,7 @@
 
 - [x] Monorepo with pnpm workspaces + Turborepo + LSP server booting cleanly
 - [x] 100+ curated skills database with categories, relationships, and metadata validation
-- [ ] Suggestion engine with natural language intent parsing and scoped workspace dependency scanning
+- [x] Suggestion engine with natural language intent parsing and scoped workspace dependency scanning
 - [ ] Reliability engine with Zod schema contracts, package existence checks, health indicators, and trust tiers
 - [ ] VS Code UX with Command Palette, Sidebar (including context folder selector), and inline CodeLens triggers
 - [ ] Interactive Webview results panel with skill cards, "WHY" explanations, and trust badges
@@ -45,7 +45,7 @@
 **Depends on**: Phase 1
 
 ### Phase 3: Suggestion Engine & Context Scoping
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Implement the core matching engine that merges natural language intent with user-scoped workspace dependencies to generate ranked skill suggestions.
 **Deliverables**:
 - Natural language intent parser & keyword extractor

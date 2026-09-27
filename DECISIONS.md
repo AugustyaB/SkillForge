@@ -11,6 +11,7 @@ This document records the major architectural, technical, and design decisions m
 - [ADR-003: Beginner-First UX Strategy](#adr-003-beginner-first-ux-strategy)
 - [ADR-004: Zod Runtime Schema Validation & Single Source of Truth](#adr-004-zod-runtime-schema-validation--single-source-of-truth)
 - [ADR-005: In-Memory Inverted Indexing for Curated Knowledge Base](#adr-005-in-memory-inverted-indexing-for-curated-knowledge-base)
+- [ADR-006: Scoped Multi-Ecosystem Dependency Scanning & Deterministic Caching](#adr-006-scoped-multi-ecosystem-dependency-scanning--deterministic-caching)
 
 ---
 
@@ -81,3 +82,16 @@ This document records the major architectural, technical, and design decisions m
   - Tokenize user queries, filter noise stop-words, and compute multi-factor relevance scores.
 - **Rationale**: High performance (<1ms lookups), zero external native C++ bindings, zero platform-specific binary dependencies, fully portable across Windows, macOS, Linux.
 - **Trade-offs**: All skills reside in heap memory (~100KB JSON, well within the 30MB idle memory budget).
+
+---
+
+## ADR-006: Scoped Multi-Ecosystem Dependency Scanning & Deterministic Caching
+
+- **Date**: 2026-09-27
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 3)
+- **Context**: In large monorepos or polyglot repositories, scanning the entire workspace directory tree causes severe I/O lag and mixes frontend/backend dependencies incorrectly. Furthermore, repeated queries should not re-run matching algorithms or waste computing resources.
+- **Decision**:
+  - Build `WorkspaceScanner` to strictly inspect manifest files directly at user-selected directory roots (`package.json`, `requirements.txt`, `Cargo.toml`, `go.mod`, `pom.xml`) without recursive tree traversal.
+  - Implement `QueryCache` using SHA-256 hashes of `query + scopePaths + installedPackages` with a 10-minute TTL to serve duplicate queries in `0ms`.
+- **Rationale**: Eliminates editor lag, prevents runaway disk I/O in monorepos, and ensures repeat queries return instantaneously.
+- **Trade-offs**: Nested dependencies inside subdirectories are not discovered unless the user scopes to that subfolder.
