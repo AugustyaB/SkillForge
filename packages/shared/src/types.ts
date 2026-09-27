@@ -1,59 +1,23 @@
 /**
  * SkillForge Domain Types
+ * Single source of truth derived from runtime Zod schemas.
  */
 
-export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+import type {
+  InferredDifficulty,
+  InferredLearnLink,
+  InferredPackageHealth,
+  InferredSkill,
+  InferredSkillCategory,
+  InferredTrustTier,
+} from './schemas.js';
 
-export type SkillCategory =
-  | 'frontend-framework'
-  | 'ui-library'
-  | 'state-management'
-  | 'backend-framework'
-  | 'database'
-  | 'orm'
-  | 'authentication'
-  | 'api-protocol'
-  | 'devops-container'
-  | 'cloud-hosting'
-  | 'testing'
-  | 'utility'
-  | 'ai-ml'
-  | 'security'
-  | 'other';
-
-export type TrustTier = 'verified' | 'validated' | 'suggested' | 'deprecated';
-
-export interface LearnLink {
-  label: string;
-  url: string;
-  type?: 'docs' | 'tutorial' | 'video' | 'article';
-}
-
-export interface Skill {
-  id: string;
-  name: string;
-  category: SkillCategory;
-  difficulty: Difficulty;
-  description: string;
-  whyUseIt: string;
-  tags: string[];
-  ecosystem: string;
-  officialUrl: string;
-  learnResources: LearnLink[];
-  alternatives: string[];
-  worksWellWith: string[];
-  prerequisites: string[];
-  stackIndicators: string[];
-}
-
-export interface PackageHealth {
-  packageExists: boolean;
-  lastPublished?: string;
-  weeklyDownloads?: number;
-  githubStars?: number;
-  healthVerdict?: 'healthy' | 'aging' | 'abandoned' | 'risky';
-  cachedAt?: number;
-}
+export type Difficulty = InferredDifficulty;
+export type SkillCategory = InferredSkillCategory;
+export type TrustTier = InferredTrustTier;
+export type LearnLink = InferredLearnLink;
+export type Skill = InferredSkill;
+export type PackageHealth = InferredPackageHealth;
 
 export interface DetectedPackage {
   name: string;
