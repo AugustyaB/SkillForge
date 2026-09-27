@@ -6,7 +6,7 @@
 
 ## Must-Haves (from SPEC)
 
-- [ ] Monorepo with pnpm workspaces + Turborepo + LSP server booting cleanly
+- [x] Monorepo with pnpm workspaces + Turborepo + LSP server booting cleanly
 - [ ] 100+ curated skills database with categories, relationships, and metadata validation
 - [ ] Suggestion engine with natural language intent parsing and scoped workspace dependency scanning
 - [ ] Reliability engine with Zod schema contracts, package existence checks, health indicators, and trust tiers
@@ -22,7 +22,7 @@
 ## 8-Phase Roadmap
 
 ### Phase 1: Foundation — LSP Server & Monorepo Scaffold
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Establish pnpm monorepo structure, shared TypeScript build system, Vitest test harness, and a minimal headless LSP server that boots over stdio and responds to custom `skillforge/suggest` requests with client roundtrip validation.
 **Deliverables**:
 - Monorepo packages: `packages/server`, `packages/vscode-client`, `packages/shared`
