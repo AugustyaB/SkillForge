@@ -20,6 +20,29 @@ export type WebviewToHostMessage =
   | {
       type: 'reQuery';
       intent: string;
+    }
+  | {
+      type: 'submitFeedback';
+      rating: 'helpful' | 'unhelpful';
+      reason?: string;
+      details?: string;
+      query: string;
+      skillId?: string;
+    }
+  | {
+      type: 'requestSkill';
+      prefillName?: string;
+    }
+  | {
+      type: 'toggleBookmark';
+      skillId: string;
+      skillName: string;
+      ecosystem?: string;
+      category?: string;
+    }
+  | {
+      type: 'compareSkills';
+      skillIds: string[];
     };
 
 /**

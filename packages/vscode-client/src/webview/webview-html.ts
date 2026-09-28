@@ -14,9 +14,13 @@ export interface WebviewHtmlOptions {
   scopeLabel?: string;
   scopePath?: string;
   isLoading?: boolean;
+  showFeedbackPrompt?: boolean;
+  bookmarkedSkillIds?: Set<string>;
 }
 
 // Embedded SVG Codicons (Minimalist, theme-adaptive vector icons)
+export const ICON_BOOKMARK_FILLED = `<svg viewBox="0 0 16 16"><path fill="#f59e0b" d="M3.5 2a1.5 1.5 0 0 0-1.5 1.5v11.25a.25.25 0 0 0 .397.202L8 11.238l5.603 3.714A.25.25 0 0 0 14 14.75V3.5A1.5 1.5 0 0 0 12.5 2h-9z"/></svg>`;
+export const ICON_BOOKMARK_OUTLINE = `<svg viewBox="0 0 16 16"><path d="M3.5 2A1.5 1.5 0 0 0 2 3.5v11.25a.25.25 0 0 0 .397.202L8 11.238l5.603 3.714A.25.25 0 0 0 14 14.75V3.5A1.5 1.5 0 0 0 12.5 2h-9zm0 1h9a.5.5 0 0 1 .5.5v9.81l-4.603-3.05a.75.75 0 0 0-.794 0L3 13.31V3.5a.5.5 0 0 1 .5-.5z"/></svg>`;
 export const ICON_FORGE = `<svg viewBox="0 0 24 24"><path d="M4 6h16l-2 4H6L4 6z"/><path d="M7 10v4h10v-4H7z" opacity="0.75"/><path d="M5 14h14l1 4H4l1-4z" opacity="0.85"/><path d="M3 18h18v2H3v-2z"/></svg>`;
 export const ICON_TERMINAL = `<svg viewBox="0 0 16 16"><path d="M2 3h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm0 1v8h12V4H2zm2 2.5 2.5 1.5L4 9.5V6.5zm4 3h4v1H8v-1z"/></svg>`;
 export const ICON_COPY = `<svg viewBox="0 0 16 16"><path d="M4 4v9h8V4H4zm1-1h6a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm6-2H3a1 1 0 0 0-1 1v9h1V3h8V1z"/></svg>`;
@@ -27,6 +31,11 @@ export const ICON_DOWNLOAD = `<svg viewBox="0 0 16 16"><path d="M8 12l-4-4h2.5V2
 export const ICON_CLOCK = `<svg viewBox="0 0 16 16"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-4a.75.75 0 0 1 .75.75v3.69l2.78 1.67a.75.75 0 1 1-.76 1.29l-3.25-1.95A.75.75 0 0 1 7.25 8V4.75A.75.75 0 0 1 8 4z"/></svg>`;
 export const ICON_WARNING = `<svg viewBox="0 0 16 16"><path d="M7.56 1.77a.75.75 0 0 1 1.38 0l6.25 11.5a.75.75 0 0 1-.65 1.11H1.46a.75.75 0 0 1-.65-1.11L7.06 1.77zM8 5.5a.5.5 0 0 0-.5.5v3.5a.5.5 0 0 0 1 0V6a.5.5 0 0 0-.5-.5zm.5 6.5a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0z"/></svg>`;
 export const ICON_INFO = `<svg viewBox="0 0 16 16"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm6.5 3h3v1h-3v-1zm1-5h1v4h-1V6zm0-2h1v1h-1V4z"/></svg>`;
+export const ICON_LOCK = `<svg viewBox="0 0 16 16"><path d="M4 4V3a4 4 0 0 1 8 0v1h1.5a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5H4zm1-1v1h6V3a3 3 0 0 0-6 0zm-2 2v8h10V5H3zm5 2.5a1.5 1.5 0 0 1 1 1.415V10.5a.5.5 0 0 1-1 0V8.915A1.5 1.5 0 0 1 8 7.5z"/></svg>`;
+export const ICON_AI = `<svg viewBox="0 0 16 16"><path d="M8 1a1 1 0 0 1 1 1v1.07A5.5 5.5 0 0 1 13.93 8H15a1 1 0 0 1 0 2h-1.07A5.5 5.5 0 0 1 9 14.93V16a1 1 0 0 1-2 0v-1.07A5.5 5.5 0 0 1 2.07 10H1a1 1 0 0 1 0-2h1.07A5.5 5.5 0 0 1 7 3.07V2a1 1 0 0 1 1-1zm0 3.5A4.5 4.5 0 1 0 8 13.5 4.5 4.5 0 0 0 8 4.5zM6 7.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm4 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>`;
+export const ICON_THUMB_UP = `<svg viewBox="0 0 16 16"><path d="M8.856 1.002a.75.75 0 0 1 .64.408l2.25 4.05h2.754a1.5 1.5 0 0 1 1.5 1.5v6.5a1.5 1.5 0 0 1-1.5 1.5H5.5a1.5 1.5 0 0 1-1.414-.997L2.4 8.75A1.5 1.5 0 0 1 2 8V6.5A1.5 1.5 0 0 1 3.5 5h3.04l.758-2.653A1.5 1.5 0 0 1 8.856 1.002zM5 6.5H3.5a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 .138.353l1.686 5.207A.5.5 0 0 0 5.3 14.5H5v-8zm1 8h8.5a.5.5 0 0 0 .5-.5v-6.5a.5.5 0 0 0-.5-.5h-3.21a.75.75 0 0 1-.652-.379L8.46 2.378a.5.5 0 0 0-.482-.377.5.5 0 0 0-.479.363L6.536 5.75A.75.75 0 0 1 5.816 6.3H6v8.2z"/></svg>`;
+export const ICON_THUMB_DOWN = `<svg viewBox="0 0 16 16"><path d="M7.144 14.998a.75.75 0 0 1-.64-.408l-2.25-4.05H1.5A1.5 1.5 0 0 1 0 9.04V2.54A1.5 1.5 0 0 1 1.5 1.04h9a1.5 1.5 0 0 1 1.414.997l1.686 5.207a1.5 1.5 0 0 1 .4.756v1.5a1.5 1.5 0 0 1-1.5 1.5H9.46l-.758 2.653a1.5 1.5 0 0 1-1.558 1.345zM11 9.5h1.5a.5.5 0 0 0 .5-.5v-1.5a.5.5 0 0 0-.138-.353l-1.686-5.207A.5.5 0 0 0 10.7 1.5H11v8zm-1-8H1.5a.5.5 0 0 0-.5.5v6.5a.5.5 0 0 0 .5.5h3.21a.75.75 0 0 1 .652.379l2.178 3.922a.5.5 0 0 0 .482.377.5.5 0 0 0 .479-.363l.963-3.387a.75.75 0 0 1 .72-.55H10V1.5z"/></svg>`;
+export const ICON_LIGHTBULB = `<svg viewBox="0 0 16 16"><path d="M8 1.5a5 5 0 0 0-3.375 8.688c.45.39.75.938.875 1.525.04.187.1.375.125.563h4.75c.025-.188.085-.376.125-.563.125-.587.425-1.135.875-1.525A5 5 0 0 0 8 1.5zm-1.875 12a1.875 1.875 0 0 0 3.75 0h-3.75zM8 0a6.5 6.5 0 0 1 4.388 11.3c-.275.24-.488.55-.613.9H4.225c-.125-.35-.338-.66-.613-.9A6.5 6.5 0 0 1 8 0z"/></svg>`;
 
 /**
  * Robust HTML escaping for hostile or untrusted strings.
@@ -192,12 +201,15 @@ export function renderDeepDive(skill: SuggestedSkill): string {
           alternatives.length > 0
             ? `
           <div class="sf-dd-section">
-            <span class="sf-dd-title">Alternatives</span>
+            <span class="sf-dd-title">Alternatives &amp; Comparisons</span>
             <div class="sf-chips">
               ${alternatives
                 .map(
                   (alt) =>
-                    `<span class="sf-chip sf-requery-chip" data-intent="${escapeHtml(alt)}" title="Search for ${escapeHtml(alt)}">${escapeHtml(alt)}</span>`
+                    `<div class="sf-alt-chip-wrapper">
+                      <span class="sf-chip sf-requery-chip" data-intent="${escapeHtml(alt)}" title="Search for ${escapeHtml(alt)}">${escapeHtml(alt)}</span>
+                      <button class="sf-chip-compare-btn" data-skill-a="${escapeHtml(skill.id)}" data-skill-b="${escapeHtml(alt)}" title="Compare ${escapeHtml(skill.name)} with ${escapeHtml(alt)} side-by-side">vs</button>
+                    </div>`
                 )
                 .join('')}
             </div>
@@ -252,7 +264,7 @@ export function renderDeepDive(skill: SuggestedSkill): string {
 /**
  * Renders an individual skill card.
  */
-export function renderSkillCard(skill: SuggestedSkill): string {
+export function renderSkillCard(skill: SuggestedSkill, isBookmarked: boolean = false): string {
   const pkgName = skill.stackIndicators?.[0] || skill.id;
   const ecosystem = skill.ecosystem || 'javascript';
   const installCmd =
@@ -278,6 +290,14 @@ export function renderSkillCard(skill: SuggestedSkill): string {
           </div>
           <div class="sf-card-desc">${escapeHtml(skill.description)}</div>
         </div>
+        <button class="sf-bookmark-btn ${isBookmarked ? 'sf-bookmarked' : ''}" 
+                data-skill-id="${escapeHtml(skill.id)}" 
+                data-skill-name="${escapeHtml(skill.name)}" 
+                data-skill-eco="${escapeHtml(ecosystem)}" 
+                data-skill-cat="${escapeHtml(skill.category)}" 
+                title="${isBookmarked ? 'Remove bookmark' : 'Bookmark this tool for later'}">
+          <span class="sf-icon">${isBookmarked ? ICON_BOOKMARK_FILLED : ICON_BOOKMARK_OUTLINE}</span>
+        </button>
       </div>
 
       <div class="sf-badge-row">
@@ -346,10 +366,61 @@ export function renderCategoryRecommendations(
 }
 
 /**
+ * Renders the privacy guarantee pill or BYOK status indicator.
+ */
+export function renderPrivacyPill(result?: SkillSuggestionResult): string {
+  const provider = result?.providerUsed;
+  if (!provider || provider === 'local') {
+    return `<span class="sf-pill sf-pill-privacy" title="SkillForge runs completely on your machine. Your code and queries never leave your computer."><span class="sf-icon sf-icon-sm">${ICON_LOCK}</span>Local &amp; Private</span>`;
+  }
+
+  const label = provider === 'openai' ? 'OpenAI BYOK' : provider === 'gemini' ? 'Gemini BYOK' : 'Hybrid AI';
+  return `<span class="sf-pill sf-pill-ai" title="BYOK Mode: Only query intent prompt is sent. Source code and workspace files are never transmitted."><span class="sf-icon sf-icon-sm">${ICON_AI}</span>${escapeHtml(label)}</span>`;
+}
+
+/**
+ * Renders the periodic low-frequency feedback bar.
+ */
+export function renderFeedbackBar(query: string, show: boolean = false): string {
+  if (!show || !query) return '';
+  return `
+    <div class="sf-feedback-bar" id="feedbackBar">
+      <div class="sf-feedback-prompt" id="feedbackPrompt">
+        <span class="sf-feedback-label">Was this suggestion helpful?</span>
+        <div class="sf-feedback-actions">
+          <button class="sf-feedback-btn sf-feedback-thumb" id="feedbackYesBtn" data-rating="helpful" title="Helpful recommendation">
+            <span class="sf-icon sf-icon-sm">${ICON_THUMB_UP}</span> Yes
+          </button>
+          <button class="sf-feedback-btn sf-feedback-thumb" id="feedbackNoBtn" data-rating="unhelpful" title="Not quite what I needed">
+            <span class="sf-icon sf-icon-sm">${ICON_THUMB_DOWN}</span> No
+          </button>
+        </div>
+      </div>
+
+      <div class="sf-feedback-reasons" id="feedbackReasons" style="display: none;">
+        <span class="sf-feedback-sublabel">What was off? (Select one to submit instantly):</span>
+        <div class="sf-reason-chips">
+          <button class="sf-reason-chip" data-reason="not_relevant">Not relevant to my prompt</button>
+          <button class="sf-reason-chip" data-reason="already_known">Already knew / installed this</button>
+          <button class="sf-reason-chip" data-reason="outdated">Outdated recommendation</button>
+          <button class="sf-reason-chip sf-reason-other" data-reason="other">Other (1-click)</button>
+        </div>
+      </div>
+
+      <div class="sf-feedback-thanks" id="feedbackThanks" style="display: none;">
+        <span class="sf-icon sf-icon-sm">${ICON_CHECK}</span>
+        <span>Thank you! We&#39;ll use this to improve future suggestions.</span>
+        <button class="sf-feedback-link-btn" id="addFeedbackDetailsBtn" style="display: none;" title="Add optional details">Add details (optional)</button>
+      </div>
+    </div>
+  `;
+}
+
+/**
  * Generates the complete, self-contained HTML page for the Webview.
  */
 export function generateWebviewHtml(options: WebviewHtmlOptions): string {
-  const { nonce, cspSource, result, scopeLabel, isLoading } = options;
+  const { nonce, cspSource, result, scopeLabel, isLoading, showFeedbackPrompt } = options;
 
   const skills = result?.skills || [];
   const query = result?.queryEcho || '';
@@ -383,6 +454,7 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
             ? `<span class="sf-pill sf-pill-active" title="Active context scope">Scope: ${escapeHtml(scopeLabel)}</span>`
             : ''
         }
+        ${renderPrivacyPill(result)}
         <span class="sf-pill" title="Local suggestion latency">${timingMs}ms local</span>
         <span class="sf-pill">${skills.length} ${skills.length === 1 ? 'result' : 'results'}</span>
       </div>
@@ -437,7 +509,7 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
     </div>
 
     <main class="sf-card-grid" id="cardGrid">
-      ${skills.map((s) => renderSkillCard(s)).join('')}
+      ${skills.map((s) => renderSkillCard(s, Boolean(options.bookmarkedSkillIds?.has(s.id.toLowerCase())))).join('')}
     </main>
 
     ${
@@ -456,6 +528,16 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
     </div>
   `
   }
+
+  ${renderFeedbackBar(query, showFeedbackPrompt)}
+
+  <footer class="sf-footer">
+    <span>SkillForge local database is regularly updated.</span>
+    <span>•</span>
+    <a href="#" class="sf-suggest-skill-link" id="suggestSkillLink" title="Request a new library to be added to the offline catalog">
+      <span class="sf-icon sf-icon-sm">${ICON_LIGHTBULB}</span>Suggest a library
+    </a>
+  </footer>
 
   <script nonce="${nonce}">
     (function () {
@@ -568,6 +650,107 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
       if (filterInput) {
         filterInput.addEventListener('input', applyFilters);
       }
+
+      // 6. Feedback & Skill Request Handlers
+      const currentQuery = ${JSON.stringify(query).replace(/</g, '\\u003c')};
+      const feedbackYesBtn = document.getElementById('feedbackYesBtn');
+      const feedbackNoBtn = document.getElementById('feedbackNoBtn');
+      const feedbackPrompt = document.getElementById('feedbackPrompt');
+      const feedbackReasons = document.getElementById('feedbackReasons');
+      const feedbackThanks = document.getElementById('feedbackThanks');
+      const addDetailsBtn = document.getElementById('addFeedbackDetailsBtn');
+      const suggestLink = document.getElementById('suggestSkillLink');
+
+      if (feedbackYesBtn) {
+        feedbackYesBtn.addEventListener('click', function () {
+          vscode.postMessage({
+            type: 'submitFeedback',
+            rating: 'helpful',
+            query: currentQuery
+          });
+          if (feedbackPrompt) feedbackPrompt.style.display = 'none';
+          if (feedbackThanks) feedbackThanks.style.display = 'flex';
+        });
+      }
+
+      if (feedbackNoBtn) {
+        feedbackNoBtn.addEventListener('click', function () {
+          if (feedbackReasons) feedbackReasons.style.display = 'flex';
+        });
+      }
+
+      document.querySelectorAll('.sf-reason-chip').forEach((chip) => {
+        chip.addEventListener('click', function () {
+          const reason = this.getAttribute('data-reason') || 'other';
+          vscode.postMessage({
+            type: 'submitFeedback',
+            rating: 'unhelpful',
+            reason: reason,
+            query: currentQuery
+          });
+
+          if (feedbackPrompt) feedbackPrompt.style.display = 'none';
+          if (feedbackReasons) feedbackReasons.style.display = 'none';
+          if (feedbackThanks) feedbackThanks.style.display = 'flex';
+          if (reason === 'other' && addDetailsBtn) {
+            addDetailsBtn.style.display = 'inline';
+          }
+        });
+      });
+
+      if (addDetailsBtn) {
+        addDetailsBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          vscode.postMessage({
+            type: 'requestSkill',
+            prefillName: currentQuery
+          });
+        });
+      }
+
+      if (suggestLink) {
+        suggestLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          vscode.postMessage({
+            type: 'requestSkill'
+          });
+        });
+      }
+
+      // 7. Bookmark Toggle Handlers
+      document.querySelectorAll('.sf-bookmark-btn').forEach((btn) => {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const skillId = this.getAttribute('data-skill-id');
+          const skillName = this.getAttribute('data-skill-name');
+          const ecosystem = this.getAttribute('data-skill-eco');
+          const category = this.getAttribute('data-skill-cat');
+          if (skillId && skillName) {
+            vscode.postMessage({
+              type: 'toggleBookmark',
+              skillId: skillId,
+              skillName: skillName,
+              ecosystem: ecosystem || undefined,
+              category: category || undefined
+            });
+          }
+        });
+      });
+
+      // 8. Side-by-Side Comparison Handlers
+      document.querySelectorAll('.sf-chip-compare-btn').forEach((btn) => {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const skillA = this.getAttribute('data-skill-a');
+          const skillB = this.getAttribute('data-skill-b');
+          if (skillA && skillB) {
+            vscode.postMessage({
+              type: 'compareSkills',
+              skillIds: [skillA, skillB]
+            });
+          }
+        });
+      });
     })();
   </script>
 </body>

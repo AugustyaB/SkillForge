@@ -28,6 +28,7 @@
     "onView:skillforge.contextView",
     "onView:skillforge.quickActionsView",
     "onView:skillforge.recentQueriesView",
+    "onView:skillforge.bookmarksView",
     "onCommand:skillforge.testConnection",
     "onCommand:skillforge.suggest",
     "onCommand:skillforge.selectScope",
@@ -35,7 +36,13 @@
     "onCommand:skillforge.suggestForCurrentFile",
     "onCommand:skillforge.runInstallCommand",
     "onCommand:skillforge.clearRecentQueries",
-    "onCommand:skillforge.showCanvas"
+    "onCommand:skillforge.showCanvas",
+    "onCommand:skillforge.setApiKey",
+    "onCommand:skillforge.clearApiKey",
+    "onCommand:skillforge.configureProvider",
+    "onCommand:skillforge.toggleBookmark",
+    "onCommand:skillforge.clearBookmarks",
+    "onCommand:skillforge.compareSkills"
   ],
   "contributes": {
     "viewsContainers": {
@@ -60,6 +67,10 @@
         {
           "id": "skillforge.recentQueriesView",
           "name": "Recent Discoveries"
+        },
+        {
+          "id": "skillforge.bookmarksView",
+          "name": "Bookmarked Tools"
         }
       ]
     },
@@ -108,6 +119,41 @@
         "title": "Open Suggestion Canvas",
         "category": "SkillForge",
         "icon": "$(layout)"
+      },
+      {
+        "command": "skillforge.setApiKey",
+        "title": "SkillForge: Set BYOK API Key (OpenAI / Gemini)",
+        "category": "SkillForge",
+        "icon": "$(key)"
+      },
+      {
+        "command": "skillforge.clearApiKey",
+        "title": "SkillForge: Clear Stored API Key",
+        "category": "SkillForge"
+      },
+      {
+        "command": "skillforge.configureProvider",
+        "title": "SkillForge: Choose Suggestion Provider (Local / BYOK)",
+        "category": "SkillForge",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "skillforge.toggleBookmark",
+        "title": "SkillForge: Toggle Skill Bookmark",
+        "category": "SkillForge",
+        "icon": "$(bookmark)"
+      },
+      {
+        "command": "skillforge.clearBookmarks",
+        "title": "Clear All Bookmarks",
+        "category": "SkillForge",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "skillforge.compareSkills",
+        "title": "SkillForge: Compare Libraries Side-by-Side",
+        "category": "SkillForge",
+        "icon": "$(split-horizontal)"
       }
     ],
     "menus": {
@@ -131,6 +177,16 @@
           "command": "skillforge.clearRecentQueries",
           "when": "view == skillforge.recentQueriesView",
           "group": "navigation@1"
+        },
+        {
+          "command": "skillforge.compareSkills",
+          "when": "view == skillforge.bookmarksView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "skillforge.clearBookmarks",
+          "when": "view == skillforge.bookmarksView",
+          "group": "navigation@2"
         }
       ]
     },
@@ -138,6 +194,12 @@
       "type": "object",
       "title": "SkillForge",
       "properties": {
+        "skillforge.provider": {
+          "type": "string",
+          "enum": ["local", "openai", "gemini"],
+          "default": "local",
+          "description": "Suggestion provider. Defaults to 'local' (100% offline, zero code transmitted). Enable 'openai' or 'gemini' for BYOK AI enrichment (only your query string is sent; source code is never transmitted)."
+        },
         "skillforge.maxResults": {
           "type": "number",
           "default": 5,
@@ -148,6 +210,31 @@
           "enum": ["all", "beginner", "intermediate", "advanced"],
           "default": "all",
           "description": "Default difficulty tier for skill recommendations."
+        },
+        "skillforge.openai.model": {
+          "type": "string",
+          "default": "gpt-4o-mini",
+          "description": "OpenAI model to use for BYOK discovery."
+        },
+        "skillforge.openai.endpoint": {
+          "type": "string",
+          "default": "",
+          "description": "Custom OpenAI-compatible API endpoint (defaults to https://api.openai.com/v1/chat/completions)."
+        },
+        "skillforge.gemini.model": {
+          "type": "string",
+          "default": "gemini-1.5-flash",
+          "description": "Google Gemini model to use for BYOK discovery."
+        },
+        "skillforge.gemini.endpoint": {
+          "type": "string",
+          "default": "",
+          "description": "Custom Google Gemini API endpoint."
+        },
+        "skillforge.timeoutMs": {
+          "type": "number",
+          "default": 4000,
+          "description": "Timeout in milliseconds for BYOK cloud AI requests before falling back to the offline catalog."
         }
       }
     }

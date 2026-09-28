@@ -10,9 +10,82 @@ The project follows a structured version & phase sequence:
   - `Phase 3`: Suggestion Engine & Context Scoping (✅ Complete)
   - `Phase 4`: Reliability Engine & Trust Verification (✅ Complete)
   - `Phase 5`: VS Code UI & Experience (✅ Complete — Phase 5.1 & Phase 5.2)
-  - `Phase 6`: Fallback Cascade & Advanced Capabilities (⬜ Pending)
-  - `Phase 7`: Polish, Packaging & Production Readiness (⬜ Pending)
+  - `Phase 6`: LLM Providers & BYOK Integration (✅ Complete)
+  - `Phase 7`: Bookmarks, Technology Comparison Matrix & Reference Suite (✅ Complete)
   - `Phase 8`: E2E Verification & Release Sign-Off (⬜ Pending)
+
+---
+
+## Phase 7: Bookmarks, Technology Comparison Matrix & Reference Suite (2026-09-28)
+
+### Deliverables
+- **Skill Bookmarking & Persistence Engine (`packages/vscode-client/src/bookmarks/bookmark-manager.ts`)**:
+  - Built `BookmarkManager` persisting developer-saved skills via `context.globalState` (`skillforge.bookmarks.v1`).
+  - Added case-insensitive deduplication, tag/indicator normalization, and corrupted storage auto-recovery via strict Zod validation.
+  - Added 1-click star toggle button to every Suggestion Canvas card header: active bookmarks show filled gold star (`#f59e0b`), unbookmarked show subtle outlined star.
+- **Dedicated Sidebar Bookmarks View (`packages/vscode-client/src/views/bookmarks-tree-provider.ts`)**:
+  - Registered `skillforge.bookmarksView` under `views.skillforge-activitybar` in `package.json`.
+  - Implemented `BookmarksTreeProvider` displaying saved tools grouped cleanly by category with difficulty pills, ecosystem icons, and friendly empty-state guidance.
+  - Registered commands `skillforge.toggleBookmark` and `skillforge.clearBookmarks` with modal confirmation.
+- **Technology Comparison Matrix (`packages/server/src/engine/comparison-engine.ts`, `packages/vscode-client/src/webview/comparison-html.ts`, `packages/vscode-client/src/webview/comparison-panel.ts`)**:
+  - Built `ComparisonEngine` in the headless LSP server accepting 2 or 3 skill IDs or indicators.
+  - Added mutual conflict detector highlighting architectural exclusivity and competing library slots (e.g. React vs Vue.js vs Svelte).
+  - Added cross-ecosystem detection and informational banner for multi-runtime comparisons (e.g. FastAPI [Python] vs Express [JavaScript]).
+  - Built responsive side-by-side comparison webview with sticky column headers, trust seals, metric rows (downloads, stars, status), pros/strengths, caveats, companion stack chips, and 1-click terminal install buttons per column.
+  - Added `vs` comparison action chips directly inside each skill card's Deep Dive "Alternatives" drawer, enabling instant 1-click comparison between a suggested tool and its alternative.
+  - Registered command `skillforge.compareSkills` supporting quick-pick selection from bookmarks or direct input.
+- **Adversarial & Edge Case Hardening**:
+  - Validated strict 2-3 skill bounds via Zod (`ComparisonRequestSchema`). Rejecting <2 or >3 tools to preserve side-by-side column readability.
+  - Graceful fallback for missing health metrics ("Verified Catalog", "Active", "No critical caveats reported").
+  - Defensive alias resolution mapping package indicators (e.g. `next` -> `nextjs`) and preventing single-tool duplicate comparisons.
+  - Safe HTML escaping across all matrix cells preventing XSS injection.
+
+### Verification Proof
+- `pnpm typecheck` (`tsc -b`): Clean build, 0 errors across all 3 packages.
+- `pnpm test` (`vitest run`): 249/249 tests passing across 23 test suites in 1070ms.
+- `pnpm build`: Clean monorepo build with 118 verified skills in catalog.
+- **Playwright E2E Verification**: 11/11 tests passing, capturing visual proof:
+  - `sf_comparison_matrix.png` (3-way comparison of React vs Vue.js vs Svelte with conflict banner, metrics, pros, and install buttons).
+  - `sf_crosseco_matrix.png` (Cross-ecosystem evaluation of FastAPI vs Express.js).
+  - `sf_bookmarks_canvas.png` (Active gold bookmark star and Deep Dive `vs` compare chips).
+
+---
+
+## Phase 6: LLM Providers & BYOK Integration (with Privacy Safeguards & Periodic Feedback System) (2026-09-28)
+
+### Deliverables
+- **Privacy-First Guarantee & Local Offline Baseline**:
+  - Maintained 100% offline `LocalProvider` as the uncompromised default provider with zero network transmission.
+  - Added visual `Local & Private` metadata pill in the header with a vector padlock codicon, assuring developers that zero code leaves their workstation.
+  - BYOK Cloud AI is an explicit opt-in choice for users who want external LLM reasoning. Privacy-preserving prompt builders sanitize inputs, transmitting only user query intent and high-level ecosystem keywords (never file contents, file paths, secrets, or source code).
+- **Pluggable BYOK Provider Engine (`packages/server/src/providers/*`)**:
+  - `SuggestionProvider` interface defining standard provider contract.
+  - `LocalProvider`: Offline suggestion engine (<10ms) wrapping `SuggestionEngine`.
+  - `OpenAIProvider`: Direct OpenAI API integration (`gpt-4o-mini` default) using native `fetch` with 4000ms `AbortSignal` timeout, structured JSON parsing, and grounding via `GroundTruthAnchor`.
+  - `GeminiProvider`: Direct Google Gemini REST integration (`gemini-1.5-flash` default) with `responseMimeType: "application/json"`, error resilience, and ground truth anchoring.
+  - `HybridMerger`: Seamless two-phase merger combining instant curated local results with dynamic AI discoveries, deduplicating on canonical IDs and stack indicators, and tagging AI discoveries with `llmEnhanced: true`.
+  - `ProviderRegistry`: Central orchestrator providing graceful degradation: if an AI provider fails (network timeout, rate limit HTTP 429, invalid API key HTTP 401), automatically falls back to the offline local database without disrupting the developer.
+- **Periodic Low-Frequency Feedback System (`packages/vscode-client/src/feedback/feedback-manager.ts`)**:
+  - Manages low-frequency feedback cadence: prompts only every 5 queries or upon zero-match fallback cascade.
+  - Enforces a 24-hour cooldown suppression period after any feedback submission to prevent repetitive prompts.
+  - Persists feedback history and skill contribution requests locally in `context.globalState`.
+- **Zero-Friction Dislike Flow & Catalog Expansion UI (`packages/vscode-client/src/webview/*`)**:
+  - Designed zero-friction feedback bar with Thumbs Up/Down selectors.
+  - Dislike options include 1-click `"Other"` at the bottom: clicking `"Other"` immediately records the rating without requiring any typed explanation.
+  - Provides a discreet `"Add details (optional)"` button for deferred elaboration if the developer wishes to elaborate later.
+  - Added offline catalog expansion footer: `"SkillForge local database is regularly updated. • Suggest a library"`. Generates pre-filled GitHub issue URLs for requested tools with safe URL encoding.
+- **OS Keychain Secret Storage & Settings (`packages/vscode-client/src/secrets/*`, `package.json`, `extension.ts`)**:
+  - Created `SecretManager` wrapping `vscode.SecretStorage` (macOS Keychain, Windows Credential Manager, Linux libsecret).
+  - Registered commands `skillforge.setApiKey`, `skillforge.clearApiKey`, and `skillforge.configureProvider`.
+  - Added VS Code configuration settings: `skillforge.provider`, `skillforge.openai.*`, `skillforge.gemini.*`, and `skillforge.timeoutMs`.
+- **Adversarial Security Hardening**:
+  - Neutralized HTML parser injection vulnerability by escaping `<` as `\u003c` in stringified script tag interpolations within `generateWebviewHtml`.
+
+### Verification Proof
+- `pnpm typecheck` (`tsc -b`): Passed cleanly across all packages with 0 diagnostics.
+- `pnpm test` (`vitest run`): 215/215 tests passing across 19 test suites in 1010ms.
+- `pnpm build`: Clean build across all monorepo packages (`@skillforge/shared`, `@skillforge/server`, `@skillforge/vscode-client`).
+- **Playwright E2E Verification**: 8/8 automated tests passing, verifying the Privacy Pill, Thumbs Up/Down interactions, 1-click "Other" option, and instant thank-you state transition (`sf_feedback_system.png`).
 
 ---
 

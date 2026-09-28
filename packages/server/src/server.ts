@@ -5,18 +5,25 @@ import {
   TextDocumentSyncKind,
 } from 'vscode-languageserver/node.js';
 import {
+  SKILLFORGE_COMPARE_METHOD,
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
+  type CompareParams,
+  type CompareResult,
   type PingResult,
   type SkillSuggestionParams,
   type SkillSuggestionResult,
 } from '@skillforge/shared';
 import { SkillsRepository } from './data/skills-repository.js';
 import { SuggestionEngine } from './engine/suggestion-engine.js';
+import { ComparisonEngine } from './engine/comparison-engine.js';
+import { ProviderRegistry } from './providers/provider-registry.js';
 
 export class SkillForgeServer {
   private connection: Connection;
   private engine: SuggestionEngine;
+  private comparisonEngine: ComparisonEngine;
+  private providerRegistry: ProviderRegistry;
 
   constructor(
     connection: Connection,
@@ -30,11 +37,23 @@ export class SkillForgeServer {
     } else {
       this.engine = new SuggestionEngine();
     }
+    this.comparisonEngine = new ComparisonEngine({
+      repository: this.engine.getRepository(),
+    });
+    this.providerRegistry = new ProviderRegistry({ engine: this.engine });
     this.registerHandlers();
   }
 
   public getEngine(): SuggestionEngine {
     return this.engine;
+  }
+
+  public getComparisonEngine(): ComparisonEngine {
+    return this.comparisonEngine;
+  }
+
+  public getProviderRegistry(): ProviderRegistry {
+    return this.providerRegistry;
   }
 
   public getRepository(): SkillsRepository {
@@ -78,9 +97,25 @@ export class SkillForgeServer {
       async (params?: SkillSuggestionParams): Promise<SkillSuggestionResult> => {
         const intent = typeof params?.intent === 'string' ? params.intent : '';
         this.connection.console.log(
-          `[SkillForge LSP] Handling suggest request: "${intent}"`
+          `[SkillForge LSP] Handling suggest request: "${intent}" (provider: ${params?.providerConfig?.provider || 'local'})`
         );
-        return await this.engine.suggest(params || { intent: '' });
+        return await this.providerRegistry.suggest(
+          params || { intent: '' },
+          params?.providerConfig
+        );
+      }
+    );
+
+    // 5. Custom compare request
+    this.connection.onRequest(
+      SKILLFORGE_COMPARE_METHOD,
+      async (params?: CompareParams): Promise<CompareResult> => {
+        const skillIds = Array.isArray(params?.skillIds) ? params.skillIds : [];
+        this.connection.console.log(
+          `[SkillForge LSP] Handling compare request for skills: [${skillIds.join(', ')}]`
+        );
+        const matrix = this.comparisonEngine.compare({ skillIds });
+        return { matrix };
       }
     );
   }

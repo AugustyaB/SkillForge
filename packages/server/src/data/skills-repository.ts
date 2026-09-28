@@ -162,7 +162,9 @@ export class SkillsRepository {
   }
 
   public getSkillById(id: string): Skill | undefined {
-    return this.idIndex.get(id);
+    if (!id || typeof id !== 'string') return undefined;
+    const cleanId = id.trim();
+    return this.idIndex.get(cleanId) || this.idIndex.get(cleanId.toLowerCase());
   }
 
   public getSkillByIndicator(indicator: string): Skill | undefined {

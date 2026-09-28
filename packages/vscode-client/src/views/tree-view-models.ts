@@ -164,3 +164,68 @@ export function buildRecentQueriesItems(queries: RecentQueryEntry[]): TreeItemMo
     collapsibleState: 'none',
   }));
 }
+
+import type { SkillBookmark } from '@skillforge/shared';
+
+export function formatCategoryName(cat: string): string {
+  if (!cat) return 'Other';
+  return cat
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Builds the tree model for the "Bookmarked Tools" sidebar view.
+ */
+export function buildBookmarksTreeItems(bookmarks: SkillBookmark[]): TreeItemModel[] {
+  if (!bookmarks || bookmarks.length === 0) {
+    return [
+      {
+        id: 'bookmarks-empty',
+        label: 'No bookmarked tools yet',
+        description: 'Star tools to save',
+        tooltip: 'Star skills in the Suggestion Canvas to save them here for quick access',
+        iconId: 'bookmark',
+        contextValue: 'bookmarkEmpty',
+        collapsibleState: 'none',
+      },
+    ];
+  }
+
+  // Group by category
+  const groups = new Map<string, SkillBookmark[]>();
+  for (const b of bookmarks) {
+    const cat = b.category || 'other';
+    const list = groups.get(cat) || [];
+    list.push(b);
+    groups.set(cat, list);
+  }
+
+  const items: TreeItemModel[] = [];
+  for (const [cat, list] of groups.entries()) {
+    const children: TreeItemModel[] = list.map((b) => ({
+      id: `bookmark-${b.id}`,
+      label: b.name,
+      description: b.ecosystem,
+      tooltip: `${b.name} (${formatCategoryName(b.category)})\n${b.whyUseIt}${b.notes ? `\n\nNotes: ${b.notes}` : ''}`,
+      iconId: 'bookmark',
+      commandId: 'skillforge.suggest',
+      commandArgs: [{ intent: b.name }],
+      contextValue: 'bookmarkItem',
+      collapsibleState: 'none',
+    }));
+
+    items.push({
+      id: `bookmark-cat-${cat}`,
+      label: `${formatCategoryName(cat)} (${list.length})`,
+      tooltip: `${formatCategoryName(cat)}: ${list.length} saved tool${list.length === 1 ? '' : 's'}`,
+      iconId: 'symbol-folder',
+      contextValue: 'bookmarkCategory',
+      collapsibleState: 'expanded',
+      children,
+    });
+  }
+
+  return items;
+}

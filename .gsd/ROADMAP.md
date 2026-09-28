@@ -12,9 +12,9 @@
 - [x] Reliability engine with Zod schema contracts, package existence checks, health indicators, and trust tiers
 - [x] VS Code UX with Command Palette, Sidebar (including context folder selector), and inline CodeLens triggers
 - [x] Interactive Webview results panel with skill cards, "WHY" explanations, and trust badges
-- [ ] BYOK LLM integration (OpenAI-compatible & Gemini) securely using SecretStorage with optional Validator mode
-- [ ] Duplicate query detection, "already installed" detection, and graceful fallback cascade
-- [ ] Bookmarks persistence (globalState) and side-by-side technology comparison mode
+- [x] BYOK LLM integration (OpenAI-compatible & Gemini) securely using SecretStorage with optional Validator mode
+- [x] Duplicate query detection, "already installed" detection, and graceful fallback cascade
+- [x] Bookmarks persistence (globalState) and side-by-side technology comparison mode
 - [ ] First-run onboarding walkthrough, strict Webview CSP, and clean VSIX packaging
 
 ---
@@ -96,26 +96,29 @@
 **Requirements**: REQ-UI, REQ-Security
 **Depends on**: Phase 5.1
 
-### Phase 6: LLM Providers & BYOK Integration
-**Status**: ⬜ Not Started
-**Objective**: Implement pluggable Bring-Your-Own-Key LLM support with OpenAI-compatible and Gemini endpoints, secure key storage, hybrid result merging, and optional dual-pass validation.
+### Phase 6: LLM Providers & BYOK Integration (with Privacy Safeguards & Periodic Feedback)
+**Status**: ✅ Complete
+**Objective**: Implement pluggable Bring-Your-Own-Key LLM support with OpenAI-compatible and Gemini endpoints, OS keychain secret storage, hybrid result merging, privacy-preserving prompt builders, and periodic low-frequency feedback cadence with zero-friction dislike options.
 **Deliverables**:
-- `SuggestionProvider` interface abstraction
-- `LocalProvider`, `OpenAICompatibleProvider`, and `GeminiProvider` implementations
-- Secure API key management using VS Code `SecretStorage` (`context.secrets`)
-- Hybrid mode: instantaneous local results (<300ms) with seamless AI enhancement merging (~2-3s)
-- Optional Generator-Validator mode (LLM generates → validator verifies applicability)
-- System prompts with few-shot examples and strict schema outputs
-**Requirements**: REQ-LLM, REQ-BYOK
+- `SuggestionProvider` interface abstraction and `LocalProvider` 100% offline baseline
+- `OpenAIProvider` and `GeminiProvider` implementations with ground truth anchoring and timeout aborts
+- Secure API key management via `vscode.SecretStorage` (`SecretManager`)
+- `HybridMerger` combining instantaneous local results (<10ms) with dynamic AI discoveries
+- Privacy-first visual assurance (`Local & Private` metadata pill)
+- Periodic low-frequency feedback cadence manager (5 queries, 24h cooldown suppression)
+- Zero-friction dislike flow with 1-click `"Other"` option (no mandatory typing)
+- Offline catalog expansion link with local logging and prefilled GitHub issues
+**Requirements**: REQ-LLM, REQ-BYOK, REQ-Privacy
 **Depends on**: Phase 3, Phase 5
 
 ### Phase 7: Bookmarks, Comparison & Reference Suite
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Build productivity and decision-making features: persistent skill bookmarks, side-by-side alternative comparison matrix, and query history management.
 **Deliverables**:
-- Skill bookmarking system persisted across sessions via `globalState`
-- Bookmarks sidebar view grouped by category with one-click access
-- Side-by-side technology comparison panel (comparing up to 3 skills across difficulty, learning curve, ecosystem, and health)
+- Skill bookmarking system persisted across sessions via `globalState` (`BookmarkManager`)
+- Bookmarks sidebar view (`skillforge.bookmarksView`, `BookmarksTreeProvider`) grouped by category with one-click access
+- Side-by-side technology comparison panel (`ComparisonEngine`, `generateComparisonHtml`, `ComparisonPanel`) comparing 2-3 skills across difficulty, learning curve, ecosystem, metrics, and mutual conflict detection
+- Deep Dive `vs` compare chips and 1-click terminal install buttons
 - Query history view with one-click re-run capability
 **Requirements**: REQ-Bookmarks, REQ-Comparison
 **Depends on**: Phase 5, Phase 6

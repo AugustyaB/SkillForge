@@ -132,3 +132,149 @@ export function validateSkillsArray(data: unknown): InferredSkill[] {
 
   return parsed;
 }
+
+/**
+ * Supported Suggestion Provider Types
+ */
+export const ProviderTypeSchema = z.enum(['local', 'openai', 'gemini', 'hybrid']);
+export type InferredProviderType = z.infer<typeof ProviderTypeSchema>;
+
+/**
+ * Configuration options for BYOK & pluggable suggestion providers
+ */
+export const ProviderConfigSchema = z.object({
+  provider: ProviderTypeSchema.default('local'),
+  apiKey: z.string().optional(),
+  model: z.string().optional(),
+  endpoint: z.string().url('Endpoint must be a valid URL').optional(),
+  temperature: z.number().min(0).max(2).optional(),
+  dualPassValidation: z.boolean().optional(),
+  timeoutMs: z.number().int().positive().optional(),
+});
+export type InferredProviderConfig = z.infer<typeof ProviderConfigSchema>;
+
+/**
+ * Schema for developer feedback on suggestion quality
+ */
+export const FeedbackRatingSchema = z.enum(['helpful', 'unhelpful']);
+export type InferredFeedbackRating = z.infer<typeof FeedbackRatingSchema>;
+
+export const UnhelpfulReasonSchema = z.enum([
+  'not_relevant',
+  'already_known',
+  'outdated',
+  'other',
+]);
+export type InferredUnhelpfulReason = z.infer<typeof UnhelpfulReasonSchema>;
+
+export const FeedbackPayloadSchema = z.object({
+  query: z.string().min(1, 'Query intent is required'),
+  skillId: z.string().optional(),
+  rating: FeedbackRatingSchema,
+  reason: UnhelpfulReasonSchema.optional(),
+  details: z.string().max(500, 'Details cannot exceed 500 characters').optional(),
+  providerUsed: ProviderTypeSchema.optional(),
+  timestamp: z.number().int().positive(),
+});
+export type InferredFeedbackPayload = z.infer<typeof FeedbackPayloadSchema>;
+
+/**
+ * Schema for requesting new skills to be added to the offline catalog
+ */
+export const SkillRequestPayloadSchema = z.object({
+  skillName: z.string().min(1, 'Library or skill name is required'),
+  category: SkillCategorySchema.optional(),
+  ecosystem: z.string().optional(),
+  reason: z.string().max(500, 'Reason cannot exceed 500 characters').optional(),
+  timestamp: z.number().int().positive(),
+});
+export type InferredSkillRequestPayload = z.infer<typeof SkillRequestPayloadSchema>;
+
+export function validateProviderConfig(data: unknown): InferredProviderConfig {
+  return ProviderConfigSchema.parse(data);
+}
+
+export function validateFeedbackPayload(data: unknown): InferredFeedbackPayload {
+  return FeedbackPayloadSchema.parse(data);
+}
+
+export function validateSkillRequestPayload(data: unknown): InferredSkillRequestPayload {
+  return SkillRequestPayloadSchema.parse(data);
+}
+
+/**
+ * Schema for developer-saved skill bookmarks
+ */
+export const SkillBookmarkSchema = z.object({
+  id: z.string().min(1, 'Skill ID is required'),
+  name: z.string().min(1, 'Skill Name is required'),
+  ecosystem: z.string().min(1, 'Ecosystem is required'),
+  category: SkillCategorySchema,
+  difficulty: DifficultySchema,
+  description: z.string().optional(),
+  whyUseIt: z.string().min(1, 'whyUseIt is required'),
+  officialUrl: z.string().url('Must be a valid URL'),
+  tags: z.array(z.string()).default([]),
+  stackIndicators: z.array(z.string()).default([]),
+  trustTier: TrustTierSchema.optional(),
+  timestamp: z.number().int().positive(),
+  notes: z.string().max(1000, 'Notes cannot exceed 1000 characters').optional(),
+});
+export type InferredSkillBookmark = z.infer<typeof SkillBookmarkSchema>;
+
+/**
+ * Schema for requesting a multi-skill side-by-side comparison
+ */
+export const ComparisonRequestSchema = z.object({
+  skillIds: z
+    .array(z.string().min(1))
+    .min(2, 'Must provide at least 2 skills to compare')
+    .max(3, 'Cannot compare more than 3 skills simultaneously'),
+});
+export type InferredComparisonRequest = z.infer<typeof ComparisonRequestSchema>;
+
+/**
+ * Normalized data for a single tool column in the comparison matrix
+ */
+export const ComparisonColumnSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  ecosystem: z.string().min(1),
+  category: SkillCategorySchema,
+  difficulty: DifficultySchema,
+  trustTier: TrustTierSchema,
+  description: z.string(),
+  whyUseIt: z.string(),
+  pros: z.array(z.string()).default([]),
+  caveats: z.string().optional(),
+  worksWellWith: z.array(z.string()).default([]),
+  stackIndicators: z.array(z.string()).default([]),
+  health: PackageHealthSchema.optional(),
+  officialUrl: z.string().url().optional(),
+  isInstalledInWorkspace: z.boolean().optional(),
+});
+export type InferredComparisonColumn = z.infer<typeof ComparisonColumnSchema>;
+
+/**
+ * Full side-by-side comparison matrix payload
+ */
+export const ComparisonMatrixSchema = z.object({
+  columns: z.array(ComparisonColumnSchema).min(2).max(3),
+  categories: z.array(SkillCategorySchema),
+  isCrossEcosystem: z.boolean(),
+  conflictsDetected: z.array(z.string()).default([]),
+  summary: z.string().optional(),
+});
+export type InferredComparisonMatrix = z.infer<typeof ComparisonMatrixSchema>;
+
+export function validateSkillBookmark(data: unknown): InferredSkillBookmark {
+  return SkillBookmarkSchema.parse(data);
+}
+
+export function validateComparisonRequest(data: unknown): InferredComparisonRequest {
+  return ComparisonRequestSchema.parse(data);
+}
+
+export function validateComparisonMatrix(data: unknown): InferredComparisonMatrix {
+  return ComparisonMatrixSchema.parse(data);
+}

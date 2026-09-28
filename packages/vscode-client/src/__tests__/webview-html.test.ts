@@ -9,6 +9,8 @@ import {
   renderWhyUseIt,
   renderSkillCard,
   renderCategoryRecommendations,
+  renderPrivacyPill,
+  renderFeedbackBar,
   generateWebviewHtml,
 } from '../webview/webview-html.js';
 import type { SuggestedSkill, SkillSuggestionResult } from '@skillforge/shared';
@@ -351,6 +353,85 @@ describe('WebviewHtml (Clean Developer UI)', () => {
 
       expect(html).not.toContain('<div class="sf-fallback-banner">');
       expect(html).not.toContain('<div class="sf-category-section">');
+    });
+
+    it('renders privacy pill and catalog suggestion link in footer', () => {
+      const result: SkillSuggestionResult = {
+        skills: [mockSkill],
+        queryEcho: 'react router',
+        timings: { localMs: 1, totalMs: 1 },
+      };
+
+      const html = generateWebviewHtml({
+        nonce: 'nonce',
+        cspSource: 'vscode-webview:',
+        result,
+      });
+
+      expect(html).toContain('Local &amp; Private');
+      expect(html).toContain('Suggest a library');
+      expect(html).toContain('id="suggestSkillLink"');
+    });
+
+    it('renders feedback bar when showFeedbackPrompt is true', () => {
+      const result: SkillSuggestionResult = {
+        skills: [mockSkill],
+        queryEcho: 'fastify api',
+        timings: { localMs: 1, totalMs: 1 },
+      };
+
+      const htmlWithFeedback = generateWebviewHtml({
+        nonce: 'nonce',
+        cspSource: 'vscode-webview:',
+        result,
+        showFeedbackPrompt: true,
+      });
+
+      expect(htmlWithFeedback).toContain('id="feedbackBar"');
+      expect(htmlWithFeedback).toContain('Was this suggestion helpful?');
+      expect(htmlWithFeedback).toContain('id="feedbackYesBtn"');
+      expect(htmlWithFeedback).toContain('id="feedbackNoBtn"');
+      expect(htmlWithFeedback).toContain('Other (1-click)');
+
+      const htmlWithoutFeedback = generateWebviewHtml({
+        nonce: 'nonce',
+        cspSource: 'vscode-webview:',
+        result,
+        showFeedbackPrompt: false,
+      });
+
+      expect(htmlWithoutFeedback).not.toContain('id="feedbackBar"');
+    });
+  });
+
+  describe('renderPrivacyPill', () => {
+    it('renders Local & Private badge by default or for local provider', () => {
+      expect(renderPrivacyPill(undefined)).toContain('Local &amp; Private');
+      expect(renderPrivacyPill({ providerUsed: 'local', skills: [], timings: { localMs: 1, totalMs: 1 }, queryEcho: '' })).toContain('Local &amp; Private');
+    });
+
+    it('renders BYOK badge for external AI providers', () => {
+      const openaiPill = renderPrivacyPill({ providerUsed: 'openai', skills: [], timings: { localMs: 1, totalMs: 1 }, queryEcho: '' });
+      expect(openaiPill).toContain('OpenAI BYOK');
+      expect(openaiPill).toContain('BYOK Mode');
+
+      const geminiPill = renderPrivacyPill({ providerUsed: 'gemini', skills: [], timings: { localMs: 1, totalMs: 1 }, queryEcho: '' });
+      expect(geminiPill).toContain('Gemini BYOK');
+    });
+  });
+
+  describe('renderFeedbackBar', () => {
+    it('returns empty string when show is false or query is empty', () => {
+      expect(renderFeedbackBar('test', false)).toBe('');
+      expect(renderFeedbackBar('', true)).toBe('');
+    });
+
+    it('renders 1-click feedback options including Other', () => {
+      const bar = renderFeedbackBar('fast api', true);
+      expect(bar).toContain('sf-feedback-bar');
+      expect(bar).toContain('Not relevant to my prompt');
+      expect(bar).toContain('Already knew / installed this');
+      expect(bar).toContain('Other (1-click)');
     });
   });
 });

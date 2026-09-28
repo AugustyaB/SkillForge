@@ -144,6 +144,18 @@ export const WEBVIEW_STYLES = `
     color: var(--sf-fg);
   }
 
+  .sf-pill-privacy {
+    color: var(--sf-verified-color);
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .sf-pill-ai {
+    color: var(--sf-validated-color);
+    border-color: rgba(56, 189, 248, 0.3);
+    background: rgba(56, 189, 248, 0.08);
+  }
+
   .sf-query-echo {
     font-size: 13px;
     color: var(--sf-muted-fg);
@@ -690,6 +702,219 @@ export const WEBVIEW_STYLES = `
     font-size: 11px;
     color: var(--sf-link-fg);
     font-weight: 500;
+  }
+
+  /* Periodic Low-Frequency Feedback Bar */
+  .sf-feedback-bar {
+    margin-top: 36px;
+    padding: 14px 18px;
+    background: var(--sf-card-bg);
+    border: 1px solid var(--sf-card-border);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .sf-feedback-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .sf-feedback-label {
+    font-weight: 500;
+    color: var(--sf-fg);
+  }
+
+  .sf-feedback-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sf-feedback-thumb {
+    background: var(--sf-code-bg);
+    border: 1px solid var(--sf-card-border);
+    border-radius: 4px;
+    color: var(--sf-fg);
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.1s ease;
+  }
+
+  .sf-feedback-thumb:hover {
+    border-color: var(--sf-card-hover-border);
+    background: var(--sf-card-bg);
+  }
+
+  .sf-feedback-reasons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--sf-card-border);
+    animation: sf-fade-in 0.15s ease;
+  }
+
+  @keyframes sf-fade-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .sf-feedback-sublabel {
+    font-size: 11px;
+    color: var(--sf-muted-fg);
+  }
+
+  .sf-reason-chips {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .sf-reason-chip {
+    font-family: inherit;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--sf-code-bg);
+    color: var(--sf-fg);
+    border: 1px solid var(--sf-card-border);
+    cursor: pointer;
+    transition: all 0.1s ease;
+  }
+
+  .sf-reason-chip:hover {
+    border-color: var(--sf-card-hover-border);
+    background: var(--sf-card-bg);
+  }
+
+  .sf-reason-other {
+    font-weight: 600;
+    color: var(--sf-link-fg);
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+
+  .sf-feedback-thanks {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--sf-verified-color);
+    font-size: 12px;
+    font-weight: 500;
+    animation: sf-fade-in 0.15s ease;
+  }
+
+  .sf-feedback-link-btn {
+    background: none;
+    border: none;
+    color: var(--sf-link-fg);
+    cursor: pointer;
+    font-size: 11px;
+    text-decoration: underline;
+    padding: 0;
+    margin-left: 8px;
+  }
+
+  /* Footer & Offline Catalog Contribution Link */
+  .sf-footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--sf-card-border);
+    text-align: center;
+    font-size: 11px;
+    color: var(--sf-muted-fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .sf-suggest-skill-link {
+    color: var(--sf-muted-fg);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.1s ease;
+  }
+
+  .sf-suggest-skill-link:hover {
+    color: var(--sf-fg);
+    text-decoration: underline;
+  }
+
+  /* Bookmark Button */
+  .sf-bookmark-btn {
+    background: transparent;
+    border: none;
+    color: var(--sf-muted-fg);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.15s ease, background 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .sf-bookmark-btn:hover {
+    color: var(--sf-fg);
+    background: var(--sf-code-bg);
+  }
+
+  .sf-bookmark-btn.sf-bookmarked {
+    color: #f59e0b;
+  }
+
+  .sf-bookmark-btn.sf-bookmarked:hover {
+    color: #d97706;
+  }
+
+  /* Comparison Chips */
+  .sf-alt-chip-wrapper {
+    display: inline-flex;
+    align-items: center;
+    background: var(--sf-code-bg);
+    border: 1px solid var(--sf-card-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .sf-alt-chip-wrapper .sf-chip {
+    border: none;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .sf-chip-compare-btn {
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--sf-card-border);
+    color: var(--sf-link-fg);
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .sf-chip-compare-btn:hover {
+    background: var(--sf-btn-primary-bg);
+    color: var(--sf-btn-primary-fg);
   }
 
   /* High Contrast Accessibility Overrides */

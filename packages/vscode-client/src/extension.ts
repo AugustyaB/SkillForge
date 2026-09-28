@@ -7,9 +7,14 @@ import {
   TransportKind,
 } from 'vscode-languageclient/node.js';
 import {
+  SKILLFORGE_COMPARE_METHOD,
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
+  type CompareResult,
+  type ComparisonMatrix,
   type PingResult,
+  type ProviderConfig,
+  type ProviderType,
   type SkillSuggestionParams,
   type SkillSuggestionResult,
 } from '@skillforge/shared';
@@ -19,7 +24,12 @@ import { TerminalRunner } from './terminal/terminal-runner.js';
 import { ContextTreeProvider } from './views/context-tree-provider.js';
 import { QuickActionsTreeProvider } from './views/quick-actions-tree-provider.js';
 import { RecentQueriesTreeProvider } from './views/recent-queries-tree-provider.js';
+import { BookmarksTreeProvider } from './views/bookmarks-tree-provider.js';
+import { BookmarkManager } from './bookmarks/bookmark-manager.js';
+import { FeedbackManager } from './feedback/feedback-manager.js';
+import { SecretManager } from './secrets/secret-manager.js';
 import { SuggestionPanel } from './webview/suggestion-panel.js';
+import { ComparisonPanel } from './webview/comparison-panel.js';
 
 let client: LanguageClient | undefined;
 
@@ -27,18 +37,25 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   const outputChannel = vscode.window.createOutputChannel('SkillForge Language Server');
   context.subscriptions.push(outputChannel);
 
-  // 1. Initialize ScopeManager
+  // 1. Initialize ScopeManager, FeedbackManager, SecretManager, and BookmarkManager
   const scopeManager = new ScopeManager(context);
+  const feedbackManager = new FeedbackManager(context.globalState);
+  const secretManager = new SecretManager(context.secrets);
+  const bookmarkManager = new BookmarkManager(context.globalState);
+  SuggestionPanel.setFeedbackManager(feedbackManager);
 
   // 2. Initialize Sidebar Tree Providers
   const contextTreeProvider = new ContextTreeProvider(scopeManager);
   const quickActionsTreeProvider = new QuickActionsTreeProvider();
   const recentQueriesTreeProvider = new RecentQueriesTreeProvider(context);
+  const bookmarksTreeProvider = new BookmarksTreeProvider(bookmarkManager);
+  SuggestionPanel.setBookmarkManager(bookmarkManager, bookmarksTreeProvider);
 
   context.subscriptions.push(
     vscode.window.registerTreeDataProvider('skillforge.contextView', contextTreeProvider),
     vscode.window.registerTreeDataProvider('skillforge.quickActionsView', quickActionsTreeProvider),
-    vscode.window.registerTreeDataProvider('skillforge.recentQueriesView', recentQueriesTreeProvider)
+    vscode.window.registerTreeDataProvider('skillforge.recentQueriesView', recentQueriesTreeProvider),
+    vscode.window.registerTreeDataProvider('skillforge.bookmarksView', bookmarksTreeProvider)
   );
 
   // 3. Initialize CodeLens Provider
@@ -199,6 +216,222 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   });
   context.subscriptions.push(showCanvasCmd);
 
+  // Command: Set BYOK API Key
+  const setApiKeyCmd = vscode.commands.registerCommand('skillforge.setApiKey', async (targetProvider?: ProviderType) => {
+    let provider = targetProvider;
+    if (!provider || provider === 'local' || provider === 'hybrid') {
+      const pick = await vscode.window.showQuickPick(
+        [
+          { label: 'OpenAI', value: 'openai' as ProviderType, description: 'Requires OpenAI API key (gpt-4o-mini)' },
+          { label: 'Google Gemini', value: 'gemini' as ProviderType, description: 'Requires Google AI Studio API key (gemini-1.5-flash)' },
+        ],
+        { placeHolder: 'Select provider to store API key for:' }
+      );
+      if (!pick) return;
+      provider = pick.value;
+    }
+
+    const key = await vscode.window.showInputBox({
+      title: `SkillForge: Set ${provider.toUpperCase()} API Key`,
+      prompt: `Enter your ${provider} API key (stored securely in your OS keychain):`,
+      password: true,
+      ignoreFocusOut: true,
+      placeHolder: provider === 'openai' ? 'sk-...' : 'AIzaSy...',
+    });
+
+    if (key && key.trim()) {
+      await secretManager.storeApiKey(provider, key);
+      vscode.window.showInformationMessage(
+        `SkillForge: API key for ${provider} securely saved in OS keychain.`
+      );
+    }
+  });
+  context.subscriptions.push(setApiKeyCmd);
+
+  // Command: Clear Stored API Key
+  const clearApiKeyCmd = vscode.commands.registerCommand('skillforge.clearApiKey', async () => {
+    const pick = await vscode.window.showQuickPick(
+      [
+        { label: 'OpenAI', value: 'openai' as ProviderType },
+        { label: 'Google Gemini', value: 'gemini' as ProviderType },
+      ],
+      { placeHolder: 'Select API key to remove from OS keychain:' }
+    );
+    if (pick) {
+      await secretManager.deleteApiKey(pick.value);
+      vscode.window.showInformationMessage(
+        `SkillForge: Stored API key for ${pick.value} removed.`
+      );
+    }
+  });
+  context.subscriptions.push(clearApiKeyCmd);
+
+  // Command: Choose Suggestion Provider
+  const configureProviderCmd = vscode.commands.registerCommand('skillforge.configureProvider', async () => {
+    const pick = await vscode.window.showQuickPick(
+      [
+        {
+          label: '$(shield) 100% Offline & Private (Default)',
+          value: 'local' as ProviderType,
+          description: 'Zero code leaves machine. Curated offline database.',
+        },
+        {
+          label: '$(sparkle) OpenAI (BYOK)',
+          value: 'openai' as ProviderType,
+          description: 'Uses gpt-4o-mini with your API key. Only prompt sent; no code files.',
+        },
+        {
+          label: '$(sparkle) Google Gemini (BYOK)',
+          value: 'gemini' as ProviderType,
+          description: 'Uses Gemini with your API key. Only prompt sent; no code files.',
+        },
+      ],
+      { placeHolder: 'Select SkillForge Suggestion Provider:' }
+    );
+
+    if (pick) {
+      await vscode.workspace.getConfiguration('skillforge').update('provider', pick.value, vscode.ConfigurationTarget.Global);
+      vscode.window.showInformationMessage(`SkillForge: Provider set to "${pick.value}".`);
+    }
+  });
+  context.subscriptions.push(configureProviderCmd);
+
+  // Helper: Run side-by-side comparison via LSP server
+  const runComparison = async (skillIds: string[]): Promise<ComparisonMatrix | undefined> => {
+    if (!client || !client.isRunning()) {
+      vscode.window.showErrorMessage('SkillForge LSP server is not running.');
+      return undefined;
+    }
+    const result = await client.sendRequest<CompareResult>(SKILLFORGE_COMPARE_METHOD, {
+      skillIds,
+    });
+    return result.matrix;
+  };
+  SuggestionPanel.setCompareHandler(runComparison);
+
+  // Command: Toggle Skill Bookmark
+  const toggleBookmarkCmd = vscode.commands.registerCommand(
+    'skillforge.toggleBookmark',
+    async (arg?: any) => {
+      let skill = arg?.skill || arg;
+      if (!skill || !skill.id) {
+        const bookmarks = bookmarkManager.getBookmarks();
+        if (bookmarks.length === 0) {
+          vscode.window.showInformationMessage('SkillForge: No bookmarks saved yet.');
+          return;
+        }
+        const pick = await vscode.window.showQuickPick(
+          bookmarks.map((b) => ({
+            label: b.name,
+            description: `[${b.ecosystem}] ${b.category}`,
+            skill: b,
+          })),
+          { placeHolder: 'Select bookmark to toggle/remove:' }
+        );
+        if (!pick) return;
+        skill = pick.skill;
+      }
+
+      const wasAdded = await bookmarkManager.toggleBookmark(skill);
+      bookmarksTreeProvider.refresh();
+      vscode.window.setStatusBarMessage(
+        `[SkillForge] ${wasAdded ? '★ Bookmarked' : '☆ Removed bookmark for'} ${skill.name || skill.id}`,
+        3000
+      );
+    }
+  );
+  context.subscriptions.push(toggleBookmarkCmd);
+
+  // Command: Clear All Bookmarks
+  const clearBookmarksCmd = vscode.commands.registerCommand(
+    'skillforge.clearBookmarks',
+    async () => {
+      const count = bookmarkManager.getBookmarks().length;
+      if (count === 0) {
+        vscode.window.showInformationMessage('SkillForge: No bookmarks to clear.');
+        return;
+      }
+      const choice = await vscode.window.showWarningMessage(
+        `Clear all ${count} saved bookmarks?`,
+        { modal: true },
+        'Clear All Bookmarks'
+      );
+      if (choice === 'Clear All Bookmarks') {
+        await bookmarkManager.clearBookmarks();
+        bookmarksTreeProvider.refresh();
+        vscode.window.showInformationMessage('SkillForge: All bookmarks cleared.');
+      }
+    }
+  );
+  context.subscriptions.push(clearBookmarksCmd);
+
+  // Command: Compare Skills Side-by-Side
+  const compareSkillsCmd = vscode.commands.registerCommand(
+    'skillforge.compareSkills',
+    async (args?: { skillIds?: string[] } | string[]) => {
+      let skillIds = Array.isArray(args) ? args : args?.skillIds;
+      if (!skillIds || skillIds.length < 2) {
+        const bookmarks = bookmarkManager.getBookmarks();
+        if (bookmarks.length >= 2) {
+          const picks = await vscode.window.showQuickPick(
+            bookmarks.map((b) => ({
+              label: b.name,
+              description: `[${b.ecosystem}] ${b.category}`,
+              detail: b.whyUseIt,
+              skillId: b.id,
+            })),
+            {
+              title: 'SkillForge: Select 2 or 3 Tools to Compare',
+              canPickMany: true,
+              placeHolder: 'Select 2 or 3 bookmarked tools to compare side-by-side',
+            }
+          );
+          if (picks && picks.length >= 2 && picks.length <= 3) {
+            skillIds = picks.map((p) => p.skillId);
+          } else if (picks && (picks.length < 2 || picks.length > 3)) {
+            vscode.window.showWarningMessage('Please select exactly 2 or 3 tools to compare.');
+            return;
+          }
+        }
+
+        if (!skillIds || skillIds.length < 2) {
+          const input = await vscode.window.showInputBox({
+            title: 'SkillForge: Compare Technologies',
+            prompt: 'Enter 2 or 3 tool IDs separated by commas (e.g. "react, vue" or "fastapi, express"):',
+            placeHolder: 'tool1, tool2, [tool3]',
+          });
+          if (input && input.trim()) {
+            skillIds = input.split(',').map((s) => s.trim()).filter(Boolean);
+          }
+        }
+      }
+
+      if (!skillIds || skillIds.length < 2) {
+        return;
+      }
+
+      if (skillIds.length > 3) {
+        vscode.window.showWarningMessage('Comparison supports up to 3 tools simultaneously.');
+        skillIds = skillIds.slice(0, 3);
+      }
+
+      try {
+        const matrix = await runComparison(skillIds);
+        if (matrix) {
+          ComparisonPanel.createOrShow(
+            context.extensionUri,
+            matrix,
+            scopeManager.activeScope
+          );
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        vscode.window.showErrorMessage(`SkillForge: Comparison failed: ${msg}`);
+      }
+    }
+  );
+  context.subscriptions.push(compareSkillsCmd);
+
   // Command: Suggest Skills for My Idea (Core suggestion flow)
   const suggestCmd = vscode.commands.registerCommand(
     'skillforge.suggest',
@@ -233,9 +466,49 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
       try {
         const workspaceCtx = scopeManager.buildWorkspaceContext();
+        const sfConfig = vscode.workspace.getConfiguration('skillforge');
+        const configuredProvider = (sfConfig.get<string>('provider') || 'local') as ProviderType;
+        let effectiveProvider = configuredProvider;
+        let apiKey: string | undefined;
+
+        if (configuredProvider === 'openai' || configuredProvider === 'gemini') {
+          apiKey = await secretManager.getApiKey(configuredProvider);
+          if (!apiKey) {
+            const action = await vscode.window.showWarningMessage(
+              `SkillForge: No API key found for ${configuredProvider}. Would you like to enter your API key now?`,
+              'Enter API Key',
+              'Run 100% Offline'
+            );
+            if (action === 'Enter API Key') {
+              await vscode.commands.executeCommand('skillforge.setApiKey', configuredProvider);
+              apiKey = await secretManager.getApiKey(configuredProvider);
+            }
+            if (!apiKey) {
+              effectiveProvider = 'local';
+            }
+          }
+        }
+
+        const providerConfig: ProviderConfig = {
+          provider: effectiveProvider,
+          apiKey,
+          model: effectiveProvider === 'openai'
+            ? sfConfig.get<string>('openai.model')
+            : effectiveProvider === 'gemini'
+            ? sfConfig.get<string>('gemini.model')
+            : undefined,
+          endpoint: effectiveProvider === 'openai'
+            ? sfConfig.get<string>('openai.endpoint')
+            : effectiveProvider === 'gemini'
+            ? sfConfig.get<string>('gemini.endpoint')
+            : undefined,
+          timeoutMs: sfConfig.get<number>('timeoutMs') || 4000,
+        };
+
         const params: SkillSuggestionParams = {
           intent: cleanIntent,
           context: workspaceCtx,
+          providerConfig,
         };
 
         const result = await client.sendRequest<SkillSuggestionResult>(
@@ -245,6 +518,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
         const count = result.skills.length;
         await recentQueriesTreeProvider.addQuery(cleanIntent, count);
+        await feedbackManager.registerQuery(Boolean(result.fallbackUsed));
 
         // Render results into the Suggestion Canvas
         SuggestionPanel.showResults(

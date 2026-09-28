@@ -13,6 +13,8 @@ This document records the major architectural, technical, and design decisions m
 - [ADR-005: In-Memory Inverted Indexing for Curated Knowledge Base](#adr-005-in-memory-inverted-indexing-for-curated-knowledge-base)
 - [ADR-006: Scoped Multi-Ecosystem Dependency Scanning & Deterministic Caching](#adr-006-scoped-multi-ecosystem-dependency-scanning--deterministic-caching)
 - [ADR-007: Layered Reliability Pipeline with Injectable Health Verification](#adr-007-layered-reliability-pipeline-with-injectable-health-verification)
+- [ADR-008: Privacy-First LLM Architecture & Zero-Friction Feedback System](#adr-008-privacy-first-llm-architecture--zero-friction-feedback-system)
+- [ADR-009: Persistent Bookmarking Engine & Side-by-Side Technology Comparison Matrix](#adr-009-persistent-bookmarking-engine--side-by-side-technology-comparison-matrix)
 
 ---
 
@@ -110,3 +112,41 @@ This document records the major architectural, technical, and design decisions m
   - Integrate all reliability components as injectable dependencies into `SuggestionEngine`, allowing individual layers to be replaced or disabled.
 - **Rationale**: Layered architecture isolates each concern for independent testing and extension. DI for fetch eliminates flaky network-dependent tests. The fallback cascade guarantees the user never sees an empty screen. The trust tier system provides transparent confidence signals.
 - **Trade-offs**: All 6 layers run synchronously in the suggestion pipeline, adding marginal latency (~1-5ms for local operations). Health verification against live registries requires async network calls that are deferred to future LLM integration phases. The curated DB is the only source of `verified` tier — expanding coverage requires manual curation.
+
+---
+
+## ADR-008: Privacy-First LLM Architecture & Zero-Friction Feedback System
+
+- **Date**: 2026-09-28
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 6)
+- **Context**: Developers are highly sensitive about codebase privacy and rightly reluctant to transmit proprietary source code to third-party cloud LLMs. Simultaneously, developers demand that the offline knowledge base regularly expand and desire an effortless way to rate recommendations without intrusive friction or typing requirements.
+- **Decision**:
+  - **Local Offline as Unbreakable Default**: The extension defaults to `LocalProvider` (100% offline, zero network requests, zero telemetry). BYOK Cloud AI (`OpenAIProvider`, `GeminiProvider`) is purely an opt-in choice.
+  - **Zero Source Code Transmission**: Even when BYOK is enabled, prompt builders only transmit the user's explicit query string and high-level detected language/ecosystem keywords. Workspace source code files, paths, and git metadata are never transmitted.
+  - **OS Keychain Storage**: API keys are securely managed via `vscode.SecretStorage` (macOS Keychain, Windows Credential Manager, Linux libsecret).
+  - **Low-Frequency Feedback Cadence**: Feedback prompts appear only every 5 queries or on fallback cascades, and are suppressed for 24 hours after submission.
+  - **Zero-Friction "Other" Option**: Dislike flow provides 1-click reason chips including `"Other"`. Clicking `"Other"` immediately records the rating without requiring typing. Deferred elaboration (`"Add details (optional)"`) is offered non-intrusively.
+  - **HTML Parser Script Injection Hardening**: Escaped `<` as `\u003c` in stringified variables embedded into webview script blocks to neutralize `</script>` parser termination vulnerabilities.
+- **Rationale**: Guarantees total developer privacy while providing freedom of choice. Low-frequency feedback respects developer focus, and the zero-friction dislike flow yields high-quality signal for catalog curation without developer frustration.
+- **Trade-offs**: Feedback is strictly voluntary and stored locally in `globalState`; global crowd analytics require manual community contribution via GitHub issues.
+
+---
+
+## ADR-009: Persistent Bookmarking Engine & Side-by-Side Technology Comparison Matrix
+
+- **Date**: 2026-09-28
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 7)
+- **Context**: Developers exploring tool suggestions require a frictionless way to save candidate technologies for future reference and compare competing libraries side-by-side without leaving their coding environment. Furthermore, unbounded comparisons lead to visual degradation in narrow editor splits, and comparing competing frameworks can create architectural ambiguity without explicit conflict warnings.
+- **Decision**:
+  - **Local Persistence via `globalState`**: Implement `BookmarkManager` persisting developer-saved skills in `context.globalState` with key `skillforge.bookmarks.v1`. Defensively validate all entries with Zod (`SkillBookmarkSchema`), gracefully dropping corrupted memento records without crashing.
+  - **1-Click Star Toggle**: Add responsive bookmark toggle buttons to each Suggestion Canvas card header: active bookmarks show filled gold stars (`#f59e0b`), unbookmarked show subtle outlined stars. Updates are reflected reactively across both canvas and sidebar.
+  - **Dedicated Bookmarks TreeView**: Register `BookmarksTreeProvider` in the SkillForge Activity Bar, organizing saved tools by category with difficulty tags, ecosystem icons, and empty-state onboarding.
+  - **Headless Comparison Engine with Strict Bounds**: Implement `ComparisonEngine` in `@skillforge/server` exposed via LSP method `skillforge/compare`. Strictly limit comparisons to between 2 and 3 tools (`.min(2).max(3)`) to maintain optimal visual density and layout readability.
+  - **Mutual Conflict & Exclusivity Detection**: Detect competing tools within the comparison set (e.g. React vs Vue.js vs Svelte) and display prominent amber/red architectural warning callouts.
+  - **Cross-Ecosystem Evaluation**: Flag comparisons across multiple language runtimes (e.g. FastAPI [Python] vs Express [JavaScript]) with dedicated informational banners.
+  - **Deep Dive "vs" Chips**: Integrate 1-click comparison chips directly into each skill card's Deep Dive "Alternatives" drawer, allowing developers to immediately compare a suggestion with its listed competitor.
+  - **1-Click Terminal Execution**: Provide direct `Install` buttons per comparison column that automatically run the tool's canonical install command in the active workspace terminal.
+- **Rationale**: Keeps developers in their primary flow state, eliminating browser tab sprawl while providing structured architectural guidance, trust seals, and direct terminal actions.
+- **Trade-offs**: Bounding comparisons to 3 tools prevents large matrix tables (e.g. 5+ tools); however, multi-tool evaluations beyond 3 tools degrade usability in code editor splits.
+
+

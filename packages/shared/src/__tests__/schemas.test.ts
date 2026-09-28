@@ -8,6 +8,19 @@ import {
   safeValidateSkill,
   validateRawSuggestion,
   safeValidateRawSuggestion,
+  ProviderTypeSchema,
+  ProviderConfigSchema,
+  FeedbackPayloadSchema,
+  SkillRequestPayloadSchema,
+  validateProviderConfig,
+  validateFeedbackPayload,
+  validateSkillRequestPayload,
+  SkillBookmarkSchema,
+  ComparisonRequestSchema,
+  ComparisonMatrixSchema,
+  validateSkillBookmark,
+  validateComparisonRequest,
+  validateComparisonMatrix,
 } from '../index.js';
 
 describe('SkillForge Zod Schemas', () => {
@@ -194,4 +207,277 @@ describe('RawSuggestionSchema', () => {
     });
     expect(safeResult.success).toBe(false);
   });
+
+  describe('Provider Configuration Schemas', () => {
+    it('validates supported provider types', () => {
+      expect(ProviderTypeSchema.parse('local')).toBe('local');
+      expect(ProviderTypeSchema.parse('openai')).toBe('openai');
+      expect(ProviderTypeSchema.parse('gemini')).toBe('gemini');
+      expect(ProviderTypeSchema.parse('hybrid')).toBe('hybrid');
+      expect(() => ProviderTypeSchema.parse('anthropic')).toThrow();
+      expect(() => ProviderTypeSchema.parse('')).toThrow();
+    });
+
+    it('validates provider config with defaults', () => {
+      const config = validateProviderConfig({});
+      expect(config.provider).toBe('local');
+      expect(ProviderConfigSchema.parse({}).provider).toBe('local');
+    });
+
+    it('validates full BYOK provider config', () => {
+      const config = validateProviderConfig({
+        provider: 'openai',
+        apiKey: 'sk-test-key-1234',
+        model: 'gpt-4o-mini',
+        endpoint: 'https://api.openai.com/v1',
+        temperature: 0.2,
+        dualPassValidation: true,
+        timeoutMs: 4000,
+      });
+
+      expect(config.provider).toBe('openai');
+      expect(config.apiKey).toBe('sk-test-key-1234');
+      expect(config.endpoint).toBe('https://api.openai.com/v1');
+      expect(config.timeoutMs).toBe(4000);
+    });
+
+    it('rejects provider config with invalid endpoint URL or temperature out of range', () => {
+      expect(() =>
+        validateProviderConfig({
+          provider: 'openai',
+          endpoint: 'not-a-valid-url',
+        })
+      ).toThrow();
+
+      expect(() =>
+        validateProviderConfig({
+          provider: 'openai',
+          temperature: 3.5,
+        })
+      ).toThrow();
+    });
+  });
+
+  describe('Feedback & Skill Request Schemas', () => {
+    it('validates positive feedback payload', () => {
+      const payload = validateFeedbackPayload({
+        query: 'rest api with auth',
+        skillId: 'fastify',
+        rating: 'helpful',
+        timestamp: Date.now(),
+      });
+
+      expect(payload.rating).toBe('helpful');
+      expect(payload.query).toBe('rest api with auth');
+      expect(FeedbackPayloadSchema.parse(payload).rating).toBe('helpful');
+    });
+
+    it('validates negative feedback with 1-click other reason and no mandatory text', () => {
+      const payload = validateFeedbackPayload({
+        query: 'chat app',
+        skillId: 'socketio',
+        rating: 'unhelpful',
+        reason: 'other',
+        timestamp: Date.now(),
+      });
+
+      expect(payload.rating).toBe('unhelpful');
+      expect(payload.reason).toBe('other');
+      expect(payload.details).toBeUndefined();
+    });
+
+    it('validates negative feedback with optional details when provided', () => {
+      const payload = validateFeedbackPayload({
+        query: 'chat app',
+        skillId: 'socketio',
+        rating: 'unhelpful',
+        reason: 'outdated',
+        details: 'Prefer modern WebSockets or SSE alternatives like uWebSockets.js',
+        timestamp: Date.now(),
+      });
+
+      expect(payload.reason).toBe('outdated');
+      expect(payload.details).toContain('modern WebSockets');
+    });
+
+    it('rejects feedback with invalid reason or missing query', () => {
+      expect(() =>
+        validateFeedbackPayload({
+          query: '',
+          rating: 'helpful',
+          timestamp: Date.now(),
+        })
+      ).toThrow();
+
+      expect(() =>
+        validateFeedbackPayload({
+          query: 'fast db',
+          rating: 'unhelpful',
+          reason: 'completely_broken' as unknown as 'other',
+          timestamp: Date.now(),
+        })
+      ).toThrow();
+    });
+
+    it('validates skill request contribution payload', () => {
+      const req = validateSkillRequestPayload({
+        skillName: 'effect-ts',
+        category: 'backend-framework',
+        ecosystem: 'typescript',
+        reason: 'Robust functional effect system gaining huge traction in TS community',
+        timestamp: Date.now(),
+      });
+
+      expect(req.skillName).toBe('effect-ts');
+      expect(req.category).toBe('backend-framework');
+      expect(SkillRequestPayloadSchema.parse(req).skillName).toBe('effect-ts');
+    });
+
+    it('rejects skill request with empty name', () => {
+      expect(() =>
+        validateSkillRequestPayload({
+          skillName: '',
+          timestamp: Date.now(),
+        })
+      ).toThrow();
+    });
+  });
+
+  describe('SkillBookmark & Comparison Schemas (Phase 7)', () => {
+    const sampleBookmark = {
+      id: 'fastify',
+      name: 'Fastify',
+      ecosystem: 'javascript',
+      category: 'backend-framework' as const,
+      difficulty: 'intermediate' as const,
+      description: 'Extremely fast web framework',
+      whyUseIt: 'High throughput and low overhead',
+      officialUrl: 'https://fastify.dev',
+      tags: ['fastify', 'backend'],
+      stackIndicators: ['fastify'],
+      trustTier: 'verified' as const,
+      timestamp: Date.now(),
+      notes: 'Evaluate for microservice architecture',
+    };
+
+    it('validates a well-formed skill bookmark', () => {
+      const result = validateSkillBookmark(sampleBookmark);
+      expect(result.id).toBe('fastify');
+      expect(result.trustTier).toBe('verified');
+      expect(result.notes).toContain('microservice');
+      expect(SkillBookmarkSchema.parse(result).name).toBe('Fastify');
+    });
+
+    it('rejects invalid bookmark with missing whyUseIt or invalid URL (Anti-Happy-Path)', () => {
+      expect(() =>
+        validateSkillBookmark({
+          ...sampleBookmark,
+          whyUseIt: '',
+        })
+      ).toThrow();
+
+      expect(() =>
+        validateSkillBookmark({
+          ...sampleBookmark,
+          officialUrl: 'not-a-valid-url',
+        })
+      ).toThrow();
+    });
+
+    it('validates multi-skill comparison request (2 to 3 skills)', () => {
+      const req2 = validateComparisonRequest({
+        skillIds: ['fastify', 'express'],
+      });
+      expect(req2.skillIds).toEqual(['fastify', 'express']);
+
+      const req3 = validateComparisonRequest({
+        skillIds: ['fastify', 'express', 'hono'],
+      });
+      expect(req3.skillIds).toHaveLength(3);
+      expect(ComparisonRequestSchema.parse(req3).skillIds).toHaveLength(3);
+    });
+
+    it('rejects comparison request with fewer than 2 or more than 3 skills (Anti-Happy-Path)', () => {
+      expect(() =>
+        validateComparisonRequest({
+          skillIds: ['fastify'],
+        })
+      ).toThrow('Must provide at least 2 skills to compare');
+
+      expect(() =>
+        validateComparisonRequest({
+          skillIds: ['fastify', 'express', 'hono', 'koa'],
+        })
+      ).toThrow('Cannot compare more than 3 skills simultaneously');
+    });
+
+    it('validates full side-by-side comparison matrix payload', () => {
+      const col1 = {
+        id: 'fastify',
+        name: 'Fastify',
+        ecosystem: 'javascript',
+        category: 'backend-framework' as const,
+        difficulty: 'intermediate' as const,
+        trustTier: 'verified' as const,
+        description: 'Fast web framework',
+        whyUseIt: 'High throughput',
+        pros: ['Very fast', 'Plugin system'],
+        caveats: 'Smaller ecosystem than Express',
+        worksWellWith: ['pino', 'typebox'],
+        stackIndicators: ['fastify'],
+        isInstalledInWorkspace: false,
+      };
+
+      const col2 = {
+        id: 'express',
+        name: 'Express',
+        ecosystem: 'javascript',
+        category: 'backend-framework' as const,
+        difficulty: 'beginner' as const,
+        trustTier: 'verified' as const,
+        description: 'Standard web framework',
+        whyUseIt: 'Massive ecosystem',
+        pros: ['Huge ecosystem', 'Simple'],
+        caveats: 'Lower performance',
+        worksWellWith: ['morgan', 'cors'],
+        stackIndicators: ['express'],
+        isInstalledInWorkspace: true,
+      };
+
+      const matrix = validateComparisonMatrix({
+        columns: [col1, col2],
+        categories: ['backend-framework'],
+        isCrossEcosystem: false,
+        conflictsDetected: ['fastify vs express: alternative backend frameworks'],
+        summary: 'Comparing Fastify vs Express for Node.js backend development.',
+      });
+
+      expect(matrix.columns).toHaveLength(2);
+      expect(matrix.isCrossEcosystem).toBe(false);
+      expect(matrix.conflictsDetected).toHaveLength(1);
+      expect(ComparisonMatrixSchema.parse(matrix).columns).toHaveLength(2);
+    });
+
+    it('rejects comparison matrix with fewer than 2 columns', () => {
+      expect(() =>
+        validateComparisonMatrix({
+          columns: [
+            {
+              id: 'single',
+              name: 'Single',
+              ecosystem: 'javascript',
+              category: 'utility',
+              difficulty: 'beginner',
+              trustTier: 'verified',
+              description: 'One',
+              whyUseIt: 'Reason',
+            },
+          ],
+          categories: ['utility'],
+          isCrossEcosystem: false,
+        })
+      ).toThrow();
+    });
+  });
 });
+
