@@ -83,11 +83,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   }
 
   // 4. Resolve Server Module
-  let serverModule = context.asAbsolutePath(path.join('..', 'server', 'dist', 'index.js'));
+  let serverModule = context.asAbsolutePath(path.join('dist', 'server.js'));
   try {
     const fs = await import('fs');
     if (!fs.existsSync(serverModule)) {
-      serverModule = context.asAbsolutePath(path.join('dist', 'server.js'));
+      serverModule = context.asAbsolutePath(path.join('..', 'server', 'dist', 'index.js'));
     }
   } catch {
     // Ignore and proceed with standard path
@@ -215,6 +215,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     SuggestionPanel.createOrShow(context.extensionUri, scopeManager.activeScope);
   });
   context.subscriptions.push(showCanvasCmd);
+
+  // Command: Open Welcome Walkthrough
+  const openWalkthroughCmd = vscode.commands.registerCommand('skillforge.openWalkthrough', () => {
+    vscode.commands.executeCommand(
+      'workbench.action.openWalkthrough',
+      'skillforge#skillforge.walkthrough',
+      false
+    );
+  });
+  context.subscriptions.push(openWalkthroughCmd);
 
   // Command: Set BYOK API Key
   const setApiKeyCmd = vscode.commands.registerCommand('skillforge.setApiKey', async (targetProvider?: ProviderType) => {
@@ -561,6 +571,18 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }
   );
   context.subscriptions.push(suggestCmd);
+
+  // 12. First-Run Auto-Trigger Walkthrough
+  const ONBOARDING_SHOWN_KEY = 'skillforge.onboarding.shown.v1';
+  const hasShownOnboarding = context.globalState.get<boolean>(ONBOARDING_SHOWN_KEY, false);
+  if (!hasShownOnboarding) {
+    vscode.commands.executeCommand(
+      'workbench.action.openWalkthrough',
+      'skillforge#skillforge.walkthrough',
+      false
+    );
+    context.globalState.update(ONBOARDING_SHOWN_KEY, true);
+  }
 }
 
 export async function deactivate(): Promise<void> {

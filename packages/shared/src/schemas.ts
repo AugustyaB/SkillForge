@@ -17,6 +17,7 @@ export const SkillCategorySchema = z.enum([
   'utility',
   'ai-ml',
   'security',
+  'mobile',
   'other',
 ]);
 

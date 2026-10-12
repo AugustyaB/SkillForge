@@ -5,11 +5,15 @@
   "description": "Cross-IDE skill suggestion engine for developers",
   "scripts": {
     "build": "pnpm --recursive run build",
+    "bundle": "pnpm --filter skillforge run bundle:prod",
+    "package": "pnpm run build && pnpm --filter skillforge run package",
     "test": "vitest run",
     "typecheck": "tsc -b",
     "clean": "rimraf packages/*/dist packages/*/tsconfig.tsbuildinfo node_modules/.cache"
   },
   "devDependencies": {
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
     "rimraf": "^6.0.1",
     "typescript": "^5.7.3",
     "vitest": "^3.0.7"

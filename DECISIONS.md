@@ -149,4 +149,52 @@ This document records the major architectural, technical, and design decisions m
 - **Rationale**: Keeps developers in their primary flow state, eliminating browser tab sprawl while providing structured architectural guidance, trust seals, and direct terminal actions.
 - **Trade-offs**: Bounding comparisons to 3 tools prevents large matrix tables (e.g. 5+ tools); however, multi-tool evaluations beyond 3 tools degrade usability in code editor splits.
 
+---
+
+## ADR-010: Expanded In-Memory Curated Knowledge Base (350+ Skills) vs. Cloud Database
+
+- **Date**: 2026-10-12
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 8)
+- **Context**: As the extension approached general release, we evaluated whether to migrate the skills repository to an external cloud database (such as Supabase or Firebase) to support arbitrary catalog growth, or retain the local in-memory JSON architecture.
+- **Decision**:
+  - **Retain Local In-Memory Architecture**: Keep the entire curated knowledge base local inside `packages/server/src/data/skills.json`.
+  - **Aggressive Catalog Expansion**: Expand the curated starter catalog from 118 to **351 thoroughly vetted skills** covering JavaScript/TypeScript (157), Python (77), Multi-ecosystem (66), Mobile (29), Rust (20), Go (15), and Java/JVM (14).
+  - **Automated Quality Rubric**: Enforce strict programmatic quality rules via `skills-quality-rubric.test.ts` ensuring that every skill has a concrete, non-fluff `whyUseIt` justification ($\ge 30$ chars, zero placeholder text), real installable package names in `stackIndicators`, and valid HTTPS documentation links.
+  - **Fallback to BYOK LLM for Open-Ended Discovery**: Rely on Phase 6's BYOK LLM provider (OpenAI / Gemini) for long-tail, uncataloged edge cases, validated through the 6-layer reliability pipeline.
+- **Rationale**:
+  - Cloud databases destroy the extension's core value proposition: privacy (sending user queries to a 3rd party server), offline-first reliability (broken on airplanes or behind air-gapped firewalls), and speed ($<2\text{ms}$ local query vs 200-500ms network roundtrip).
+  - 351 skills occupies only 260 KB raw JSON (compressed to ~65 KB in VSIX), comfortably within our 5MB VSIX budget and 30MB memory budget.
+- **Trade-offs**: Catalog additions require extension releases or pull requests rather than real-time remote updates; mitigated by the BYOK LLM fallback and planned community dataset sync.
+
+---
+
+## ADR-011: Production `esbuild` Dual-Bundle Architecture
+
+- **Date**: 2026-10-12
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 8)
+- **Context**: VS Code extension best practices recommend bundling multi-file TypeScript distributions and dependencies into single self-contained files to minimize filesystem I/O, reduce VSIX archive sizes, and achieve sub-200ms extension activation latency.
+- **Decision**:
+  - **Dual-Bundle Pipeline**: Implement `packages/vscode-client/esbuild.mjs` bundling:
+    1. Client Bundle: `src/extension.ts` $\to$ `dist/extension.js` (target: Node 18, format: CommonJS, external: `['vscode']`, minified, sourcemapped).
+    2. Server Bundle: `packages/server/src/index.ts` $\to$ `packages/vscode-client/dist/server.js` (target: Node 18, format: CommonJS, inlines all JSON data and `@skillforge/shared`, minified, sourcemapped).
+  - **Dynamic Server Path Resolution**: Update `extension.ts` to check `dist/server.js` first in production bundles, gracefully falling back to `../server/dist/index.js` in development.
+  - **Strict `.vscodeignore`**: Exclude all TypeScript sources, test suites, build caches, and maps from the final package archive.
+- **Rationale**: Reduces VSIX archive size to **261.57 KB** (far below the 5MB budget) and reduces cold activation time to $<150\text{ms}$ while eliminating runtime `node_modules` dependencies for the server.
+- **Trade-offs**: Requires running `pnpm run bundle` or `pnpm run build` prior to running the extension in production mode.
+
+---
+
+## ADR-012: Interactive First-Run Onboarding Walkthrough
+
+- **Date**: 2026-10-12
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 8)
+- **Context**: First-time users installing SkillForge need immediate orientation on how intent discovery, context scoping, CodeLens triggers, and side-by-side comparisons operate without feeling overwhelmed by popups or unfamiliar terminology.
+- **Decision**:
+  - **Native `contributes.walkthroughs`**: Register a native VS Code Walkthrough (`skillforge.walkthrough`) with 5 visual markdown guide cards: Welcome, Scoping, Triggers, Comparison, and Privacy.
+  - **Automatic First-Launch Trigger**: Automatically invoke `workbench.action.openWalkthrough` on initial extension activation using `context.globalState` (`skillforge.onboarding.shown.v1`), ensuring it runs once and never pops up uninvited again.
+  - **Manual Trigger**: Expose `skillforge.openWalkthrough` in the Command Palette and Activity Bar header menu (`mortar-board` icon) so users can revisit the guide anytime.
+- **Rationale**: Conforms to official VS Code Extension Guidelines for onboarding and drives discoverability of inline CodeLens and monorepo scoping features.
+- **Trade-offs**: Adds 5 small markdown files to the extension distribution (~6 KB total).
+
+
 

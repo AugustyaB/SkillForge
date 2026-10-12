@@ -105,6 +105,10 @@ const CATEGORY_KEYWORDS: Record<string, SkillCategory> = {
   rag: 'ai-ml',
   gpt: 'ai-ml',
   embeddings: 'ai-ml',
+  // Mobile
+  mobile: 'mobile',
+  ios: 'mobile',
+  android: 'mobile',
 };
 
 const ECOSYSTEM_KEYWORDS: Record<string, string> = {

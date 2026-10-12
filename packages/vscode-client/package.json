@@ -1,17 +1,41 @@
 {
   "name": "skillforge",
   "displayName": "SkillForge",
-  "description": "Cross-IDE skill suggestion engine for developers",
+  "description": "Cross-IDE skill suggestion engine for developers: map natural language ideas to vetted libraries and frameworks",
   "version": "0.1.0",
   "publisher": "skillforge",
-  "private": true,
   "engines": {
     "vscode": "^1.85.0"
   },
+  "icon": "resources/icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skillforge-team/skillforge"
+  },
+  "bugs": {
+    "url": "https://github.com/skillforge-team/skillforge/issues"
+  },
+  "homepage": "https://github.com/skillforge-team/skillforge#readme",
+  "keywords": [
+    "skills",
+    "developer-tools",
+    "libraries",
+    "dependencies",
+    "architecture",
+    "recommendation",
+    "discovery",
+    "frameworks"
+  ],
   "categories": [
     "Programming Languages",
-    "Other"
+    "Education",
+    "AI"
   ],
+  "galleryBanner": {
+    "color": "#18181b",
+    "theme": "dark"
+  },
   "main": "./dist/extension.js",
   "activationEvents": [
     "onLanguage:javascript",
@@ -42,7 +66,8 @@
     "onCommand:skillforge.configureProvider",
     "onCommand:skillforge.toggleBookmark",
     "onCommand:skillforge.clearBookmarks",
-    "onCommand:skillforge.compareSkills"
+    "onCommand:skillforge.compareSkills",
+    "onCommand:skillforge.openWalkthrough"
   ],
   "contributes": {
     "viewsContainers": {
@@ -154,6 +179,12 @@
         "title": "SkillForge: Compare Libraries Side-by-Side",
         "category": "SkillForge",
         "icon": "$(split-horizontal)"
+      },
+      {
+        "command": "skillforge.openWalkthrough",
+        "title": "Open Welcome Walkthrough",
+        "category": "SkillForge",
+        "icon": "$(mortar-board)"
       }
     ],
     "menus": {
@@ -174,6 +205,11 @@
           "group": "navigation@3"
         },
         {
+          "command": "skillforge.openWalkthrough",
+          "when": "view == skillforge.contextView",
+          "group": "navigation@4"
+        },
+        {
           "command": "skillforge.clearRecentQueries",
           "when": "view == skillforge.recentQueriesView",
           "group": "navigation@1"
@@ -190,6 +226,40 @@
         }
       ]
     },
+    "walkthroughs": [
+      {
+        "id": "skillforge.walkthrough",
+        "title": "Get Started with SkillForge",
+        "description": "Learn how to discover, evaluate, and compare tools and libraries right from your code.",
+        "steps": [
+          {
+            "id": "welcome",
+            "title": "Welcome to SkillForge",
+            "description": "walkthrough/welcome.md"
+          },
+          {
+            "id": "scoping",
+            "title": "Scope Your Context",
+            "description": "walkthrough/scoping.md"
+          },
+          {
+            "id": "triggers",
+            "title": "Inline & Palette Triggers",
+            "description": "walkthrough/triggers.md"
+          },
+          {
+            "id": "comparison",
+            "title": "Side-by-Side Tool Comparison",
+            "description": "walkthrough/comparison.md"
+          },
+          {
+            "id": "privacy",
+            "title": "Local & Private by Default",
+            "description": "walkthrough/privacy.md"
+          }
+        ]
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "SkillForge",
@@ -240,7 +310,11 @@
     }
   },
   "scripts": {
-    "build": "tsc -b",
+    "compile": "tsc -b",
+    "bundle": "node esbuild.mjs",
+    "bundle:prod": "node esbuild.mjs --production",
+    "build": "tsc -b && node esbuild.mjs --production",
+    "package": "vsce package --no-dependencies",
     "clean": "rimraf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {

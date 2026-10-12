@@ -114,6 +114,7 @@ describe('SkillForge Zod Schemas', () => {
       'utility',
       'ai-ml',
       'security',
+      'mobile',
       'other',
     ];
 
