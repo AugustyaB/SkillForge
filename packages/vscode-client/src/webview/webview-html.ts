@@ -318,6 +318,9 @@ export function renderSkillCard(skill: SuggestedSkill, isBookmarked: boolean = f
         <button class="sf-btn sf-btn-secondary sf-copy-btn" data-cmd="${escapeHtml(installCmd)}" title="Copy command to clipboard">
           <span class="sf-icon">${ICON_COPY}</span>Copy command
         </button>
+        <button class="sf-btn sf-btn-secondary sf-agent-skill-btn" data-skill-id="${escapeHtml(skill.id)}" data-skill-name="${escapeHtml(skill.name)}" title="Generate agent skill directive (.agent/skills/${escapeHtml(skill.id)}/SKILL.md)">
+          <span class="sf-icon">${ICON_AI}</span>Agent Skill
+        </button>
         ${
           hasSafeDocs
             ? `
@@ -747,6 +750,22 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
             vscode.postMessage({
               type: 'compareSkills',
               skillIds: [skillA, skillB]
+            });
+          }
+        });
+      });
+
+      // 9. Agent Skill Directive Generator Handlers
+      document.querySelectorAll('.sf-agent-skill-btn').forEach((btn) => {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const skillId = this.getAttribute('data-skill-id');
+          const skillName = this.getAttribute('data-skill-name');
+          if (skillId) {
+            vscode.postMessage({
+              type: 'createAgentSkill',
+              skillId: skillId,
+              skillName: skillName || skillId
             });
           }
         });

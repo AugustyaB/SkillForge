@@ -196,5 +196,21 @@ This document records the major architectural, technical, and design decisions m
 - **Rationale**: Conforms to official VS Code Extension Guidelines for onboarding and drives discoverability of inline CodeLens and monorepo scoping features.
 - **Trade-offs**: Adds 5 small markdown files to the extension distribution (~6 KB total).
 
+---
 
+## ADR-013: Multi-Platform Agent Skill Directive Generation & Usability Verification
 
+- **Date**: 2026-10-12
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 9)
+- **Context**: Modern developers increasingly pair-program with AI coding agents (Antigravity, Claude Code, Cursor, Windsurf, Copilot). Simply discovering a library is half the journey—agents also need deterministic, structured operational directives (`SKILL.md`, `.mdc`, `AGENTS.md`) so they don't hallucinate deprecated APIs, over-engineer abstractions, or skip verification tests. Furthermore, vague "Act as a senior developer" persona prompts fail in real agentic workflows.
+- **Decision**:
+  - **Multi-Format Directive Engine (`AgentSkillGenerator`)**: Generate structured markdown directives with strict YAML frontmatter supporting 4 target standards:
+    1. `.agent/skills/<id>/SKILL.md` (Antigravity & Claude Code modular skills)
+    2. `.cursor/rules/<id>.mdc` (Cursor IDE ecosystem-scoped glob rules)
+    3. `.claude/skills/<id>/SKILL.md` (Dedicated Claude Code skills)
+    4. `AGENTS.md` (Repository root agent directives)
+  - **Andrej Karpathy's 4 Coding Disciplines**: Embed actionable operational constraints (*Think Before Coding*, *Simplicity & Minimal Surface Area*, *Surgical Precision*, *Verification Rigor*), category-specific idiomatic patterns, common anti-patterns, and deterministic CLI verification commands (`pytest`, `pnpm test && pnpm typecheck`, `cargo test`, `go test ./...`).
+  - **Zero-Dependency YAML Serializer & Path Sanitizer**: Implement safe YAML frontmatter serialization and strict path sanitization (`sanitizeSkillId`) to neutralize directory traversal and scoped package characters (`@`, `/`, `.`).
+  - **Empirical Agent Usability Test Suite**: Validate every generated skill file in `agent-skill-usability.test.ts` by simulating AI agent parsing of frontmatter triggers, operational rules, and executable bash verification blocks.
+- **Rationale**: Transforms SkillForge from a passive discovery catalog into an active bridge between human developers and autonomous coding agents, with zero external runtime dependencies.
+- **Trade-offs**: Increases server bundle size by ~12 KB (272 KB $\to$ 284.4 KB), remaining well within performance budgets.

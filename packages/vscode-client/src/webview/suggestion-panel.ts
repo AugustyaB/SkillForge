@@ -327,6 +327,13 @@ export class SuggestionPanel {
         }
         break;
       }
+      case 'createAgentSkill': {
+        vscode.commands.executeCommand('skillforge.generateAgentSkill', {
+          skillId: message.skillId,
+          skillName: message.skillName,
+        });
+        break;
+      }
     }
   }
 

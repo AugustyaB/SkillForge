@@ -4,7 +4,7 @@ All notable changes, phase deliveries, and milestone releases for SkillForge are
 
 The project follows a structured version & phase sequence:
 - **Major Milestone (`v1.0.0`)**: Full cross-IDE suggestion engine with beginner UX, reliability pipeline, and context scoping.
-- **Phase Subsections (`Phase 1` through `Phase 8`)**:
+- **Phase Subsections (`Phase 1` through `Phase 9`)**:
   - `Phase 1`: Foundation — LSP Server & Monorepo Scaffold (✅ Complete)
   - `Phase 2`: Skills Database & Schema — The Knowledge Base (✅ Complete)
   - `Phase 3`: Suggestion Engine & Context Scoping (✅ Complete)
@@ -13,6 +13,25 @@ The project follows a structured version & phase sequence:
   - `Phase 6`: LLM Providers & BYOK Integration (✅ Complete)
   - `Phase 7`: Bookmarks, Technology Comparison Matrix & Reference Suite (✅ Complete)
   - `Phase 8`: Polish, Knowledge Base Expansion & Marketplace Release (✅ Complete)
+  - `Phase 9`: Agent Skill Generation & Usability Validation Engine (✅ Complete)
+
+---
+
+## Phase 9: Agent Skill Generation & Usability Validation Engine (2026-10-12)
+
+### Deliverables
+- **Shared Agent Skill Data Contracts (`packages/shared/src/schemas.ts`, `packages/shared/src/protocol.ts`, `packages/shared/src/types.ts`)**:
+  - Defined `AgentSkillFormatSchema` supporting 4 industry standards: `'agent-skill'` (`.agent/skills/<id>/SKILL.md`), `'claude-skill'` (`.claude/skills/<id>/SKILL.md`), `'cursor-rule'` (`.cursor/rules/<id>.mdc`), and `'root-agents'` (`AGENTS.md`).
+  - Added `GenerateAgentSkillRequestSchema`, `GeneratedAgentSkillSchema`, and `SKILLFORGE_GENERATE_AGENT_SKILL_METHOD` (`skillforge/generateAgentSkill`) LSP JSON-RPC protocol method.
+- **Agent Skill Generator Engine (`packages/server/src/engine/agent-skill-generator.ts`, `packages/server/src/server.ts`)**:
+  - Built `AgentSkillGenerator` transforming any of the 363 curated skills (including `jev`, `rea-re`, `llm-c`, `nanogpt`, `mcp-sdk`, `zod`, `fastapi`, `tailwind`) into structured, actionable agent directives.
+  - Embeds **Andrej Karpathy's 4 Coding Disciplines** (*Think Before Coding*, *Simplicity & Minimal Surface Area*, *Surgical Precision*, *Verification Rigor*) alongside technology rationale, category-tailored idiomatic best practices, anti-patterns, and deterministic CLI verification commands.
+  - Implemented `sanitizeSkillId` to safely handle scoped packages (`@modelcontextprotocol/sdk`), dots (`socket.io`), and hostile path inputs (`../../etc/passwd`) without directory traversal.
+- **Empirical Agent Usability & Parseability Test Suite (`packages/server/src/__tests__/agent-skill-usability.test.ts`)**:
+  - 24 automated tests validating YAML frontmatter parseability, section completeness, Karpathy rules toggling, ecosystem glob mapping, hostile input sanitization, and simulated AI agent extraction of triggers and deterministic verification scripts.
+- **1-Click VS Code UI & Workspace File Generation (`packages/vscode-client/`)**:
+  - Added `Agent Skill` action button with embedded vector AI codicon (`ICON_AI`, zero emojis) to both Suggestion Canvas cards (`webview-html.ts`) and Comparison Matrix column headers (`comparison-html.ts`).
+  - Registered `skillforge.generateAgentSkill` command prompting format selection via QuickPick, writing the generated directive directly into the active workspace scope, and offering a 1-click `[Open File]` notification.
 
 ---
 

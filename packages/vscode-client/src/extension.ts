@@ -8,10 +8,14 @@ import {
 } from 'vscode-languageclient/node.js';
 import {
   SKILLFORGE_COMPARE_METHOD,
+  SKILLFORGE_GENERATE_AGENT_SKILL_METHOD,
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
+  type AgentSkillFormat,
   type CompareResult,
   type ComparisonMatrix,
+  type GenerateAgentSkillRequest,
+  type GeneratedAgentSkill,
   type PingResult,
   type ProviderConfig,
   type ProviderType,
@@ -441,6 +445,122 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }
   );
   context.subscriptions.push(compareSkillsCmd);
+
+  // Command: Generate Agent Skill Directive (Phase 9)
+  const generateAgentSkillCmd = vscode.commands.registerCommand(
+    'skillforge.generateAgentSkill',
+    async (args?: { skillId?: string; skillName?: string; format?: AgentSkillFormat }) => {
+      if (!client || !client.isRunning()) {
+        vscode.window.showErrorMessage('SkillForge LSP server is not running.');
+        return;
+      }
+
+      let skillId = args?.skillId;
+      if (!skillId) {
+        const input = await vscode.window.showInputBox({
+          title: 'SkillForge: Generate Agent Skill Directive',
+          prompt: 'Enter the skill or library ID (e.g., zod, fastapi, jev, rea-re, tailwind):',
+          placeHolder: 'zod',
+        });
+        if (!input || !input.trim()) {
+          return;
+        }
+        skillId = input.trim();
+      }
+
+      let format = args?.format;
+      if (!format) {
+        const pick = await vscode.window.showQuickPick(
+          [
+            {
+              label: 'Antigravity & Claude Code (Recommended)',
+              description: `.agent/skills/${skillId}/SKILL.md`,
+              detail: 'Standard modular skill format with YAML frontmatter and Karpathy rules',
+              value: 'agent-skill' as AgentSkillFormat,
+            },
+            {
+              label: 'Cursor IDE Rule',
+              description: `.cursor/rules/${skillId}.mdc`,
+              detail: 'Ecosystem-scoped glob rules for Cursor IDE',
+              value: 'cursor-rule' as AgentSkillFormat,
+            },
+            {
+              label: 'Claude Code Dedicated Skill',
+              description: `.claude/skills/${skillId}/SKILL.md`,
+              detail: 'Dedicated Claude Code workspace skill folder',
+              value: 'claude-skill' as AgentSkillFormat,
+            },
+            {
+              label: 'Repository Root Directive',
+              description: 'AGENTS.md',
+              detail: 'Root-level agent guidelines file for all AI assistants',
+              value: 'root-agents' as AgentSkillFormat,
+            },
+          ],
+          {
+            title: `SkillForge: Choose Agent Skill Target for ${args?.skillName || skillId}`,
+            placeHolder: 'Select target agent platform format...',
+          }
+        );
+        if (!pick) {
+          return;
+        }
+        format = pick.value;
+      }
+
+      try {
+        const req: GenerateAgentSkillRequest = {
+          skillId,
+          format,
+          workspacePath: scopeManager.activeScope.absolutePath,
+          includeKarpathyRules: true,
+        };
+
+        const generated = await client.sendRequest<GeneratedAgentSkill>(
+          SKILLFORGE_GENERATE_AGENT_SKILL_METHOD,
+          req
+        );
+
+        const rootPath =
+          scopeManager.activeScope.absolutePath ||
+          vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+
+        if (!rootPath) {
+          const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: generated.markdownContent,
+          });
+          await vscode.window.showTextDocument(doc);
+          vscode.window.showInformationMessage(
+            `SkillForge: Generated ${generated.skillName} agent directive in editor.`
+          );
+          return;
+        }
+
+        const targetFilePath = path.join(rootPath, generated.suggestedFilePath);
+        const targetUri = vscode.Uri.file(targetFilePath);
+        const dirUri = vscode.Uri.file(path.dirname(targetFilePath));
+
+        await vscode.workspace.fs.createDirectory(dirUri);
+        const encoder = new TextEncoder();
+        await vscode.workspace.fs.writeFile(targetUri, encoder.encode(generated.markdownContent));
+
+        const choice = await vscode.window.showInformationMessage(
+          `SkillForge: Generated ${generated.suggestedFilePath} for ${generated.skillName}!`,
+          'Open File'
+        );
+
+        if (choice === 'Open File') {
+          const doc = await vscode.workspace.openTextDocument(targetUri);
+          await vscode.window.showTextDocument(doc);
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        vscode.window.showErrorMessage(`SkillForge: Failed to generate agent skill: ${msg}`);
+      }
+    }
+  );
+  context.subscriptions.push(generateAgentSkillCmd);
 
   // Command: Suggest Skills for My Idea (Core suggestion flow)
   const suggestCmd = vscode.commands.registerCommand(

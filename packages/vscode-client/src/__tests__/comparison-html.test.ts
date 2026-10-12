@@ -208,4 +208,15 @@ describe('generateComparisonHtml', () => {
     expect(html).toContain('No critical caveats reported');
     expect(html).toContain('Standalone / general compatibility');
   });
+
+  it('includes Agent Skill directive button in comparison column headers', () => {
+    const html = generateComparisonHtml({
+      nonce: 'test-nonce',
+      cspSource: 'vscode-webview:',
+      matrix: sampleMatrix,
+    });
+
+    expect(html).toContain('sf-agent-skill-btn');
+    expect(html).toContain("type: 'createAgentSkill'");
+  });
 });

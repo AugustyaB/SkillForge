@@ -67,6 +67,7 @@
     "onCommand:skillforge.toggleBookmark",
     "onCommand:skillforge.clearBookmarks",
     "onCommand:skillforge.compareSkills",
+    "onCommand:skillforge.generateAgentSkill",
     "onCommand:skillforge.openWalkthrough"
   ],
   "contributes": {
@@ -179,6 +180,12 @@
         "title": "SkillForge: Compare Libraries Side-by-Side",
         "category": "SkillForge",
         "icon": "$(split-horizontal)"
+      },
+      {
+        "command": "skillforge.generateAgentSkill",
+        "title": "SkillForge: Generate Agent Skill Directive (SKILL.md / .mdc)",
+        "category": "SkillForge",
+        "icon": "$(robot)"
       },
       {
         "command": "skillforge.openWalkthrough",

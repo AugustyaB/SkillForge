@@ -7,6 +7,7 @@ import {
   formatRelativeTime,
   isSafeUrl,
   renderTrustSeal,
+  ICON_AI,
   ICON_CHECK,
   ICON_COPY,
   ICON_EXTERNAL,
@@ -80,6 +81,12 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
                     title="Install ${escapeHtml(packageName)} in project terminal">
               <span class="sf-icon">${ICON_TERMINAL}</span>
               ${isInstalled ? 'Reinstall' : 'Install'}
+            </button>
+            <button class="sf-btn sf-btn-secondary sf-btn-sm sf-agent-skill-btn" 
+                    data-skill-id="${escapeHtml(col.id)}" 
+                    data-skill-name="${escapeHtml(col.name)}" 
+                    title="Generate agent skill directive for ${escapeHtml(col.name)}">
+              <span class="sf-icon">${ICON_AI}</span> Agent Skill
             </button>
             ${
               col.officialUrl && isSafeUrl(col.officialUrl)
@@ -561,6 +568,21 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
           vscode.postMessage({
             type: 'openExternal',
             url: url
+          });
+        }
+      });
+    });
+
+    // Agent Skill Directive Generator Buttons
+    document.querySelectorAll('.sf-agent-skill-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const skillId = btn.getAttribute('data-skill-id');
+        const skillName = btn.getAttribute('data-skill-name');
+        if (skillId) {
+          vscode.postMessage({
+            type: 'createAgentSkill',
+            skillId: skillId,
+            skillName: skillName || skillId
           });
         }
       });

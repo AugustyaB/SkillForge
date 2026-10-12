@@ -19,6 +19,7 @@ export const SKILLFORGE_PING_METHOD = 'skillforge/ping';
 export const SKILLFORGE_FEEDBACK_METHOD = 'skillforge/feedback';
 export const SKILLFORGE_SKILL_REQUEST_METHOD = 'skillforge/skillRequest';
 export const SKILLFORGE_COMPARE_METHOD = 'skillforge/compare';
+export const SKILLFORGE_GENERATE_AGENT_SKILL_METHOD = 'skillforge/generateAgentSkill';
 
 export interface SuggestionOptions {
   maxResults?: number;

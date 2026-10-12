@@ -279,3 +279,48 @@ export function validateComparisonRequest(data: unknown): InferredComparisonRequ
 export function validateComparisonMatrix(data: unknown): InferredComparisonMatrix {
   return ComparisonMatrixSchema.parse(data);
 }
+
+/**
+ * Format target for generated agent skills
+ */
+export const AgentSkillFormatSchema = z.enum([
+  'agent-skill', // .agent/skills/<id>/SKILL.md (Antigravity & Claude Code)
+  'claude-skill', // .claude/skills/<id>/SKILL.md
+  'cursor-rule', // .cursor/rules/<id>.mdc (Cursor)
+  'root-agents', // AGENTS.md (Root repo guidelines)
+]);
+export type AgentSkillFormat = z.infer<typeof AgentSkillFormatSchema>;
+
+/**
+ * Request payload for generating an agent skill
+ */
+export const GenerateAgentSkillRequestSchema = z.object({
+  skillId: z.string().min(1),
+  format: AgentSkillFormatSchema.default('agent-skill'),
+  workspacePath: z.string().optional(),
+  includeKarpathyRules: z.boolean().default(true),
+});
+export type GenerateAgentSkillRequest = z.input<typeof GenerateAgentSkillRequestSchema>;
+
+/**
+ * Generated agent skill response
+ */
+export const GeneratedAgentSkillSchema = z.object({
+  skillId: z.string(),
+  skillName: z.string(),
+  format: AgentSkillFormatSchema,
+  suggestedFilePath: z.string(),
+  frontmatter: z.record(z.unknown()),
+  markdownContent: z.string().min(30),
+});
+export type GeneratedAgentSkill = z.infer<typeof GeneratedAgentSkillSchema>;
+
+export function validateGenerateAgentSkillRequest(
+  data: unknown
+): z.output<typeof GenerateAgentSkillRequestSchema> {
+  return GenerateAgentSkillRequestSchema.parse(data);
+}
+
+export function validateGeneratedAgentSkill(data: unknown): GeneratedAgentSkill {
+  return GeneratedAgentSkillSchema.parse(data);
+}

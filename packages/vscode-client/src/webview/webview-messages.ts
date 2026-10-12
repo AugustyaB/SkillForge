@@ -43,6 +43,11 @@ export type WebviewToHostMessage =
   | {
       type: 'compareSkills';
       skillIds: string[];
+    }
+  | {
+      type: 'createAgentSkill';
+      skillId: string;
+      skillName: string;
     };
 
 /**

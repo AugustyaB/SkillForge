@@ -6,10 +6,13 @@ import {
 } from 'vscode-languageserver/node.js';
 import {
   SKILLFORGE_COMPARE_METHOD,
+  SKILLFORGE_GENERATE_AGENT_SKILL_METHOD,
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
   type CompareParams,
   type CompareResult,
+  type GenerateAgentSkillRequest,
+  type GeneratedAgentSkill,
   type PingResult,
   type SkillSuggestionParams,
   type SkillSuggestionResult,
@@ -17,12 +20,14 @@ import {
 import { SkillsRepository } from './data/skills-repository.js';
 import { SuggestionEngine } from './engine/suggestion-engine.js';
 import { ComparisonEngine } from './engine/comparison-engine.js';
+import { AgentSkillGenerator } from './engine/agent-skill-generator.js';
 import { ProviderRegistry } from './providers/provider-registry.js';
 
 export class SkillForgeServer {
   private connection: Connection;
   private engine: SuggestionEngine;
   private comparisonEngine: ComparisonEngine;
+  private agentSkillGenerator: AgentSkillGenerator;
   private providerRegistry: ProviderRegistry;
 
   constructor(
@@ -40,6 +45,7 @@ export class SkillForgeServer {
     this.comparisonEngine = new ComparisonEngine({
       repository: this.engine.getRepository(),
     });
+    this.agentSkillGenerator = new AgentSkillGenerator(this.engine.getRepository());
     this.providerRegistry = new ProviderRegistry({ engine: this.engine });
     this.registerHandlers();
   }
@@ -50,6 +56,10 @@ export class SkillForgeServer {
 
   public getComparisonEngine(): ComparisonEngine {
     return this.comparisonEngine;
+  }
+
+  public getAgentSkillGenerator(): AgentSkillGenerator {
+    return this.agentSkillGenerator;
   }
 
   public getProviderRegistry(): ProviderRegistry {
@@ -116,6 +126,20 @@ export class SkillForgeServer {
         );
         const matrix = this.comparisonEngine.compare({ skillIds });
         return { matrix };
+      }
+    );
+
+    // 6. Custom generate agent skill request
+    this.connection.onRequest(
+      SKILLFORGE_GENERATE_AGENT_SKILL_METHOD,
+      async (params?: GenerateAgentSkillRequest): Promise<GeneratedAgentSkill> => {
+        if (!params || !params.skillId) {
+          throw new Error('Invalid generateAgentSkill request: skillId is required');
+        }
+        this.connection.console.log(
+          `[SkillForge LSP] Handling generateAgentSkill request for: "${params.skillId}" (format: ${params.format || 'agent-skill'})`
+        );
+        return this.agentSkillGenerator.generate(params);
       }
     );
   }

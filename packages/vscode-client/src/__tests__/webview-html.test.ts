@@ -434,4 +434,44 @@ describe('WebviewHtml (Clean Developer UI)', () => {
       expect(bar).toContain('Other (1-click)');
     });
   });
+
+  describe('Agent Skill Button Integration', () => {
+    it('renders sf-agent-skill-btn on skill cards and wires createAgentSkill postMessage', () => {
+      const result: SkillSuggestionResult = {
+        skills: [
+          {
+            id: 'jev',
+            name: 'Jev (TypeSafe AI)',
+            category: 'ai-ml',
+            difficulty: 'beginner',
+            description: 'Zero-config agent decision router',
+            whyUseIt: 'Type-safe LLM decision routing',
+            tags: ['ai', 'agent'],
+            ecosystem: 'javascript',
+            officialUrl: 'https://github.com/typesafe-ai/jev',
+            learnResources: [{ label: 'Docs', url: 'https://github.com/typesafe-ai/jev', type: 'docs' }],
+            alternatives: [],
+            worksWellWith: [],
+            prerequisites: [],
+            stackIndicators: ['jev'],
+            confidence: 0.95,
+            trustTier: 'verified',
+            reasoning: 'Matches query',
+          },
+        ],
+        queryEcho: 'jev router',
+        timings: { localMs: 2, totalMs: 2 },
+      };
+
+      const html = generateWebviewHtml({
+        nonce: 'nonce-agent',
+        cspSource: 'vscode-webview:',
+        result,
+      });
+
+      expect(html).toContain('sf-agent-skill-btn');
+      expect(html).toContain('data-skill-id="jev"');
+      expect(html).toContain("type: 'createAgentSkill'");
+    });
+  });
 });

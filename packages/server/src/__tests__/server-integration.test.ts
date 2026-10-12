@@ -10,8 +10,11 @@ import {
 } from 'vscode-languageserver/node.js';
 import { SkillForgeServer } from '../server.js';
 import {
+  SKILLFORGE_GENERATE_AGENT_SKILL_METHOD,
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
+  type GenerateAgentSkillRequest,
+  type GeneratedAgentSkill,
   type PingResult,
   type SkillSuggestionParams,
   type SkillSuggestionResult,
@@ -149,5 +152,24 @@ describe('SkillForge Headless LSP Server Integration', () => {
 
     expect(result.skills).toHaveLength(0);
     expect(result.queryEcho).toBe('');
+  });
+
+  it('handles skillforge/generateAgentSkill over JSON-RPC transport', async () => {
+    const req: GenerateAgentSkillRequest = {
+      skillId: 'jev',
+      format: 'agent-skill',
+      includeKarpathyRules: true,
+    };
+
+    const result = await clientConn.sendRequest<GeneratedAgentSkill>(
+      SKILLFORGE_GENERATE_AGENT_SKILL_METHOD,
+      req
+    );
+
+    expect(result.skillId).toBe('jev');
+    expect(result.format).toBe('agent-skill');
+    expect(result.suggestedFilePath).toBe('.agent/skills/jev/SKILL.md');
+    expect(result.markdownContent).toContain('# SkillForge Agent Directive');
+    expect(result.markdownContent).toContain('Think Before Coding');
   });
 });

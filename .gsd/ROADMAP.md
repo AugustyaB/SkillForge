@@ -124,16 +124,29 @@
 **Depends on**: Phase 5, Phase 6
 
 ### Phase 8: Polish, Onboarding & Marketplace Release
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Objective**: Finalize product readiness: interactive first-run walkthrough, graceful error notifications, performance optimization, accessibility audit, documentation, and VSIX packaging.
 **Deliverables**:
-- First-launch interactive walkthrough introducing trigger mechanisms
+- First-launch interactive walkthrough introducing trigger mechanisms (`contributes.walkthroughs`, 5 visual cards)
 - Actionable error states (offline mode, invalid API keys, empty queries, category browser fallback)
-- Performance & bundle optimization with `esbuild` (<500ms activation, <5MB VSIX)
-- Extension icon (PNG ≥128x128), comprehensive marketplace `README.md`, `CHANGELOG.md`, `LICENSE` (MIT + CC BY)
-- Clean VSIX package generation (`vsce package`) and local installation verification
+- Performance & bundle optimization with `esbuild` (91ms bundle, 261KB VSIX)
+- Extension icon (PNG 256x256), comprehensive marketplace `README.md`, `CHANGELOG.md`, `LICENSE` (MIT + CC BY)
+- Clean VSIX package generation (`skillforge-0.1.0.vsix`) and catalog expansion to 363 vetted skills
 **Requirements**: REQ-Release, REQ-Performance
 **Depends on**: Phase 7
+
+---
+
+### Phase 9: Agent Skill Generation & Usability Validation Engine
+**Status**: ✅ Complete
+**Objective**: Enable developers to generate compliant, battle-tested Agent Skill Files (`SKILL.md`, `AGENTS.md`, `.cursorrules`) directly from selected skill suggestions, and empirically validate that coding agents can read and follow these files for direction.
+**Deliverables**:
+- Agent Skill Generator (`AgentSkillGenerator` in `@skillforge/server` / LSP method `skillforge/generateAgentSkill`) synthesizing YAML frontmatter, Karpathy guidelines, tool-specific idioms, and verification rules.
+- Interactive "Create Agent Skill" UI button on Suggestion Canvas cards and Comparison columns.
+- Multiple target format support: `.agent/skills/<id>/SKILL.md` (Antigravity/Claude Code), `.cursor/rules/<id>.mdc` (Cursor), and `AGENTS.md` (Repo root).
+- Programmatic usability & parseability validation test (`agent-skill-usability.test.ts`) ensuring agents can reliably extract and follow directions.
+**Requirements**: REQ-AgentSkills, REQ-Validation
+**Depends on**: Phase 8
 
 ---
 
@@ -151,4 +164,5 @@ graph TD
     P5 --> P7["⭐ Phase 7\nBookmarks & Compare\n(Reference Suite)"]
     P6 --> P7
     P7 --> P8["🚀 Phase 8\nPolish & Ship\n(Onboarding, VSIX, Release)"]
+    P8 --> P9["🤖 Phase 9\nAgent Skill Generation\n(SKILL.md & Usability Validation)"]
 ```

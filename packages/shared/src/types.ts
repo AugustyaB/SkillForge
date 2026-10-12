@@ -21,7 +21,16 @@ import type {
   InferredSkillRequestPayload,
   InferredTrustTier,
   InferredUnhelpfulReason,
+  AgentSkillFormat,
+  GenerateAgentSkillRequest,
+  GeneratedAgentSkill,
 } from './schemas.js';
+
+export type {
+  AgentSkillFormat,
+  GenerateAgentSkillRequest,
+  GeneratedAgentSkill,
+};
 
 export type Difficulty = InferredDifficulty;
 export type SkillCategory = InferredSkillCategory;
