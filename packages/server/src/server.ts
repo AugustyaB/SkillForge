@@ -121,10 +121,13 @@ export class SkillForgeServer {
       SKILLFORGE_COMPARE_METHOD,
       async (params?: CompareParams): Promise<CompareResult> => {
         const skillIds = Array.isArray(params?.skillIds) ? params.skillIds : [];
+        const installedPackages = Array.isArray(params?.installedPackages)
+          ? params.installedPackages
+          : [];
         this.connection.console.log(
           `[SkillForge LSP] Handling compare request for skills: [${skillIds.join(', ')}]`
         );
-        const matrix = this.comparisonEngine.compare({ skillIds });
+        const matrix = this.comparisonEngine.compare({ skillIds }, installedPackages);
         return { matrix };
       }
     );

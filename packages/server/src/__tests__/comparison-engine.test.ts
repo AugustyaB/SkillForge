@@ -79,4 +79,37 @@ describe('ComparisonEngine', () => {
       engine.compare({ skillIds: ['react', 'react-dom'] });
     }).toThrow(/requires at least 2 distinct skills/i);
   });
+
+  it('forwards installedPackages through SkillForgeServer SKILLFORGE_COMPARE_METHOD handler (BUG-16)', async () => {
+    const { SkillForgeServer } = await import('../server.js');
+    const { SKILLFORGE_COMPARE_METHOD } = await import('@skillforge/shared');
+
+    const handlers = new Map<string, (params?: any) => Promise<any>>();
+    const mockConnection = {
+      onInitialize: () => {},
+      onInitialized: () => {},
+      onRequest: (method: string, handler: (params?: any) => Promise<any>) => {
+        handlers.set(method, handler);
+      },
+      console: { log: () => {} },
+      listen: () => {},
+      dispose: () => {},
+    } as any;
+
+    new SkillForgeServer(mockConnection, repo);
+    const compareHandler = handlers.get(SKILLFORGE_COMPARE_METHOD);
+    expect(compareHandler).toBeDefined();
+
+    const response = await compareHandler!({
+      skillIds: ['react', 'vue'],
+      installedPackages: ['react'],
+    });
+
+    expect(response.matrix.columns.find((c: any) => c.id === 'react')?.isInstalledInWorkspace).toBe(
+      true
+    );
+    expect(response.matrix.columns.find((c: any) => c.id === 'vue')?.isInstalledInWorkspace).toBe(
+      false
+    );
+  });
 });

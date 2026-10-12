@@ -46,6 +46,10 @@ export class GeminiProvider implements SuggestionProvider {
     const endpointBase = (config.endpoint || 'https://generativelanguage.googleapis.com').replace(/\/+$/, '');
     const model = config.model || 'gemini-1.5-flash';
     const apiKey = config.apiKey.trim();
+    const effectiveTimeout =
+      typeof config.timeoutMs === 'number' && config.timeoutMs > 0
+        ? config.timeoutMs
+        : this.timeoutMs;
     const url = `${endpointBase}/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
     const fullPrompt = `${SKILLFORGE_SYSTEM_PROMPT}\nWrap your answer in a JSON object: {"skills": [...]}\n\n${buildPrivacyPreservingUserPrompt(params.intent, params.context)}`;
@@ -69,12 +73,12 @@ export class GeminiProvider implements SuggestionProvider {
             temperature: config.temperature ?? 0.2,
           },
         }),
-        signal: AbortSignal.timeout(this.timeoutMs),
+        signal: AbortSignal.timeout(effectiveTimeout),
       });
     } catch (err: unknown) {
       const errName = (err as Error)?.name;
       if (errName === 'TimeoutError' || errName === 'AbortError') {
-        throw new Error(`Gemini request timed out after ${this.timeoutMs}ms.`);
+        throw new Error(`Gemini request timed out after ${effectiveTimeout}ms.`);
       }
       throw err;
     }

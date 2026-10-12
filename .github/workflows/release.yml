@@ -1,0 +1,100 @@
+name: Release & Marketplace Deployment
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Verify, Package & Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.6.0
+          run_install: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify Tag Alignment
+        shell: bash
+        run: |
+          TAG_VERSION=${GITHUB_REF_NAME#v}
+          PKG_VERSION=$(node -p "require('./packages/vscode-client/package.json').version")
+          echo "Comparing Git tag ($TAG_VERSION) with client package.json version ($PKG_VERSION)..."
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag version ($TAG_VERSION) does not match packages/vscode-client/package.json ($PKG_VERSION)"
+            exit 1
+          fi
+          echo "Version alignment verified: $PKG_VERSION"
+
+      - name: Verification Gate - Typecheck
+        run: pnpm typecheck
+
+      - name: Verification Gate - Test Suite
+        run: pnpm test
+
+      - name: Verification Gate - Production Build
+        run: pnpm build
+
+      - name: Package VSIX Archive
+        run: pnpm package
+
+      - name: Audit Built VSIX
+        shell: bash
+        run: |
+          PKG_VERSION=$(node -p "require('./packages/vscode-client/package.json').version")
+          VSIX_PATH="packages/vscode-client/skillforge-${PKG_VERSION}.vsix"
+          if [ ! -f "$VSIX_PATH" ]; then
+            echo "::error::Expected VSIX file not found at $VSIX_PATH"
+            exit 1
+          fi
+          SIZE_BYTES=$(stat -c%s "$VSIX_PATH")
+          echo "VSIX generated successfully: $VSIX_PATH ($SIZE_BYTES bytes)"
+
+      - name: Publish to VS Code Marketplace
+        if: env.VSCE_PAT != ''
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        shell: bash
+        run: |
+          PKG_VERSION=$(node -p "require('./packages/vscode-client/package.json').version")
+          echo "Publishing to Visual Studio Marketplace..."
+          npx @vscode/vsce publish --packagePath "packages/vscode-client/skillforge-${PKG_VERSION}.vsix" -p "$VSCE_PAT"
+          echo "VS Code Marketplace publication complete!"
+
+      - name: Publish to Open VSX Registry
+        if: env.OVSX_PAT != ''
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        shell: bash
+        run: |
+          PKG_VERSION=$(node -p "require('./packages/vscode-client/package.json').version")
+          echo "Publishing to Open VSX Registry..."
+          npx ovsx publish "packages/vscode-client/skillforge-${PKG_VERSION}.vsix" -p "$OVSX_PAT"
+          echo "Open VSX publication complete!"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: packages/vscode-client/skillforge-*.vsix
+          generate_release_notes: true
+          draft: false
+          prerelease: false

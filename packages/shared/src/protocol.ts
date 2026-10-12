@@ -87,6 +87,7 @@ export interface SkillRequestParams {
 
 export interface CompareParams {
   skillIds: string[];
+  installedPackages?: string[];
 }
 
 export interface CompareResult {

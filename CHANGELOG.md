@@ -17,6 +17,46 @@ The project follows a structured version & phase sequence:
 
 ---
 
+## Marketplace & Open VSX Deployment Automation (2026-10-12)
+
+### Deliverables
+- **Live Antigravity IDE Integration**: Installed and verified `skillforge-0.1.0.vsix` directly in Google Antigravity IDE setup with zero external dependencies.
+- **Continuous Integration Pipeline (`.github/workflows/ci.yml`)**:
+  - Matrix builds across Ubuntu and Windows runners.
+  - Multi-gate verification: `pnpm typecheck` (`tsc -b`), `pnpm test` (292 tests), and `pnpm build`.
+  - Automated package audit ensuring VSIX bundle size $<1.5\text{ MB}$ and verifying zero unbundled TypeScript source files leak into production.
+- **Tag-Triggered Release Pipeline (`.github/workflows/release.yml`)**:
+  - Automated GitHub Actions release pipeline triggered on `v*` tags.
+  - Version alignment assertion between git tag and `packages/vscode-client/package.json`.
+  - Dual marketplace publishing: Visual Studio Marketplace (`@vscode/vsce publish`) and Open VSX Registry (`ovsx publish`).
+  - GitHub Release creation attaching the standalone `.vsix` bundle.
+- **Publisher & Deployment Guide ([`DEPLOYMENT.md`](./DEPLOYMENT.md))**:
+  - Detailed instructions for Azure DevOps PAT, Open VSX access token, publisher namespace claiming, and GitHub Actions repository secrets (`VSCE_PAT`, `OVSX_PAT`).
+  - Local CLI fallback commands and bundle size audit metrics.
+- **Package Hygiene & .vscodeignore Optimization**:
+  - Cleaned `.vscodeignore` to exclude `*.vsix`, coverage, and OS artifacts.
+  - VSIX package optimized to 269.1 KB across 53 files.
+
+---
+
+## Post-Phase 7/9 QA Audit & Cross-Layer Hardening (2026-10-12)
+
+### Deliverables
+- **Resolved 10 Cross-Layer & Adversarial Defects (`BUG-14` through `BUG-23`)**:
+  - **BUG-14 (Critical)**: Aligned `SKILLFORGE_SYSTEM_PROMPT` categories with `SkillCategorySchema` and added `normalizeSkillCategory` + `normalizeOfficialUrl` across `@skillforge/shared`, `openai-provider.ts`, `ground-truth-anchor.ts`, and `bookmark-manager.ts` so unanchored AI skills never fail Zod validation when bookmarked.
+  - **BUG-15 (High)**: Wired `ConflictDetector.detectConflicts`, `isInstalledInWorkspace` tagging, and `minTrustTier` filtering into `HybridMerger.merge()` and `ProviderRegistry.suggest()`.
+  - **BUG-16 (High)**: Added `installedPackages?: string[]` to `CompareParams` (`protocol.ts`), forwarded `scopeManager.buildWorkspaceContext().alreadyInstalled` in `extension.ts`, and passed it into `comparisonEngine.compare()` in `server.ts`.
+  - **BUG-17 (High)**: Preserved `categoryRecommendations` in `HybridMerger.merge()` when falling back with 0 AI matches.
+  - **BUG-18 (Medium)**: Honored per-request `config.timeoutMs` in both `OpenAIProvider.suggest()` and `GeminiProvider.suggest()`.
+  - **BUG-19 (Medium)**: Hardened `parseRawSuggestions()` to extract JSON from markdown fences even when wrapped in conversational LLM prose.
+  - **BUG-20 (Medium)**: Added `getSkillByIndicator()` lookup in `GroundTruthAnchor.anchor()` so package names like `next` or `tailwindcss` anchor to `verified` catalog entries.
+  - **BUG-21 (Medium)**: Reset `this.showFeedbackPrompt = false` in `SuggestionPanel` upon `submitFeedback` so subsequent bookmark toggles do not resurrect the feedback prompt.
+  - **BUG-22 (Low)**: Aligned `deriveInstallString()` in `comparison-html.ts` with `pnpm add` and `mvn dependency:get`, enforced strict nonce-based `style-src` CSP, and updated `ComparisonPanel` tab title on reuse.
+  - **BUG-23 (High)**: Replaced raw `trimmed.includes(lowerName)` substring check in `SkillsRepository.search()` with delimiter-bounded regex so short skill names (`Ent`, `Gin`) do not false-positive inside words like `"authentication"`, `"nonexistent"`, or `"login"`.
+- **Empirical Verification**: Expanded test suite to **292/292 passing unit tests** across 25 test suites (`tsc -b` 0 errors, clean `esbuild` production bundle).
+
+---
+
 ## Phase 9: Agent Skill Generation & Usability Validation Engine (2026-10-12)
 
 ### Deliverables

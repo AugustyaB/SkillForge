@@ -322,6 +322,8 @@
     "bundle:prod": "node esbuild.mjs --production",
     "build": "tsc -b && node esbuild.mjs --production",
     "package": "vsce package --no-dependencies",
+    "publish:vsce": "vsce publish --no-dependencies",
+    "publish:ovsx": "ovsx publish --no-dependencies",
     "clean": "rimraf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {

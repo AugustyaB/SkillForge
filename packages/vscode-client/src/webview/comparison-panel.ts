@@ -61,7 +61,10 @@ export class ComparisonPanel {
       ? vscode.ViewColumn.Beside
       : vscode.ViewColumn.One;
 
+    const toolNames = matrix.columns.map((c) => c.name).join(' vs ');
+
     if (ComparisonPanel.currentPanel) {
+      ComparisonPanel.currentPanel.panel.title = `Compare: ${toolNames}`;
       ComparisonPanel.currentPanel.panel.reveal(column);
       ComparisonPanel.currentPanel.currentMatrix = matrix;
       if (scope) {
@@ -71,7 +74,6 @@ export class ComparisonPanel {
       return ComparisonPanel.currentPanel;
     }
 
-    const toolNames = matrix.columns.map((c) => c.name).join(' vs ');
     const panel = vscode.window.createWebviewPanel(
       ComparisonPanel.viewType,
       `Compare: ${toolNames}`,

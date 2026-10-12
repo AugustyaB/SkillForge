@@ -195,5 +195,25 @@ describe('BookmarkManager', () => {
       expect(bookmarks).toHaveLength(1);
       expect(bookmarks[0]?.id).toBe('valid');
     });
+
+    it('successfully bookmarks unanchored AI skills with shorthand categories and protocol-less URLs (BUG-14)', async () => {
+      const unanchoredAiSkill = {
+        ...sampleSkill1,
+        id: 'effect-ts',
+        name: 'Effect',
+        category: 'state' as any, // LLM shorthand category
+        officialUrl: 'effect.website', // Protocol-less domain from LLM
+      };
+
+      const added = await manager.toggleBookmark(unanchoredAiSkill);
+      expect(added).toBe(true);
+      expect(manager.isBookmarked('effect-ts')).toBe(true);
+
+      const saved = manager.getBookmarks();
+      expect(saved).toHaveLength(1);
+      expect(saved[0]?.id).toBe('effect-ts');
+      expect(saved[0]?.category).toBe('state-management');
+      expect(saved[0]?.officialUrl).toBe('https://effect.website');
+    });
   });
 });

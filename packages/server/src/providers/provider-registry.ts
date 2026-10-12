@@ -22,14 +22,16 @@ export interface ProviderRegistryOptions {
 export class ProviderRegistry {
   private providers = new Map<ProviderType, SuggestionProvider>();
   private localProvider: LocalProvider;
+  private repository: SkillsRepository;
 
   constructor(options?: ProviderRegistryOptions) {
     const engine = options?.engine ?? new SuggestionEngine({ repository: options?.repository });
+    this.repository = engine.getRepository();
     this.localProvider = new LocalProvider(engine);
     this.providers.set('local', this.localProvider);
 
-    const openai = options?.openaiProvider ?? new OpenAIProvider({ repository: engine.getRepository() });
-    const gemini = options?.geminiProvider ?? new GeminiProvider({ repository: engine.getRepository() });
+    const openai = options?.openaiProvider ?? new OpenAIProvider({ repository: this.repository });
+    const gemini = options?.geminiProvider ?? new GeminiProvider({ repository: this.repository });
 
     this.providers.set('openai', openai);
     this.providers.set('gemini', gemini);
@@ -80,6 +82,9 @@ export class ProviderRegistry {
       const aiResult = await provider.suggest(params, config);
       return HybridMerger.merge(localResult, aiResult, {
         maxResults: params.options?.maxResults,
+        alreadyInstalled: params.context?.alreadyInstalled,
+        minTrustTier: params.options?.minTrustTier,
+        repository: this.repository,
       });
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);

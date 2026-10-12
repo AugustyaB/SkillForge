@@ -1,8 +1,8 @@
 # ROADMAP.md
 
-> **Current Phase**: Not started
-> **Milestone**: v1.0 — SkillForge MVP
-> **Target**: Cross-IDE skill suggestion engine with beginner-first UX, multi-tiered reliability, and user-controlled context scoping.
+> **Current Phase**: Phase 9 (Agent Skill Generation & Usability Validation Engine) — Complete
+> **Milestone**: v1.0 — SkillForge MVP + Agent Skills Engine
+> **Target**: Cross-IDE skill suggestion engine with beginner-first UX, multi-tiered reliability, user-controlled context scoping, and agent skill directive synthesis.
 
 ## Must-Haves (from SPEC)
 
@@ -15,7 +15,7 @@
 - [x] BYOK LLM integration (OpenAI-compatible & Gemini) securely using SecretStorage with optional Validator mode
 - [x] Duplicate query detection, "already installed" detection, and graceful fallback cascade
 - [x] Bookmarks persistence (globalState) and side-by-side technology comparison mode
-- [ ] First-run onboarding walkthrough, strict Webview CSP, and clean VSIX packaging
+- [x] First-run onboarding walkthrough, strict Webview CSP, and clean VSIX packaging
 
 ---
 

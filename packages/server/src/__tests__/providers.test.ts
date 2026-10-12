@@ -343,5 +343,145 @@ describe('Pluggable BYOK Suggestion Providers', () => {
       expect(result.skills.length).toBeGreaterThan(0);
       expect(result.privacyNotice).toContain('Fallback to 100% offline database');
     });
+
+    it('parses conversational preamble around markdown JSON fences and normalizes shorthand categories (BUG-14 & BUG-19)', () => {
+      const chattyOutput = `Sure! Here are the recommended libraries for your project:
+\`\`\`json
+{
+  "skills": [
+    {
+      "id": "effect-ts",
+      "name": "Effect",
+      "category": "state",
+      "ecosystem": "typescript",
+      "description": "Type-safe functional effect system for TypeScript."
+    },
+    {
+      "id": "lucia",
+      "name": "Lucia Auth",
+      "category": "auth",
+      "ecosystem": "typescript",
+      "description": "Simple and flexible authentication library."
+    }
+  ]
+}
+\`\`\`
+Let me know if you need anything else!`;
+
+      const parsed = parseRawSuggestions(chattyOutput);
+      expect(parsed).toHaveLength(2);
+      expect(parsed[0]?.category).toBe('state-management');
+      expect(parsed[1]?.category).toBe('authentication');
+    });
+
+    it('honors per-request config.timeoutMs over default timeoutMs in OpenAI and Gemini providers (BUG-18)', async () => {
+      const timeoutErr = new Error('Aborted');
+      timeoutErr.name = 'TimeoutError';
+      const mockFetch = vi.fn().mockRejectedValue(timeoutErr);
+
+      const openai = new OpenAIProvider({ repository, fetchFn: mockFetch, timeoutMs: 4000 });
+      await expect(
+        openai.suggest(
+          { intent: 'test' },
+          { provider: 'openai', apiKey: 'sk-key', timeoutMs: 1234 }
+        )
+      ).rejects.toThrow('OpenAI request timed out after 1234ms');
+
+      const gemini = new GeminiProvider({ repository, fetchFn: mockFetch, timeoutMs: 4000 });
+      await expect(
+        gemini.suggest(
+          { intent: 'test' },
+          { provider: 'gemini', apiKey: 'AIza-key', timeoutMs: 2345 }
+        )
+      ).rejects.toThrow('Gemini request timed out after 2345ms');
+    });
+
+    it('runs ConflictDetector, tags isInstalledInWorkspace, and filters by minTrustTier on HybridMerger results (BUG-15)', () => {
+      const expressSkill = {
+        ...repository.getSkillById('express')!,
+        trustTier: 'verified' as const,
+        confidence: 0.9,
+        reasoning: 'Local match',
+      };
+      const fastifySkill = {
+        ...repository.getSkillById('fastify')!,
+        trustTier: 'verified' as const,
+        confidence: 0.88,
+        reasoning: 'AI match',
+        llmEnhanced: true,
+      };
+      const unanchoredAiSkill = {
+        id: 'novel-lib',
+        name: 'NovelLib',
+        category: 'utility' as const,
+        difficulty: 'intermediate' as const,
+        description: 'Unanchored external AI tool',
+        whyUseIt: 'Experimental utility',
+        tags: ['novel'],
+        ecosystem: 'javascript',
+        officialUrl: 'https://novellib.dev',
+        learnResources: [{ label: 'Docs', url: 'https://novellib.dev' }],
+        alternatives: [],
+        worksWellWith: [],
+        prerequisites: [],
+        stackIndicators: ['novel-lib'],
+        trustTier: 'suggested' as const,
+        confidence: 0.6,
+        reasoning: 'Unanchored AI suggestion',
+        llmEnhanced: true,
+      };
+
+      const localResult = {
+        skills: [expressSkill],
+        timings: { localMs: 5, totalMs: 5 },
+        fallbackUsed: false,
+        queryEcho: 'node server',
+      };
+      const aiResult = {
+        skills: [fastifySkill, unanchoredAiSkill],
+        timings: { localMs: 0, totalMs: 300 },
+        fallbackUsed: false,
+        queryEcho: 'node server',
+        providerUsed: 'openai' as const,
+        llmEnhanced: true,
+      };
+
+      const merged = HybridMerger.merge(localResult, aiResult, {
+        maxResults: 5,
+        alreadyInstalled: ['fastify'],
+        minTrustTier: 'verified',
+        repository,
+      });
+
+      // Unanchored 'suggested' skill filtered out by minTrustTier: 'verified'
+      expect(merged.skills.map((s) => s.id)).toEqual(['express', 'fastify']);
+      // Fastify marked as installed in workspace
+      expect(merged.skills.find((s) => s.id === 'fastify')?.isInstalledInWorkspace).toBe(true);
+      // Cross-source conflict detected between Express and Fastify
+      expect(merged.skills.find((s) => s.id === 'express')?.conflictWith).toContain('fastify');
+      expect(merged.skills.find((s) => s.id === 'express')?.conflictWarning).toBeDefined();
+    });
+
+    it('preserves categoryRecommendations when HybridMerger falls back with 0 AI skills (BUG-17)', async () => {
+      const localFallback = await engine.suggest({ intent: 'zzzz_nonexistent_gibberish_999' });
+      expect(localFallback.fallbackUsed).toBe(true);
+      expect(localFallback.categoryRecommendations?.length).toBeGreaterThan(0);
+
+      const emptyAiResult = {
+        skills: [],
+        timings: { localMs: 0, totalMs: 250 },
+        fallbackUsed: true,
+        queryEcho: 'zzzz_nonexistent_gibberish_999',
+        providerUsed: 'openai' as const,
+        llmEnhanced: false,
+      };
+
+      const merged = HybridMerger.merge(localFallback, emptyAiResult, { maxResults: 5 });
+      expect(merged.fallbackUsed).toBe(true);
+      expect(merged.categoryRecommendations).toBeDefined();
+      expect(merged.categoryRecommendations?.length).toBe(
+        localFallback.categoryRecommendations?.length
+      );
+    });
   });
 });

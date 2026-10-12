@@ -223,6 +223,7 @@ export class SuggestionPanel {
         break;
       }
       case 'submitFeedback': {
+        this.showFeedbackPrompt = false;
         if (SuggestionPanel.feedbackManager) {
           await SuggestionPanel.feedbackManager.recordFeedback({
             query: message.query,

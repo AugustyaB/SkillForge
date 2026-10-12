@@ -2,13 +2,14 @@
 
 > **Document Type**: Defect & Technical Debt Register  
 > **Target Audience**: Development Pair, Next Chat/Agent, QA Review  
-> **Last Updated**: 2026-09-27  
-> **Audit Status**: Complete — 13 confirmed bugs identified, reproduced, documented, and 100% resolved with empirical proof.
+> **Last Updated**: 2026-10-12  
+> **Audit Status**: Complete — All 23 tracked bugs (BUG-01..BUG-23) identified, reproduced, documented, and 100% resolved. Marketplace Readiness Audit verified with 307/307 tests passing.
 
 ---
 
 ## 📋 Quick Action Checklist
 
+### Phase 1–5.1 Audit (Resolved)
 - [x] **BUG-01** (Critical): Fix RegExp injection crash in `SkillsRepository.search` & `IntentParser`
 - [x] **BUG-02** (High): Fix Skill ID vs Package Name mismatch in compatibility boost & conflict detection
 - [x] **BUG-03** (High): Fix ambient workspace ecosystem overriding explicit user query intent
@@ -22,6 +23,18 @@
 - [x] **BUG-11** (Critical): Terminal install command passes human display name instead of package identifier
 - [x] **BUG-12** (Critical): CodeLens triggers dormant on startup due to missing language activation events
 - [x] **BUG-13** (High): `TerminalRunner` reuses stale working directory across context scope switches
+
+### Phase 5.2, 6 & 7 Audit (Resolved)
+- [x] **BUG-14** (Critical): AI-suggested skills silently fail to bookmark due to `SKILLFORGE_SYSTEM_PROMPT` category shorthand mismatch with `SkillCategorySchema`
+- [x] **BUG-15** (High): Hybrid/BYOK pipeline bypasses `ConflictDetector`, `isInstalledInWorkspace`, and `minTrustTier` filtering
+- [x] **BUG-16** (High): Live LSP `skillforge/compare` drops workspace `alreadyInstalled` packages (`isInstalledInWorkspace` always `false` in Comparison Matrix)
+- [x] **BUG-17** (High): `HybridMerger.merge()` drops `categoryRecommendations` when falling back with an active BYOK provider
+- [x] **BUG-18** (Medium): `OpenAIProvider` and `GeminiProvider` ignore dynamic per-request `config.timeoutMs` setting
+- [x] **BUG-19** (Medium): `parseRawSuggestions()` crashes with `SyntaxError` when LLM wraps markdown JSON fences in conversational prose
+- [x] **BUG-20** (Medium): `GroundTruthAnchor.anchor()` misses `getSkillByIndicator()` lookup, demoting verified skills like `next` or `next-auth` to unanchored `suggested`
+- [x] **BUG-21** (Medium): Toggling a bookmark in `SuggestionPanel` re-renders Webview with `showFeedbackPrompt: true`, resurrecting a submitted feedback bar
+- [x] **BUG-22** (Low): Comparison Matrix displays `npm install` instead of `pnpm add`, retains stale tab title on reuse, and uses `unsafe-inline` style CSP
+- [x] **BUG-23** (High): `SkillsRepository.search()` substring check `trimmed.includes(lowerName)` false-positives short skill names (`"Ent"`, `"Gin"`) inside unrelated words (`"authentication"`, `"nonexistent"`, `"login"`)
 
 ---
 
@@ -322,13 +335,135 @@
 
 ---
 
+## 🧪 Phase 5.2, 6 & 7 Audit Findings (BUG-14 to BUG-22)
+
+### BUG-14: AI-Suggested Skills Silently Fail to Bookmark (`prompt-templates.ts` vs `SkillCategorySchema`)
+
+- **Severity**: Critical (Silent data loss / broken feature across BYOK + Bookmarks layers)
+- **Files Affected**:
+  - [`packages/server/src/providers/prompt-templates.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/prompt-templates.ts#L17) (Line 17)
+  - [`packages/server/src/providers/openai-provider.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/openai-provider.ts#L56) (Line 56)
+  - [`packages/server/src/reliability/ground-truth-anchor.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/reliability/ground-truth-anchor.ts#L112-L120) (Lines 112–120)
+  - [`packages/vscode-client/src/bookmarks/bookmark-manager.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/bookmarks/bookmark-manager.ts#L24-L31) (Lines 24–31)
+- **Root Cause**:
+  `SKILLFORGE_SYSTEM_PROMPT` instructs OpenAI/Gemini to emit categories `"state | auth | backend | testing | styling | ui | database | devtools | api | performance | mobile | other"`. However, `SkillCategorySchema` requires `'state-management' | 'authentication' | 'backend-framework' | 'ui-library' | 'api-protocol' | 'utility' | ...`. `parseRawSuggestions()` and `GroundTruthAnchor.buildUnanchored()` pass the unvalidated LLM category through onto `SuggestedSkill`. When the user clicks the Bookmark icon on an unanchored AI suggestion, `BookmarkManager.addBookmark()` persists it, and `BookmarkManager.getBookmarks()` immediately runs `validateSkillBookmark()`, which throws a `ZodError` and silently drops the bookmark.
+- **Remediation**:
+  1. Align `SKILLFORGE_SYSTEM_PROMPT` categories with `SkillCategorySchema`.
+  2. Normalize shorthand categories (`state` → `state-management`, `auth` → `authentication`, `backend` → `backend-framework`, `ui`/`styling` → `ui-library`, `api` → `api-protocol`, `devtools`/`performance` → `utility`) and validate `officialUrl` in `parseRawSuggestions()`, `GroundTruthAnchor.buildUnanchored()`, and `BookmarkManager.addBookmark()`.
+
+---
+
+### BUG-15: Hybrid/BYOK Pipeline Bypasses `ConflictDetector`, `isInstalledInWorkspace`, and `minTrustTier`
+
+- **Severity**: High (Missing safety warnings & filter enforcement on AI/Hybrid results)
+- **Files Affected**:
+  - [`packages/server/src/providers/hybrid-merger.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/hybrid-merger.ts#L21-L94) (Lines 21–94)
+  - [`packages/server/src/providers/openai-provider.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/openai-provider.ts#L141-L149)
+  - [`packages/server/src/providers/gemini-provider.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/gemini-provider.ts#L104-L112)
+- **Root Cause**:
+  Unlike `SuggestionEngine.suggest()`, `OpenAIProvider`, `GeminiProvider`, and `HybridMerger.merge()` only run `GroundTruthAnchor.anchorAll()` and never invoke `ConflictDetector.detectConflicts()`, never populate `isInstalledInWorkspace` against `context.alreadyInstalled`, and never filter by `options.minTrustTier`.
+- **Remediation**:
+  Post-process merged/AI skills through `ConflictDetector.detectConflicts()`, `isInstalledInWorkspace` tagging, and `minTrustTier` filtering using the active `SkillSuggestionParams`.
+
+---
+
+### BUG-16: Live LSP `skillforge/compare` Drops Workspace `alreadyInstalled` Context
+
+- **Severity**: High (`isInstalledInWorkspace` is always `false` in live Comparison Matrix)
+- **Files Affected**:
+  - [`packages/shared/src/protocol.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/shared/src/protocol.ts#L88-L90) (Lines 88–90)
+  - [`packages/server/src/server.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/server.ts#L120-L130) (Lines 120–130)
+  - [`packages/vscode-client/src/extension.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/extension.ts#L314-L323) (Lines 314–323)
+- **Root Cause**:
+  `CompareParams` omits `installedPackages?: string[]`, `extension.ts` does not send `scopeManager.buildWorkspaceContext().alreadyInstalled`, and `server.ts` invokes `this.comparisonEngine.compare({ skillIds })` without the second `installedPackages` argument.
+- **Remediation**:
+  Add `installedPackages?: string[]` to `CompareParams`, send `scopeManager.buildWorkspaceContext().alreadyInstalled` from `extension.ts`, and forward it to `this.comparisonEngine.compare({ skillIds }, params?.installedPackages)` in `server.ts`.
+
+---
+
+### BUG-17: `HybridMerger.merge()` Drops `categoryRecommendations` on Fallback Cascade
+
+- **Severity**: High (Empty category drawer when fallback triggers with active BYOK provider)
+- **File Affected**: [`packages/server/src/providers/hybrid-merger.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/hybrid-merger.ts#L70-L93) (Lines 70–93)
+- **Root Cause**:
+  When `isFallback` is `true` in `HybridMerger.merge()`, `localResult.categoryRecommendations` is omitted from the returned `SkillSuggestionResult` object.
+- **Remediation**:
+  Preserve `categoryRecommendations: isFallback ? localResult.categoryRecommendations : undefined` in `HybridMerger.merge()`.
+
+---
+
+### BUG-18: `OpenAIProvider` and `GeminiProvider` Ignore Dynamic `config.timeoutMs`
+
+- **Severity**: Medium (User timeout setting ignored)
+- **Files Affected**:
+  - [`packages/server/src/providers/openai-provider.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/openai-provider.ts#L113) (Line 113)
+  - [`packages/server/src/providers/gemini-provider.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/gemini-provider.ts#L72) (Line 72)
+- **Root Cause**:
+  Both providers use `AbortSignal.timeout(this.timeoutMs)` instead of `AbortSignal.timeout(config.timeoutMs ?? this.timeoutMs)`.
+- **Remediation**:
+  Respect `config.timeoutMs ?? this.timeoutMs` on every `suggest()` request.
+
+---
+
+### BUG-19: `parseRawSuggestions()` Crashes on Conversational Prose Around Markdown JSON Fences
+
+- **Severity**: Medium (Unnecessary fallback on valid LLM JSON inside fenced blocks)
+- **File Affected**: [`packages/server/src/providers/openai-provider.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/providers/openai-provider.ts#L28-L40) (Lines 28–40)
+- **Root Cause**:
+  `cleaned.startsWith('```')` fails when an LLM prepends conversational text before the code fence, causing `JSON.parse()` to throw `SyntaxError`.
+- **Remediation**:
+  Extract fenced JSON via regex `/```(?:json)?\s*([\s\S]*?)```/i` or outer `{...}` / `[...]` bounds before calling `JSON.parse()`.
+
+---
+
+### BUG-20: `GroundTruthAnchor.anchor()` Misses `getSkillByIndicator()` Package Name Lookup
+
+- **Severity**: Medium (Verified skills demoted to unanchored `suggested` when LLM uses npm/PyPI package name)
+- **File Affected**: [`packages/server/src/reliability/ground-truth-anchor.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/reliability/ground-truth-anchor.ts#L30-L60) (Lines 30–60)
+- **Root Cause**:
+  `anchor()` checks `getSkillById()` and display name, but never calls `this.repository.getSkillByIndicator()` (e.g., `next` → `nextjs`, `tailwindcss` → `tailwind-css`, `next-auth` → `authjs`).
+- **Remediation**:
+  Check `this.repository.getSkillByIndicator(raw.id)` and `this.repository.getSkillByIndicator(raw.name)` in `GroundTruthAnchor.anchor()`.
+
+---
+
+### BUG-21: Toggling a Bookmark Resurrects a Submitted Feedback Bar
+
+- **Severity**: Medium (UI state regression on re-render)
+- **File Affected**: [`packages/vscode-client/src/webview/suggestion-panel.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/webview/suggestion-panel.ts#L225-L237) (Lines 225–237)
+- **Root Cause**:
+  `handleWebviewMessage` (`case 'submitFeedback'`) records feedback in `FeedbackManager` but does not set `this.showFeedbackPrompt = false`. Subsequent `toggleBookmark` calls invoke `this.updateHtml()`, re-rendering the feedback prompt.
+- **Remediation**:
+  Set `this.showFeedbackPrompt = false;` when `submitFeedback` is handled.
+
+---
+
+### BUG-22: Comparison Matrix Package Manager Discrepancy (`npm install` vs `pnpm add`), Stale Tab Title, and CSP
+
+- **Severity**: Low (UX/Security consistency)
+- **Files Affected**:
+  - [`packages/vscode-client/src/webview/comparison-html.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/webview/comparison-html.ts#L195) (Lines 195, 517, 602–615)
+  - [`packages/vscode-client/src/webview/comparison-panel.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/webview/comparison-panel.ts#L64-L71) (Lines 64–71)
+- **Root Cause**:
+  1. `deriveInstallString()` in `comparison-html.ts` outputs `npm install` (and omits `java`), whereas clicking `Install` in the header calls `TerminalRunner.deriveInstallCommand()`, which runs `pnpm add`.
+  2. `ComparisonPanel.createOrShow()` does not update `this.panel.title` when reusing an existing panel for a new comparison.
+  3. `comparison-html.ts` uses `style-src 'unsafe-inline'` instead of `style-src 'nonce-${nonce}'`.
+- **Remediation**:
+  Align `deriveInstallString()` with `TerminalRunner.deriveInstallCommand()`, update `this.panel.title` on reuse, and enforce `style-src 'nonce-${nonce}'`.
+
+---
+
+### BUG-23: `SkillsRepository.search()` Substring False-Positive on Short Skill Names (`"Ent"`, `"Gin"`)
+
+- **Severity**: High (Incorrect search scoring & suppressed fallback cascade)
+- **File Affected**: [`packages/server/src/data/skills-repository.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/data/skills-repository.ts#L240-L250) (Lines 240–250)
+- **Root Cause**:
+  `else if (trimmed.includes(lowerName))` performed an unbounded substring check for `skill.name` inside the query string. Short 3-letter skill names like `"Ent"` (`ent-go`) or `"Gin"` (`gin-gonic`) matched inside unrelated words like `"authentication"`, `"component"`, `"nonexistent"`, `"login"`, `"logging"`, or `"pagination"`, awarding a false `+60` (`Query mentions name`) score boost and preventing the fallback cascade from triggering on unrecognized queries containing `"ent"`.
+- **Remediation**:
+  Use a delimiter-bounded regex `(?:^|[\s,./_-])${escapeRegExp(lowerName)}(?:$|[\s,./_-])` so multi-word and punctuation-containing skill names (`"next.js"`, `"c++"`) still match while internal word substrings do not.
+
+---
+
 ## 🛠️ Instructions for Next Chat / Developer
 
-When picking up these bug fixes:
-1. Follow the **Mandatory Gating Protocol** in [`PROJECT_RULES.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/PROJECT_RULES.md):
-   - Propose an implementation plan for the fixes.
-   - Halt for user approval (Gate 1).
-   - Implement the fixes.
-   - Run `pnpm typecheck` and `pnpm test` for empirical verification (Gate 2).
-   - Sync `CHANGELOG.md` and check off items in this document (Gate 3).
-2. Start with **BUG-11** (Terminal install name bug), **BUG-12** (Activation events), and **BUG-13** (TerminalRunner CWD).
+All 23 identified bugs (`BUG-01` through `BUG-23`) have been resolved and verified with regression tests. Follow the **Mandatory Gating Protocol** in [`PROJECT_RULES.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/PROJECT_RULES.md) for any future enhancements.

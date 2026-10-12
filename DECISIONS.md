@@ -214,3 +214,26 @@ This document records the major architectural, technical, and design decisions m
   - **Empirical Agent Usability Test Suite**: Validate every generated skill file in `agent-skill-usability.test.ts` by simulating AI agent parsing of frontmatter triggers, operational rules, and executable bash verification blocks.
 - **Rationale**: Transforms SkillForge from a passive discovery catalog into an active bridge between human developers and autonomous coding agents, with zero external runtime dependencies.
 - **Trade-offs**: Increases server bundle size by ~12 KB (272 KB $\to$ 284.4 KB), remaining well within performance budgets.
+
+---
+
+## ADR-014: Dual-Marketplace Release Pipeline & Zero-Leak Package Hygiene
+
+- **Date**: 2026-10-12
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 8 / Marketplace Automation)
+- **Context**: Releasing SkillForge to developers requires seamless publishing across both the official Visual Studio Marketplace and the community Open VSX Registry (supporting VSCodium, Gitpod, Cursor, and open-source VS Code distributions). Manual publication is prone to human error (version mismatches, leaking development source files or test artifacts, forgotten verification commands).
+- **Decision**:
+  - **Automated GitHub Actions Release Pipeline (`.github/workflows/release.yml`)**:
+    - Triggered on tag pushes (`v*`).
+    - Enforces version parity: aborts release if the Git tag does not match the version declared in `packages/vscode-client/package.json`.
+    - Enforces the 3-gate verification protocol before packaging (`pnpm typecheck`, `pnpm test`, `pnpm build`).
+    - Dual publishing: `@vscode/vsce publish` (VS Code Marketplace) via `VSCE_PAT` and `npx ovsx publish` (Open VSX) via `OVSX_PAT`.
+    - Automatically creates a GitHub Release and attaches the compiled `.vsix` binary for direct offline distribution.
+  - **Multi-OS Continuous Integration (`.github/workflows/ci.yml`)**:
+    - Runs matrix builds across Ubuntu and Windows runners on every `push` and `pull_request` to `main`.
+    - Includes automated `package-audit` asserting that the generated VSIX is under $1.5\text{ MB}$ and contains zero raw `extension/src/` TypeScript source files.
+  - **Strict Package Ignore Rules (`.vscodeignore`)**:
+    - Whitelists compiled runtime bundles (`dist/`), icons (`resources/`), and user onboarding markdown (`walkthrough/`).
+    - Explicitly excludes `*.vsix`, `src/**`, `coverage/**`, test files, `.map` files, and OS junk (`.DS_Store`, `Thumbs.db`).
+- **Rationale**: Guarantees reproducible, zero-leak deployments across both marketplace ecosystems while preventing bloated binaries and accidental source code leaks.
+- **Trade-offs**: Requires setting up repository secrets (`VSCE_PAT`, `OVSX_PAT`) and maintaining separate publisher accounts on Azure DevOps and Open VSX.

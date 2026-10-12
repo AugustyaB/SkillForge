@@ -7,6 +7,8 @@
     "build": "pnpm --recursive run build",
     "bundle": "pnpm --filter skillforge run bundle:prod",
     "package": "pnpm run build && pnpm --filter skillforge run package",
+    "publish:vsce": "pnpm --filter skillforge run publish:vsce",
+    "publish:ovsx": "pnpm --filter skillforge run publish:ovsx",
     "test": "vitest run",
     "typecheck": "tsc -b",
     "clean": "rimraf packages/*/dist packages/*/tsconfig.tsbuildinfo node_modules/.cache"

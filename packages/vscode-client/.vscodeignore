@@ -12,3 +12,7 @@ node_modules/**
 scripts/**
 *.tsbuildinfo
 vitest.config.ts
+*.vsix
+coverage/**
+.DS_Store
+Thumbs.db

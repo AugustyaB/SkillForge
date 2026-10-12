@@ -141,4 +141,33 @@ describe('GroundTruthAnchor', () => {
     // Must not throw ZodError when validated against SkillSchema
     expect(() => validateSkill(result.suggestedSkill)).not.toThrow();
   });
+
+  it('anchors skills by stackIndicators when LLM returns npm/PyPI package name (BUG-20)', () => {
+    const fullRepo = new SkillsRepository();
+    const fullAnchor = new GroundTruthAnchor(fullRepo);
+
+    // 'next' is a stackIndicator for 'nextjs'; 'tailwindcss' is a stackIndicator for 'tailwind-css'
+    const nextResult = fullAnchor.anchor({ id: 'next', name: 'Next' });
+    expect(nextResult.isAnchored).toBe(true);
+    expect(nextResult.suggestedSkill.id).toBe('nextjs');
+    expect(nextResult.suggestedSkill.trustTier).toBe('verified');
+
+    const twResult = fullAnchor.anchor({ id: 'tailwindcss', name: 'Tailwind' });
+    expect(twResult.isAnchored).toBe(true);
+    expect(twResult.suggestedSkill.id).toBe('tailwind-css');
+    expect(twResult.suggestedSkill.trustTier).toBe('verified');
+  });
+
+  it('normalizes shorthand LLM categories and protocol-less URLs on unanchored skills (BUG-14)', () => {
+    const result = anchor.anchor({
+      name: 'Effect TS',
+      category: 'state' as any,
+      officialUrl: 'effect.website',
+    });
+
+    expect(result.isAnchored).toBe(false);
+    expect(result.suggestedSkill.category).toBe('state-management');
+    expect(result.suggestedSkill.officialUrl).toBe('https://effect.website');
+    expect(() => validateSkill(result.suggestedSkill)).not.toThrow();
+  });
 });

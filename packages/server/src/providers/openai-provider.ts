@@ -1,10 +1,11 @@
-import type {
-  ProviderConfig,
-  ProviderType,
-  RawSuggestion,
-  SkillSuggestionParams,
-  SkillSuggestionResult,
-  SuggestedSkill,
+import {
+  normalizeSkillCategory,
+  type ProviderConfig,
+  type ProviderType,
+  type RawSuggestion,
+  type SkillSuggestionParams,
+  type SkillSuggestionResult,
+  type SuggestedSkill,
 } from '@skillforge/shared';
 import { SkillsRepository } from '../data/skills-repository.js';
 import { GroundTruthAnchor } from '../reliability/ground-truth-anchor.js';
@@ -23,14 +24,39 @@ export interface OpenAIProviderOptions {
 
 /**
  * Extracts and parses a list of RawSuggestions from an LLM response string.
- * Resilient against markdown code fences, JSON objects with a "skills" key, and raw arrays.
+ * Resilient against conversational preamble, markdown code fences, JSON objects with a "skills" key, and raw arrays.
  */
 export function parseRawSuggestions(content: string): RawSuggestion[] {
   let cleaned = content.trim();
+  if (!cleaned) {
+    return [];
+  }
 
-  // Strip markdown code fences if present
-  if (cleaned.startsWith('```')) {
+  // 1. Extract markdown code fence anywhere in the response (handles conversational preamble/epilogue)
+  const fenceMatch = cleaned.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenceMatch && fenceMatch[1]) {
+    cleaned = fenceMatch[1].trim();
+  } else if (cleaned.startsWith('```')) {
     cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+  } else if (!cleaned.startsWith('{') && !cleaned.startsWith('[')) {
+    // Extract first JSON object or array if conversational prose wraps raw JSON without fences
+    const firstBrace = cleaned.indexOf('{');
+    const firstBracket = cleaned.indexOf('[');
+    let startIdx = -1;
+    let endChar = '';
+    if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+      startIdx = firstBrace;
+      endChar = '}';
+    } else if (firstBracket !== -1) {
+      startIdx = firstBracket;
+      endChar = ']';
+    }
+    if (startIdx !== -1) {
+      const endIdx = cleaned.lastIndexOf(endChar);
+      if (endIdx > startIdx) {
+        cleaned = cleaned.slice(startIdx, endIdx + 1).trim();
+      }
+    }
   }
 
   if (!cleaned) {
@@ -40,13 +66,13 @@ export function parseRawSuggestions(content: string): RawSuggestion[] {
   const parsed = JSON.parse(cleaned);
 
   if (Array.isArray(parsed)) {
-    return parsed.filter(isValidRawSuggestion);
+    return parsed.filter(isValidRawSuggestion).map(normalizeRawItem);
   }
 
   if (parsed && typeof parsed === 'object') {
     const arr = parsed.skills || parsed.recommendations || parsed.tools || parsed.data;
     if (Array.isArray(arr)) {
-      return arr.filter(isValidRawSuggestion);
+      return arr.filter(isValidRawSuggestion).map(normalizeRawItem);
     }
   }
 
@@ -57,6 +83,13 @@ function isValidRawSuggestion(item: unknown): item is RawSuggestion {
   if (!item || typeof item !== 'object') return false;
   const candidate = item as Record<string, unknown>;
   return typeof candidate.name === 'string' && candidate.name.trim().length > 0;
+}
+
+function normalizeRawItem(item: RawSuggestion): RawSuggestion {
+  return {
+    ...item,
+    category: item.category ? normalizeSkillCategory(item.category) : undefined,
+  };
 }
 
 export class OpenAIProvider implements SuggestionProvider {
@@ -90,6 +123,10 @@ export class OpenAIProvider implements SuggestionProvider {
 
     const endpoint = config.endpoint || 'https://api.openai.com/v1/chat/completions';
     const model = config.model || 'gpt-4o-mini';
+    const effectiveTimeout =
+      typeof config.timeoutMs === 'number' && config.timeoutMs > 0
+        ? config.timeoutMs
+        : this.timeoutMs;
     const systemPrompt = `${SKILLFORGE_SYSTEM_PROMPT}\nWrap your answer in a JSON object: {"skills": [...]}`;
     const userPrompt = buildPrivacyPreservingUserPrompt(params.intent, params.context);
 
@@ -110,12 +147,12 @@ export class OpenAIProvider implements SuggestionProvider {
           temperature: config.temperature ?? 0.2,
           response_format: { type: 'json_object' },
         }),
-        signal: AbortSignal.timeout(this.timeoutMs),
+        signal: AbortSignal.timeout(effectiveTimeout),
       });
     } catch (err: unknown) {
       const errName = (err as Error)?.name;
       if (errName === 'TimeoutError' || errName === 'AbortError') {
-        throw new Error(`OpenAI request timed out after ${this.timeoutMs}ms.`);
+        throw new Error(`OpenAI request timed out after ${effectiveTimeout}ms.`);
       }
       throw err;
     }

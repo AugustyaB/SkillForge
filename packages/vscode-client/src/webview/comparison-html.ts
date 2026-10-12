@@ -192,10 +192,10 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'nonce-${nonce}'; font-src ${cspSource};">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${cspSource} https: data:; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}'; font-src ${cspSource};">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkillForge: Technology Comparison Matrix</title>
-  <style>
+  <style nonce="${nonce}">
     ${WEBVIEW_STYLES}
 
     /* Comparison Matrix Custom Layout */
@@ -514,7 +514,7 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
     ${conflictBanner}
     ${crossEcoBanner}
 
-    <div class="sf-comparison-grid" style="--col-count: ${colCount};">
+    <div class="sf-comparison-grid">
       <!-- Sticky Column Headers -->
       <div class="sf-matrix-header-corner">Tool Architecture</div>
       ${headerCards}
@@ -607,9 +607,11 @@ function deriveInstallString(pkg: string, ecosystem?: string): string {
       return `cargo add ${pkg}`;
     case 'go':
       return `go get ${pkg}`;
+    case 'java':
+      return `mvn dependency:get -Dartifact=${pkg}`;
     case 'javascript':
     case 'typescript':
     default:
-      return `npm install ${pkg}`;
+      return `pnpm add ${pkg}`;
   }
 }

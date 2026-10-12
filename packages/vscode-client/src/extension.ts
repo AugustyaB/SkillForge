@@ -316,8 +316,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       vscode.window.showErrorMessage('SkillForge LSP server is not running.');
       return undefined;
     }
+    const workspaceCtx = scopeManager.buildWorkspaceContext();
     const result = await client.sendRequest<CompareResult>(SKILLFORGE_COMPARE_METHOD, {
       skillIds,
+      installedPackages: workspaceCtx.alreadyInstalled,
     });
     return result.matrix;
   };

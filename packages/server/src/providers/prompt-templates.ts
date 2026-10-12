@@ -13,8 +13,8 @@ CRITICAL INSTRUCTIONS:
     "id": "canonical-package-name-lowercase",
     "name": "Display Name",
     "description": "Concise 1-2 sentence description of what this tool does.",
-    "ecosystem": "typescript | javascript | python | rust | go | multi",
-    "category": "state | auth | backend | testing | styling | ui | database | devtools | api | performance | mobile | other",
+    "ecosystem": "typescript | javascript | python | rust | go | java | multi",
+    "category": "frontend-framework | ui-library | state-management | backend-framework | database | orm | authentication | api-protocol | devops-container | cloud-hosting | testing | utility | ai-ml | security | mobile | other",
     "tags": ["keyword1", "keyword2"],
     "whyUseIt": "Clear explanation of why this library is recommended for the developer's use case."
   }

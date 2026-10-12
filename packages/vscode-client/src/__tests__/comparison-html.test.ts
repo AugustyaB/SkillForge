@@ -219,4 +219,19 @@ describe('generateComparisonHtml', () => {
     expect(html).toContain('sf-agent-skill-btn');
     expect(html).toContain("type: 'createAgentSkill'");
   });
+
+  it('uses pnpm add for JS/TS install commands and enforces strict nonce style-src CSP (BUG-22)', () => {
+    const html = generateComparisonHtml({
+      nonce: 'strict-nonce-999',
+      cspSource: 'vscode-webview:',
+      matrix: sampleMatrix,
+    });
+
+    expect(html).toContain('pnpm add react');
+    expect(html).toContain('pnpm add vue');
+    expect(html).not.toContain('npm install react');
+    expect(html).toContain("style-src 'nonce-strict-nonce-999'");
+    expect(html).not.toContain("style-src 'unsafe-inline'");
+    expect(html).toContain('<style nonce="strict-nonce-999">');
+  });
 });

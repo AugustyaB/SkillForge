@@ -237,11 +237,15 @@ export class SkillsRepository {
       const lowerDesc = skill.description.toLowerCase();
       const lowerWhy = skill.whyUseIt.toLowerCase();
 
-      // Exact name or ID match
+      // Exact name or ID match (use delimiter boundaries so short names like "Ent" or "Gin" don't match inside "authentication" or "login")
+      const nameMentionRegex = new RegExp(
+        `(?:^|[\\s,./_-])${escapeRegExp(lowerName)}(?:$|[\\s,./_-])`,
+        'i'
+      );
       if (trimmed === lowerName || trimmed === lowerId) {
         score += 100;
         matchReasons.push(`Exact name match: "${skill.name}"`);
-      } else if (trimmed.includes(lowerName)) {
+      } else if (nameMentionRegex.test(trimmed)) {
         score += 60;
         matchReasons.push(`Query mentions name: "${skill.name}"`);
       }

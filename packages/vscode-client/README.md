@@ -62,7 +62,7 @@ Customize SkillForge behavior in VS Code Settings (`Ctrl+,` $\to$ search `skillf
 
 | Setting | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `skillforge.provider` | `string` | `"local"` | Active suggestion provider: `"local"` (100% offline), `"gemini"`, `"openai"`, or `"hybrid"`. |
+| `skillforge.provider` | `string` | `"local"` | Active suggestion provider: `"local"` (100% offline, zero network traffic), `"gemini"`, or `"openai"` (BYOK AI enrichment). |
 | `skillforge.maxResults` | `number` | `5` | Maximum number of ranked recommendations to return. |
 | `skillforge.defaultDifficulty` | `string` | `"all"` | Target difficulty tier: `"all"`, `"beginner"`, `"intermediate"`, `"advanced"`. |
 | `skillforge.timeoutMs` | `number` | `4000` | Timeout in milliseconds for optional BYOK AI requests before falling back to local catalog. |

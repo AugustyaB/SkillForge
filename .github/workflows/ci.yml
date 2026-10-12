@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.6.0
+          run_install: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck (tsc -b)
+        run: pnpm typecheck
+
+      - name: Unit Tests (vitest)
+        run: pnpm test
+
+      - name: Monorepo Build
+        run: pnpm build
+
+  package-audit:
+    name: VSIX Package Audit
+    runs-on: ubuntu-latest
+    needs: [verify]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.6.0
+          run_install: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build & Package VSIX
+        run: pnpm package
+
+      - name: Audit VSIX Size and Contents
+        shell: bash
+        run: |
+          VSIX_FILE=$(ls packages/vscode-client/skillforge-*.vsix | head -n 1)
+          if [ -z "$VSIX_FILE" ]; then
+            echo "Error: No .vsix file generated!"
+            exit 1
+          fi
+
+          FILE_SIZE=$(stat -c%s "$VSIX_FILE")
+          echo "VSIX file: $VSIX_FILE ($FILE_SIZE bytes)"
+
+          # Fail if VSIX exceeds 1.5MB (expected ~275KB)
+          MAX_BYTES=1572864
+          if [ "$FILE_SIZE" -gt "$MAX_BYTES" ]; then
+            echo "Error: VSIX file size ($FILE_SIZE bytes) exceeds limit of $MAX_BYTES bytes!"
+            exit 1
+          fi
+
+          # Inspect contents to ensure no raw source typescript leaked into distribution
+          echo "Verifying extension bundle structure..."
+          npx @vscode/vsce ls --packagePath "$VSIX_FILE" > package_contents.txt
+          cat package_contents.txt
+
+          if grep -E "^extension/src/" package_contents.txt; then
+            echo "Error: Raw source files found in .vsix archive!"
+            exit 1
+          fi
+
+          echo "VSIX package audit passed successfully!"

@@ -1,4 +1,11 @@
-import type { Skill, SuggestedSkill, RawSuggestion, TrustTier } from '@skillforge/shared';
+import {
+  normalizeOfficialUrl,
+  normalizeSkillCategory,
+  type Skill,
+  type SuggestedSkill,
+  type RawSuggestion,
+  type TrustTier,
+} from '@skillforge/shared';
 import { SkillsRepository } from '../data/skills-repository.js';
 
 export interface AnchorResult {
@@ -43,7 +50,17 @@ export class GroundTruthAnchor {
       return this.buildAnchored(nameMatch, raw, defaults);
     }
 
-    // Strategy 3: Fuzzy search — search by name and take top exact match
+    // Strategy 3: Stack indicator / package name lookup (e.g. "next" -> "nextjs", "tailwindcss" -> "tailwind-css")
+    const indicatorMatch =
+      (raw.id ? this.repository.getSkillByIndicator(raw.id) : undefined) ||
+      this.repository.getSkillByIndicator(raw.name) ||
+      this.repository.getSkillByIndicator(normalizedId);
+
+    if (indicatorMatch) {
+      return this.buildAnchored(indicatorMatch, raw, defaults);
+    }
+
+    // Strategy 4: Fuzzy search — search by name and take top exact match
     const searchResults = this.repository.search(raw.name, { maxResults: 3 });
     const topMatch = searchResults.find(
       (r) =>
@@ -105,21 +122,24 @@ export class GroundTruthAnchor {
     raw: RawSuggestion,
     defaults?: Partial<SuggestedSkill>
   ): AnchorResult {
+    const safeUrl = normalizeOfficialUrl(raw.officialUrl, raw.name);
+    const safeCategory = normalizeSkillCategory(raw.category);
+
     return {
       suggestedSkill: {
         id: raw.id || this.normalizeToId(raw.name),
         name: raw.name,
-        category: raw.category || 'other',
+        category: safeCategory,
         difficulty: raw.difficulty || 'intermediate',
         description: raw.description || `${raw.name} — external suggestion.`,
         whyUseIt: raw.whyUseIt || raw.reasoning || `Suggested tool: ${raw.name}.`,
         tags: raw.tags || [this.normalizeToId(raw.name)],
         ecosystem: raw.ecosystem || 'multi',
-        officialUrl: raw.officialUrl || `https://www.google.com/search?q=${encodeURIComponent(raw.name)}`,
+        officialUrl: safeUrl,
         learnResources: [
           {
             label: 'Documentation',
-            url: raw.officialUrl || `https://www.google.com/search?q=${encodeURIComponent(raw.name)}`,
+            url: safeUrl,
             type: 'docs',
           },
         ],

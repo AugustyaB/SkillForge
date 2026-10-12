@@ -21,6 +21,96 @@ export const SkillCategorySchema = z.enum([
   'other',
 ]);
 
+const CATEGORY_SHORTHAND_MAP: Record<string, z.infer<typeof SkillCategorySchema>> = {
+  state: 'state-management',
+  store: 'state-management',
+  auth: 'authentication',
+  oauth: 'authentication',
+  jwt: 'authentication',
+  backend: 'backend-framework',
+  server: 'backend-framework',
+  frontend: 'frontend-framework',
+  web: 'frontend-framework',
+  ui: 'ui-library',
+  styling: 'ui-library',
+  css: 'ui-library',
+  components: 'ui-library',
+  db: 'database',
+  sql: 'database',
+  nosql: 'database',
+  cache: 'database',
+  api: 'api-protocol',
+  graphql: 'api-protocol',
+  rpc: 'api-protocol',
+  rest: 'api-protocol',
+  websocket: 'api-protocol',
+  devtools: 'utility',
+  performance: 'utility',
+  cli: 'utility',
+  build: 'utility',
+  bundler: 'utility',
+  logging: 'utility',
+  validation: 'utility',
+  tooling: 'utility',
+  devops: 'devops-container',
+  docker: 'devops-container',
+  container: 'devops-container',
+  cloud: 'cloud-hosting',
+  hosting: 'cloud-hosting',
+  serverless: 'cloud-hosting',
+  ai: 'ai-ml',
+  ml: 'ai-ml',
+  llm: 'ai-ml',
+  test: 'testing',
+  e2e: 'testing',
+};
+
+/**
+ * Normalizes arbitrary or LLM-shorthand category strings into a valid SkillCategory.
+ */
+export function normalizeSkillCategory(
+  rawCategory?: unknown
+): z.infer<typeof SkillCategorySchema> {
+  if (typeof rawCategory !== 'string' || !rawCategory.trim()) {
+    return 'other';
+  }
+  const cleaned = rawCategory.trim().toLowerCase();
+  const parsed = SkillCategorySchema.safeParse(cleaned);
+  if (parsed.success) {
+    return parsed.data;
+  }
+  return CATEGORY_SHORTHAND_MAP[cleaned] ?? 'other';
+}
+
+/**
+ * Normalizes an external or potentially protocol-less URL into a valid http(s) URL.
+ */
+export function normalizeOfficialUrl(
+  rawUrl?: unknown,
+  fallbackName: string = 'library'
+): string {
+  if (typeof rawUrl === 'string' && rawUrl.trim().length > 0) {
+    const trimmed = rawUrl.trim();
+    try {
+      const parsed = new URL(trimmed);
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        return trimmed;
+      }
+    } catch {
+      if (/^[a-z0-9.-]+\.[a-z]{2,}(\/.*)?$/i.test(trimmed)) {
+        try {
+          const withHttps = `https://${trimmed}`;
+          new URL(withHttps);
+          return withHttps;
+        } catch {
+          // Fall through to search fallback
+        }
+      }
+    }
+  }
+  return `https://www.google.com/search?q=${encodeURIComponent(fallbackName.trim() || 'library')}`;
+}
+
 export const TrustTierSchema = z.enum(['verified', 'validated', 'suggested', 'deprecated']);
 
 export const LearnLinkSchema = z.object({

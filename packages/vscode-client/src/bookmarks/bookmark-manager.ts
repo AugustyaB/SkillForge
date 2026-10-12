@@ -1,6 +1,10 @@
 import * as vscode from 'vscode';
 import type { Skill, SuggestedSkill, SkillBookmark } from '@skillforge/shared';
-import { validateSkillBookmark } from '@skillforge/shared';
+import {
+  normalizeOfficialUrl,
+  normalizeSkillCategory,
+  validateSkillBookmark,
+} from '@skillforge/shared';
 
 export class BookmarkManager {
   public static readonly STORAGE_KEY = 'skillforge.bookmarks.v1';
@@ -59,15 +63,16 @@ export class BookmarkManager {
       (b) => b.id.toLowerCase() !== normalizedId
     );
 
+    const cleanName = skill.name.trim() || skill.id.trim();
     const bookmark: SkillBookmark = {
       id: skill.id.trim(),
-      name: skill.name.trim(),
-      ecosystem: skill.ecosystem,
-      category: skill.category,
-      difficulty: skill.difficulty,
+      name: cleanName,
+      ecosystem: skill.ecosystem?.trim() || 'multi',
+      category: normalizeSkillCategory(skill.category),
+      difficulty: skill.difficulty || 'intermediate',
       description: skill.description,
-      whyUseIt: skill.whyUseIt,
-      officialUrl: skill.officialUrl,
+      whyUseIt: skill.whyUseIt?.trim() || `Saved tool bookmark for ${cleanName}`,
+      officialUrl: normalizeOfficialUrl(skill.officialUrl, cleanName),
       tags: Array.isArray(skill.tags) ? [...skill.tags] : [],
       stackIndicators: Array.isArray(skill.stackIndicators)
         ? [...skill.stackIndicators]
