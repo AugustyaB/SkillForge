@@ -42,6 +42,14 @@ async function buildAll() {
     logLevel: 'info',
   });
 
+  // 3. Copy skills.json dataset into dist/ for filesystem fallback
+  const srcSkillsJson = path.resolve(__dirname, '../server/src/data/skills.json');
+  const distSkillsJson = path.resolve(__dirname, 'dist/skills.json');
+  if (fs.existsSync(srcSkillsJson)) {
+    fs.copyFileSync(srcSkillsJson, distSkillsJson);
+    console.log('[esbuild] Copied skills.json dataset to dist/skills.json');
+  }
+
   const duration = Date.now() - startTime;
 
   // Report bundle sizes

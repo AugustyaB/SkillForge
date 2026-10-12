@@ -6,6 +6,7 @@ import {
   type SkillCategory,
   type Difficulty,
 } from '@skillforge/shared';
+import { DEFAULT_SKILLS_DATA } from './skills-data.js';
 
 export interface SearchOptions {
   category?: SkillCategory;
@@ -83,12 +84,19 @@ export class SkillsRepository {
   }
 
   private loadDefaultDataset(): void {
+    if (Array.isArray(DEFAULT_SKILLS_DATA) && DEFAULT_SKILLS_DATA.length > 0) {
+      this.loadSkills(DEFAULT_SKILLS_DATA);
+      return;
+    }
+
     const currentDir = typeof __dirname !== 'undefined' ? __dirname : process.cwd();
     let jsonPath = path.join(currentDir, 'skills.json');
 
     // Fallback search locations
     if (!fs.existsSync(jsonPath)) {
       const candidates = [
+        path.join(currentDir, 'skills.json'),
+        path.join(currentDir, 'data', 'skills.json'),
         path.join(currentDir, '..', 'data', 'skills.json'),
         path.join(currentDir, '..', 'src', 'data', 'skills.json'),
         path.join(process.cwd(), 'packages', 'server', 'src', 'data', 'skills.json'),
@@ -102,14 +110,12 @@ export class SkillsRepository {
       }
     }
 
-    if (!fs.existsSync(jsonPath)) {
-      throw new Error(`Failed to locate skills.json dataset. Looked at: ${jsonPath}`);
+    if (fs.existsSync(jsonPath)) {
+      const raw = fs.readFileSync(jsonPath, 'utf-8');
+      const parsed = JSON.parse(raw);
+      const validated = validateSkillsArray(parsed);
+      this.loadSkills(validated);
     }
-
-    const raw = fs.readFileSync(jsonPath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    const validated = validateSkillsArray(parsed);
-    this.loadSkills(validated);
   }
 
   public loadSkills(skillsList: Skill[]): void {

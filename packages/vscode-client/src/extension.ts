@@ -131,9 +131,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     },
   });
 
-  // Start client connection
-  await client.start();
-  outputChannel.appendLine('[SkillForge Client] Connected to SkillForge LSP server.');
+  // Start client connection safely
+  try {
+    await client.start();
+    outputChannel.appendLine('[SkillForge Client] Connected to SkillForge LSP server.');
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    outputChannel.appendLine(`[SkillForge Client] Error starting LSP server: ${msg}`);
+  }
 
   // Command: Test Server Connection
   const testConnCmd = vscode.commands.registerCommand('skillforge.testConnection', async () => {
