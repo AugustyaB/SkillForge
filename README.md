@@ -5,6 +5,17 @@
 
 ---
 
+## 📦 Ecosystem Distributions
+
+| Platform / Ecosystem | Integration Type | Installation / Link |
+| :--- | :--- | :--- |
+| **VS Code (Official)** | Native Extension | [VS Marketplace](https://marketplace.visualstudio.com/items?itemName=skillforge.skillforge) |
+| **VSCodium / Open VSX** | Open Source Extension | [Open VSX Registry](https://open-vsx.org/extension/SkillForge/skillforge) |
+| **Claude / Cursor / Windsurf** | Model Context Protocol | `npx -y skillforge-mcp-server` |
+| **Neovim / Vim** | Native Lua Plugin & MCP | [Neovim Setup Guide](./docs/integrations/NEOVIM.md) / `lazy.nvim` |
+
+---
+
 ## 🏗️ Architecture & Monorepo Layout
 
 SkillForge is structured as a TypeScript monorepo using `pnpm` workspaces:
@@ -14,7 +25,11 @@ skillforge/
 ├── packages/
 │   ├── shared/         # Common domain types, Zod schemas & LSP protocol contracts
 │   ├── server/         # Headless LSP suggestion engine (ranking, caching, providers)
-│   └── vscode-client/  # VS Code extension client, commands & Webview UI
+│   ├── vscode-client/  # VS Code extension client, commands & Webview UI
+│   └── mcp/            # Model Context Protocol (MCP) server & CLI runner
+├── lua/                # Native Neovim plugin core module
+├── plugin/             # Neovim user command registration (:SkillForgeSuggest, etc.)
+├── docs/               # Platform integration guides (Neovim, etc.)
 ├── .gsd/               # GSD methodology state, specs, and roadmaps
 ├── CHANGELOG.md        # Phase history and milestone tracking
 ├── DECISIONS.md        # Architecture Decision Records (ADRs)

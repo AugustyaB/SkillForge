@@ -1,4 +1,4 @@
-# @skillforge/mcp
+# skillforge-mcp-server
 
 Model Context Protocol (MCP) server for SkillForge: map developer intents to vetted libraries, detect architectural conflicts, and generate AI agent skill directives with Karpathy coding disciplines.
 
@@ -18,7 +18,7 @@ Add SkillForge to your `claude_desktop_config.json`:
   "mcpServers": {
     "skillforge": {
       "command": "npx",
-      "args": ["-y", "@skillforge/mcp"]
+      "args": ["-y", "skillforge-mcp-server"]
     }
   }
 }
@@ -33,7 +33,7 @@ Restart Claude Desktop, and you will see the SkillForge tools available!
 Run Claude Code with the SkillForge MCP server enabled:
 
 ```bash
-claude mcp add skillforge -- npx -y @skillforge/mcp
+claude mcp add skillforge -- npx -y skillforge-mcp-server
 ```
 
 Or configure in your project root `.claude/config.json`.
@@ -47,7 +47,7 @@ Or configure in your project root `.claude/config.json`.
 3. Fill in:
    - **Name**: `skillforge`
    - **Type**: `command`
-   - **Command**: `npx -y @skillforge/mcp`
+   - **Command**: `npx -y skillforge-mcp-server`
 
 ---
 
@@ -92,6 +92,6 @@ Browse or filter the complete 363-skill curated catalog by category or ecosystem
 ---
 
 ## 📜 License
-
-- **Code**: [MIT License](../../LICENSE)
-- **Catalog Dataset**: [Creative Commons Attribution 4.0 International (CC BY 4.0)](../../LICENSE)
+ 
+- **Code**: [MIT License](./LICENSE)
+- **Catalog Dataset**: [Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE)
