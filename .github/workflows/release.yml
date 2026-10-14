@@ -48,11 +48,11 @@ jobs:
       - name: Verification Gate - Typecheck
         run: pnpm typecheck
 
-      - name: Verification Gate - Test Suite
-        run: pnpm test
-
       - name: Verification Gate - Production Build
         run: pnpm build
+
+      - name: Verification Gate - Test Suite
+        run: pnpm test
 
       - name: Package VSIX Archive
         run: pnpm package
@@ -88,7 +88,7 @@ jobs:
         run: |
           PKG_VERSION=$(node -p "require('./packages/vscode-client/package.json').version")
           echo "Publishing to Open VSX Registry..."
-          npx ovsx publish "packages/vscode-client/skillforge-${PKG_VERSION}.vsix" -p "$OVSX_PAT"
+          npx ovsx publish "packages/vscode-client/skillforge-${PKG_VERSION}.vsix" -p "$OVSX_PAT" --skip-duplicate
           echo "Open VSX publication complete!"
 
       - name: Create GitHub Release

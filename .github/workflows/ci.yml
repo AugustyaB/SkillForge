@@ -40,11 +40,11 @@ jobs:
       - name: Typecheck (tsc -b)
         run: pnpm typecheck
 
-      - name: Unit Tests (vitest)
-        run: pnpm test
-
       - name: Monorepo Build
         run: pnpm build
+
+      - name: Unit Tests (vitest)
+        run: pnpm test
 
       - name: Verify MCP Standalone Executable
         shell: bash

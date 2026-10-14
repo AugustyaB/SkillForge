@@ -8,5 +8,3 @@ out/
 coverage/
 *.log
 .vscode-test/
-packages/vscode-client/CHANGELOG.md
-packages/vscode-client/NOTICE

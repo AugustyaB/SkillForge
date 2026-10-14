@@ -374,7 +374,7 @@
     }
   },
   "scripts": {
-    "copy-docs": "node -e \"const fs = require('fs'); fs.copyFileSync('../../CHANGELOG.md', 'CHANGELOG.md');\"",
+    "copy-docs": "node -e \"const fs = require('fs'); fs.copyFileSync('../../CHANGELOG.md', 'CHANGELOG.md'); fs.copyFileSync('../../NOTICE', 'NOTICE');\"",
     "compile": "tsc -b",
     "bundle": "node esbuild.mjs",
     "bundle:prod": "node esbuild.mjs --production",
