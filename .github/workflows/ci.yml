@@ -113,12 +113,6 @@ jobs:
 
           # Inspect contents to ensure no raw source typescript leaked into distribution
           echo "Verifying extension bundle structure..."
-          npx @vscode/vsce ls --packagePath "$VSIX_FILE" > package_contents.txt
-          cat package_contents.txt
-
-          if grep -E "^extension/src/" package_contents.txt; then
-            echo "Error: Raw source files found in .vsix archive!"
-            exit 1
-          fi
+          python -c "import zipfile; z = zipfile.ZipFile('$VSIX_FILE'); names = z.namelist(); [print(' -', n) for n in names]; leaked = [n for n in names if n.startswith('extension/src/')]; assert len(leaked) == 0, f'Raw source files found in .vsix archive: {leaked}'"
 
           echo "VSIX package audit passed successfully!"
