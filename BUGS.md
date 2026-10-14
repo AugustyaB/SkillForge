@@ -9,6 +9,10 @@
 
 ## 📋 Quick Action Checklist
 
+### 📌 Pre-Publish Checklist for Next Release (v0.1.2)
+- [ ] **PRE-01**: Mirror `resources/screenshots/` to repo root & set `--baseImagesUrl` in `package` script (fixes Open VSX relative image 404).
+- [ ] **PRE-02**: Remove raw LaTeX math syntax (`$<2\text{ms}$` -> `< 2ms`, `$\to$` -> `→`) in `packages/vscode-client/README.md`.
+
 ### Phase 1–5.1 Audit (Resolved)
 - [x] **BUG-01** (Critical): Fix RegExp injection crash in `SkillsRepository.search` & `IntentParser`
 - [x] **BUG-02** (High): Fix Skill ID vs Package Name mismatch in compatibility boost & conflict detection
@@ -557,6 +561,37 @@
 
 ---
 
+## 📌 Pre-Publish Action Items for Next Release (v0.1.2)
+
+> **MANDATORY BEFORE PUBLISHING NEXT VERSION**: The following two items were surfaced during the post-v0.1.1 marketplace audit and MUST be applied and verified before publishing the next version (`v0.1.2` or later):
+
+### PRE-01: Fix Open VSX Relative Screenshot Resolution (Omitted Monorepo Subfolder)
+- **Severity**: High (Broken image embeds on marketplace listing)
+- **Files Affected**:
+  - `packages/vscode-client/package.json` (package script)
+  - `resources/screenshots/` (Repository Root)
+- **Root Cause**:
+  `@vscode/vsce package` executed from `packages/vscode-client` prepends `https://github.com/AugustyaB/SkillForge/raw/HEAD/` to relative image paths (`resources/screenshots/*.png`), dropping the monorepo subfolder `packages/vscode-client/`. Because GitHub serves repository files based on their exact tree structure, this generated URL points to the root of the repo where `resources/` does not exist, causing Open VSX to receive HTTP 404 from GitHub's raw CDN and display broken image placeholders.
+- **Required Remediation**:
+  1. Mirror `packages/vscode-client/resources/screenshots/` into the repository root at `resources/screenshots/` so requests to `https://github.com/AugustyaB/SkillForge/raw/HEAD/resources/screenshots/...` immediately resolve to HTTP 200 OK.
+  2. In `packages/vscode-client/package.json`, update `"package"` script to pass:
+     `--baseImagesUrl https://raw.githubusercontent.com/AugustyaB/SkillForge/main/packages/vscode-client`
+- **Verification Criteria**:
+  Run: `python -c "import urllib.request; assert urllib.request.urlopen('https://github.com/AugustyaB/SkillForge/raw/HEAD/resources/screenshots/sidebar-overview.png').status == 200"`
+
+### PRE-02: Remove Unrendered LaTeX Math Delimiters in README
+- **Severity**: Low (Visual polish / raw Markdown code leak)
+- **File Affected**: [`packages/vscode-client/README.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/README.md)
+- **Root Cause**:
+  Open VSX's Markdown rendering engine does not render KaTeX or LaTeX delimiters, causing math expressions to be printed literally as raw syntax.
+- **Locations**:
+  - Line 61: `$<2\text{ms}$` $\to$ Replace with `< 2ms`
+  - Line 150: `$\to$` $\to$ Replace with standard Unicode arrow `→`
+- **Verification Criteria**:
+  Assert 0 unescaped `$` math delimiters exist in `packages/vscode-client/README.md`.
+
+---
+
 ## 🛠️ Instructions for Next Chat / Developer
 
-All 29 identified bugs (`BUG-01` through `BUG-29`) have been resolved and verified with regression tests. Follow the **Mandatory Gating Protocol** in [`PROJECT_RULES.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/PROJECT_RULES.md) for any future enhancements.
+All 29 identified bugs (`BUG-01` through `BUG-29`) have been resolved and verified with regression tests. The two pre-publish items above (`PRE-01` and `PRE-02`) are queued for the next release. Follow the **Mandatory Gating Protocol** in [`PROJECT_RULES.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/PROJECT_RULES.md) for any future enhancements.

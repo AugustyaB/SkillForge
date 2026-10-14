@@ -20,6 +20,11 @@
   - `CI` workflow run `38536628829`: **100% Success** (`Verify (windows-latest)`, `Verify (ubuntu-latest)`, `VSIX Package Audit`).
   - `Release & Marketplace Deployment` run `38536632459`: **100% Success**; created official GitHub Release `v0.1.1` with `skillforge-0.1.1.vsix` installer.
 
+## 📌 Pre-Release Queue for Next Version (v0.1.2)
+> **NOTE BEFORE PUBLISHING NEXT RELEASE**: Apply the following two queued fixes before packaging and releasing `v0.1.2`:
+1. **Screenshot 404 Resolution on Open VSX**: Mirror `resources/screenshots/` to repository root and pass `--baseImagesUrl https://raw.githubusercontent.com/AugustyaB/SkillForge/main/packages/vscode-client` in `packages/vscode-client/package.json` package script so relative image URLs resolve properly on Open VSX.
+2. **Remove Raw LaTeX from README**: Replace `$<2\text{ms}$` with `< 2ms` and `$\to$` with Unicode `→` in `packages/vscode-client/README.md`.
+
 ## Completed Work in Phase 9
 1. **Shared Agent Skill Contracts (`packages/shared`)**:
    - Added `AgentSkillFormatSchema`, `GenerateAgentSkillRequestSchema`, and `GeneratedAgentSkillSchema`.

@@ -85,6 +85,11 @@ pnpm package
 ```
 This generates `packages/vscode-client/skillforge-<version>.vsix`.
 
+> [!IMPORTANT]
+> **Pre-Flight Marketplace Quality Checks**:
+> - Ensure `resources/screenshots/` exists at the workspace root and that `--baseImagesUrl` is used during packaging so relative screenshot URLs resolve to 200 OK on Open VSX.
+> - Verify that `packages/vscode-client/README.md` contains 0 raw LaTeX math delimiters (`$<2\text{ms}$` or `$\to$`).
+
 ### 2. Publish to Visual Studio Marketplace
 ```bash
 # Using root shortcut:
