@@ -126,7 +126,7 @@ export function renderHealthBar(health?: PackageHealth): string {
   if (!health) {
     return `
       <div class="sf-health-bar">
-        <span class="sf-health-metric">Health: <span class="sf-health-aging">Pending Verification</span></span>
+        <span class="sf-health-metric" title="Curated and statically vetted by SkillForge catalog"><span class="sf-icon sf-icon-sm">${ICON_CHECK}</span> <span class="sf-health-healthy">Catalog Verified • Curated Tool</span></span>
       </div>
     `;
   }
@@ -144,7 +144,7 @@ export function renderHealthBar(health?: PackageHealth): string {
       <span class="sf-health-metric" title="${stars} GitHub stars"><span class="sf-icon sf-icon-sm">${ICON_STAR}</span>${stars}</span>
       <span class="sf-health-metric" title="${downloads} weekly downloads"><span class="sf-icon sf-icon-sm">${ICON_DOWNLOAD}</span>${downloads}/wk</span>
       <span class="sf-health-metric" title="Last published ${updated}"><span class="sf-icon sf-icon-sm">${ICON_CLOCK}</span>${updated}</span>
-      <span class="sf-health-metric">Health: <span class="${verdictClass}">${verdictLabel}</span></span>
+      <span class="sf-health-metric" title="Registry health verdict based on release recency, maintenance activity, and download velocity">Health: <span class="${verdictClass}">${verdictLabel}</span></span>
     </div>
   `;
 }

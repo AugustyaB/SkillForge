@@ -1,23 +1,19 @@
 import { createConnection, ProposedFeatures } from 'vscode-languageserver/node.js';
 import { SkillForgeServer } from './server.js';
 
-// Instantiate server with stdio JSON-RPC transport
-const connection = createConnection(ProposedFeatures.all);
-const server = new SkillForgeServer(connection);
+export function startLspServer(): void {
+  const connection = createConnection(ProposedFeatures.all);
+  const server = new SkillForgeServer(connection);
+  server.listen();
+}
 
-server.listen();
+// Auto-run when executed directly via node or CLI (not in vitest tests)
+if (process.env.NODE_ENV !== 'test' && !process.env.VITEST) {
+  try {
+    startLspServer();
+  } catch {
+    // Ignore when not attached to an LSP stdio stream
+  }
+}
 
-export { SkillForgeServer };
-export { SkillsRepository } from './data/skills-repository.js';
-export { SuggestionEngine } from './engine/suggestion-engine.js';
-export { ComparisonEngine } from './engine/comparison-engine.js';
-export { AgentSkillGenerator } from './engine/agent-skill-generator.js';
-export { IntentParser } from './engine/intent-parser.js';
-export { QueryCache } from './engine/query-cache.js';
-export {
-  GroundTruthAnchor,
-  ConflictDetector,
-  HealthVerifier,
-  TrustTierClassifier,
-  FallbackCascade,
-} from './reliability/index.js';
+export * from './api.js';

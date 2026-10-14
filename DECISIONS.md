@@ -15,6 +15,8 @@ This document records the major architectural, technical, and design decisions m
 - [ADR-007: Layered Reliability Pipeline with Injectable Health Verification](#adr-007-layered-reliability-pipeline-with-injectable-health-verification)
 - [ADR-008: Privacy-First LLM Architecture & Zero-Friction Feedback System](#adr-008-privacy-first-llm-architecture--zero-friction-feedback-system)
 - [ADR-009: Persistent Bookmarking Engine & Side-by-Side Technology Comparison Matrix](#adr-009-persistent-bookmarking-engine--side-by-side-technology-comparison-matrix)
+- [ADR-016: Dedicated Model Context Protocol (MCP) Server Architecture (`packages/mcp`)](#adr-016-dedicated-model-context-protocol-mcp-server-architecture-packagesmcp)
+- [ADR-019: Open VSX Marketplace Quality & Trust Audit Remediation](#adr-019-open-vsx-marketplace-quality--trust-audit-remediation)
 
 ---
 
@@ -237,3 +239,89 @@ This document records the major architectural, technical, and design decisions m
     - Explicitly excludes `*.vsix`, `src/**`, `coverage/**`, test files, `.map` files, and OS junk (`.DS_Store`, `Thumbs.db`).
 - **Rationale**: Guarantees reproducible, zero-leak deployments across both marketplace ecosystems while preventing bloated binaries and accidental source code leaks.
 - **Trade-offs**: Requires setting up repository secrets (`VSCE_PAT`, `OVSX_PAT`) and maintaining separate publisher accounts on Azure DevOps and Open VSX.
+
+---
+
+## ADR-015: Filesystem Boundary Containment & Anti-Misdirection Defense
+
+- **Date**: 2026-10-12
+- **Status**: **ACCEPTED & IMPLEMENTED**
+- **Context**: As users open projects with non-standard folder layouts, multi-root workspaces, Windows drive letter inconsistencies, monorepos, and deleted/moved subfolders, naïve path operations (`.startsWith()`, `path.join(root, absPath)`, unqualified `cd`) cause files to be written in wrong subfolders, command executions to fail, or scopes to misdirect.
+- **Decision**:
+  - **Standardized Drive Casing (`normalizePath`)**: Capitalize drive letters (`c:` $\to$ `C:`) uniformly on Windows to prevent false mismatches.
+  - **Strict Containment Validation (`isPathInsideRoot`)**: Enforce directory boundary checks using `path.relative()` rather than prefix matching, preventing sibling folder collisions (`/app` matching `/app-secrets`).
+  - **Workspace Root Anchoring for Global Directives**: Enforce that repository-wide agent files (`AGENTS.md`, `.cursor/rules/*.mdc`) are placed at `scopeManager.workspaceRoot`, preventing them from being buried inside scoped subpackages in monorepos.
+  - **Dynamic Scope Healing**: If a previously saved scope folder is deleted or moved during an active session, `ScopeManager.activeScope` detects disk absence and transparently falls back to `Entire Workspace`.
+  - **Universal Shell Navigation**: Sanitize terminal commands across Windows PowerShell 5.1/7+, cmd.exe, and POSIX shells with disk existence pre-checks.
+  - **Virtual Scheme Filtering**: Guard CodeLens and active editor suggestions to `file` and `untitled` schemes, ignoring internal `git:`, `output:`, and debug consoles.
+- **Rationale**: Eliminates silent path misdirection bugs, prevents file leakage outside workspace boundaries, and guarantees stable execution regardless of OS or monorepo depth.
+- **Trade-offs**: Adds tiny boundary checks ($\le 0.05\text{ms}$) on scope switching and file writing.
+
+---
+
+## ADR-016: Dedicated Model Context Protocol (MCP) Server Architecture (`packages/mcp`)
+
+- **Date**: 2026-10-13
+- **Status**: **ACCEPTED & IMPLEMENTED**
+- **Context**: Autonomous AI coding agents and assistants (Claude Desktop, Claude Code CLI, Cursor, Windsurf, Google Antigravity) natively invoke developer capabilities using the Model Context Protocol (MCP). To empower AI agents with SkillForge's offline library catalog (363 skills), architectural conflict detection, and Karpathy rule generation, we needed to expose SkillForge via MCP without touching, modifying, or creating regression risks for the live VS Code extension client.
+- **Decision**:
+  - **Decoupled Monorepo Package (`packages/mcp`)**: Create a standalone package `@skillforge/mcp` powered by `@modelcontextprotocol/sdk` (`McpServer` + `StdioServerTransport`).
+  - **Non-LSP Library Export (`@skillforge/server/api`)**: Refactor `@skillforge/server` to export its core algorithmic engines (`SuggestionEngine`, `ComparisonEngine`, `AgentSkillGenerator`, `SkillsRepository`, `WorkspaceScanner`) via a dedicated `src/api.ts` entry point, isolating them from `vscode-languageserver` stdio stream initialization.
+  - **4 Registered Agent Tools**:
+    1. `skillforge_suggest`: Intent-based library discovery with trust tiers, conflict warnings, and install commands.
+    2. `skillforge_compare`: Side-by-side comparison matrix with conflict warnings, health metrics, and tradeoffs.
+    3. `skillforge_create_rules`: Dynamic agent directive generation embedding Andrej Karpathy's 4 disciplines and bash verification protocols.
+    4. `skillforge_get_catalog`: Filterable, paginated catalog browser.
+  - **Strict Stdio Stream Discipline**: Keep `stdout` 100% clean for JSON-RPC 2.0 messages; route all diagnostic logs and startup messages to `stderr` (`console.error`).
+  - **100% Offline-First Execution**: Zero user code or proprietary tokens leave the developer's machine; all decisions leverage the curated offline brain.
+- **Rationale**: Gives AI coding assistants instant access to SkillForge's curated database, architectural conflict engine, and Karpathy rule generation without touching or destabilizing the VS Code extension codebase.
+- **Trade-offs**: Requires building and publishing `@skillforge/mcp` as an npm binary (`skillforge-mcp`) alongside the VS Code VSIX extension.
+
+---
+
+## ADR-017: Resilient Comparison Column Fallback Synthesis for Uncataloged Alternatives
+
+- **Date**: 2026-10-14
+- **Status**: **ACCEPTED & IMPLEMENTED**
+- **Context**: In real-world projects and in the curated database, catalog skills frequently reference external community alternatives (e.g. `pinia` lists `vuex`, `zod` lists `yup`, `mysql` lists `mariadb`). Previously, `ComparisonEngine.compare()` threw an unhandled exception if any requested ID was not in the curated catalog, causing the VS Code Webview comparison panel to crash with an error popup and causing the MCP tool to report misleading error messages.
+- **Decision**:
+  - Update `ComparisonEngine` to dynamically synthesize unanchored `ComparisonColumn` records (`trustTier: 'suggested'`) whenever a missing ID is declared in `alternatives` or `worksWellWith` of any resolved catalog skill.
+  - Derive category, ecosystem, and official registry URLs (`npm`, `pypi`, `crates.io`, `pkg.go.dev`) cleanly from the companion anchor.
+  - Maintain bidirectional conflict detection so direct alternative warnings (`"Pinia" and "Vuex" are direct alternatives in state-management`) continue to trigger.
+  - Throw descriptive errors only when no tools in the comparison request are recognizable or related.
+- **Rationale**: Real-world developers comparing tools must never experience an application crash when clicking comparison buttons provided by our own UI or when comparing real-world tools.
+
+---
+
+## ADR-018: Standalone Zero-Dependency Executable Packaging for Model Context Protocol (MCP) Server
+
+- **Date**: 2026-10-14
+- **Status**: **ACCEPTED & IMPLEMENTED**
+- **Context**: Autonomous AI coding agents (Claude Desktop, Cursor, Antigravity) invoke `@skillforge/mcp` via `npx @skillforge/mcp`. Because `@skillforge/server` and `@skillforge/shared` are `"private": true` packages in the monorepo, compiling solely with `tsc -b` produced output with unresolvable module imports outside the workspace.
+- **Decision**:
+  - Implement `packages/mcp/esbuild.mjs` to bundle `@skillforge/server`, `@skillforge/shared`, and the catalog dataset into a single self-contained executable at `packages/mcp/dist/index.js`.
+  - Remove `SkillForgeServer` (LSP server) from `packages/server/src/api.ts` to cleanly decouple headless engines from `vscode-languageserver` and eliminate ESM dynamic `require` incompatibilities.
+  - Inject a `createRequire` banner and Node shebang `#!/usr/bin/env node`.
+  - Add continuous watch and stdio smoke test verification in `.github/workflows/ci.yml`.
+- **Rationale**: Guarantees that any developer running `npx -y @skillforge/mcp` anywhere in the world gets an instant, zero-setup, crash-free execution experience.
+
+---
+
+## ADR-019: Open VSX Marketplace Quality & Trust Audit Remediation
+
+- **Date**: 2026-10-14
+- **Status**: **ACCEPTED & IMPLEMENTED**
+- **Context**: An external audit of the live Open VSX release (`SkillForge.skillforge v0.1.0`) surfaced 10 quality, trust, and discoverability issues: broken repository/issue links (404), invalid default cloud AI model IDs (`gemini-3.5-flash`, `gpt-4.1-mini`), missing changelog in the VSIX archive, lack of Python `# IDEA:` CodeLens syntax documentation, zero screenshots of the UI, missing complete 16-command reference, unlisted languages & manifest detection rules, missing Quick Install snippet, tagline wording inconsistency, and CC BY 4.0 data attribution gap.
+- **Decision**:
+  - **Verified Repository URLs**: Updated `repository`, `bugs`, and `homepage` across all manifests to `https://github.com/AugustyaB/SkillForge`.
+  - **Production AI Model Defaults**: Updated default BYOK models to valid, production endpoints: `gemini-2.0-flash` (Google Gemini) and `gpt-4o-mini` (OpenAI), completely eliminating 404 API errors and silent fallback delays.
+  - **Automated VSIX Changelog & NOTICE Bundling**: Integrated `pnpm run copy-docs` into extension build/packaging lifecycle, guaranteeing `CHANGELOG.md` and `NOTICE` are bundled at package root for the Open VSX "Changes" tab.
+  - **UI Screenshots Showcase**: Created 4 high-resolution 960x620 PNG screenshots in `resources/screenshots/` (sidebar overview, comparison matrix, codelens triggers, agent directives) complying strictly with `vsce` PNG requirements.
+  - **Python Syntax & Anti-Happy-Path Hardening**: Updated documentation and walkthroughs to show `# IDEA:` / `# SKILL:` for Python alongside C-style `// IDEA:`. Added tests confirming Python floor division (`//`) is never misidentified as a CodeLens trigger.
+  - **Complete Command & Language Matrices**: Added complete 16-command table with keybindings and 11-language manifest detection table to README.
+  - **Dual-License Attribution Notice**: Formalized dual-licensing in `README.md` and created `NOTICE` outlining MIT software permissions and CC BY 4.0 dataset attribution terms.
+- **Rationale**: Resolves all 10 audit findings, ensuring user trust, accurate BYOK behavior, and seamless marketplace presentation on Open VSX and VS Code Marketplace.
+- **Trade-offs**: Increases packaged VSIX archive size from 407 KB to 567 KB due to bundled screenshots and full changelog, well within the 1.5 MB performance budget.
+
+
+

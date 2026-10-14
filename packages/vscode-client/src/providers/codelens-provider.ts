@@ -32,6 +32,12 @@ export class SkillForgeCodeLensProvider implements vscode.CodeLensProvider {
     document: vscode.TextDocument,
     _token: vscode.CancellationToken
   ): vscode.CodeLens[] {
+    // Only provide CodeLenses for real filesystem files or untitled scratchpads.
+    // Ignore internal virtual schemes (git, output, debug, settings, etc.)
+    if (document.uri.scheme !== 'file' && document.uri.scheme !== 'untitled') {
+      return [];
+    }
+
     const lines: string[] = [];
     const lineCount = document.lineCount;
 

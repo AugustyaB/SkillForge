@@ -93,7 +93,7 @@ export class FeedbackManager {
    * Generates a pre-filled GitHub issue URL for a skill contribution request.
    */
   public generateSkillRequestIssueUrl(skillName: string, reason?: string): string {
-    const repo = 'https://github.com/skillforge/skillforge/issues/new';
+    const repo = 'https://github.com/AugustyaB/SkillForge/issues/new';
     const title = encodeURIComponent(`[Skill Request]: ${skillName.trim()}`);
     const bodyText = `### Requested Library / Skill\n**Name**: ${skillName.trim()}\n\n### Why should it be added to the offline catalog?\n${reason ? reason.trim() : 'Widely adopted tool in modern development.'}\n\n---\n*Submitted via SkillForge Extension*`;
     const body = encodeURIComponent(bodyText);

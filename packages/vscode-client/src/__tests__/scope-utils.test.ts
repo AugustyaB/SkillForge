@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import {
   normalizePath,
+  isPathInsideRoot,
   detectManifestInDir,
   findCandidateScopes,
   resolveScopePath,
@@ -28,9 +29,30 @@ describe('ScopeUtils', () => {
   describe('normalizePath', () => {
     it('normalizes Windows backslashes to forward slashes and strips trailing slashes', () => {
       expect(normalizePath('C:\\Users\\dev\\project\\')).toBe('C:/Users/dev/project');
+      expect(normalizePath('c:\\users\\dev\\project')).toBe('C:/users/dev/project');
       expect(normalizePath('packages\\server\\dist\\')).toBe('packages/server/dist');
       expect(normalizePath('foo//bar///baz')).toBe('foo/bar/baz');
       expect(normalizePath('')).toBe('');
+    });
+  });
+
+  describe('isPathInsideRoot', () => {
+    it('returns true for root itself or child subdirectories', () => {
+      expect(isPathInsideRoot('C:/projects/app', 'C:/projects/app')).toBe(true);
+      expect(isPathInsideRoot('C:/projects/app', 'C:/projects/app/frontend')).toBe(true);
+      expect(isPathInsideRoot('c:/projects/app', 'C:/projects/app/packages/sub')).toBe(true);
+    });
+
+    it('returns false for sibling directories (preventing prefix traps)', () => {
+      expect(isPathInsideRoot('C:/projects/app', 'C:/projects/app-sibling')).toBe(false);
+      expect(isPathInsideRoot('C:/projects/app', 'C:/projects/app2')).toBe(false);
+      expect(isPathInsideRoot('/home/user/app', '/home/user/app-other')).toBe(false);
+    });
+
+    it('returns false for directory traversal and cross-drive paths', () => {
+      expect(isPathInsideRoot('C:/projects/app', 'C:/projects/app/../../etc')).toBe(false);
+      expect(isPathInsideRoot('C:/projects/app', 'D:/projects/app/frontend')).toBe(false);
+      expect(isPathInsideRoot('', 'C:/projects/app')).toBe(false);
     });
   });
 

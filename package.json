@@ -1,8 +1,16 @@
 {
   "name": "skillforge-monorepo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Cross-IDE skill suggestion engine for developers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AugustyaB/SkillForge"
+  },
+  "bugs": {
+    "url": "https://github.com/AugustyaB/SkillForge/issues"
+  },
+  "homepage": "https://github.com/AugustyaB/SkillForge#readme",
   "scripts": {
     "build": "pnpm --recursive run build",
     "bundle": "pnpm --filter skillforge run bundle:prod",

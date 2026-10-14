@@ -1,0 +1,33 @@
+{
+  "name": "@skillforge/mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol (MCP) server for SkillForge: discover vetted libraries, detect architectural conflicts, and generate AI agent skill directives",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AugustyaB/SkillForge"
+  },
+  "bugs": {
+    "url": "https://github.com/AugustyaB/SkillForge/issues"
+  },
+  "homepage": "https://github.com/AugustyaB/SkillForge#readme",
+  "type": "module",
+  "bin": {
+    "skillforge-mcp": "./dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b && node esbuild.mjs",
+    "clean": "rimraf dist tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "@skillforge/server": "workspace:*",
+    "@skillforge/shared": "workspace:*",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  }
+}

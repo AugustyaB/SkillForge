@@ -122,7 +122,7 @@ export class OpenAIProvider implements SuggestionProvider {
     }
 
     const endpoint = config.endpoint || 'https://api.openai.com/v1/chat/completions';
-    const model = config.model || 'gpt-4o-mini';
+    const model = (config.model && config.model.trim()) ? config.model.trim() : 'gpt-4o-mini';
     const effectiveTimeout =
       typeof config.timeoutMs === 'number' && config.timeoutMs > 0
         ? config.timeoutMs

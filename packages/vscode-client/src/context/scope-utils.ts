@@ -19,11 +19,35 @@ const MANIFEST_PATTERNS = [
 ];
 
 /**
- * Normalizes a file or directory path to use forward slashes uniformly.
+ * Normalizes a file or directory path to use forward slashes uniformly,
+ * and standardizes Windows drive letter casing (e.g. "c:" -> "C:").
  */
 export function normalizePath(inputPath: string): string {
-  if (!inputPath) return '';
-  return inputPath.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '');
+  if (!inputPath || typeof inputPath !== 'string') return '';
+  let normalized = inputPath.replace(/\\/g, '/').replace(/\/+/g, '/').replace(/\/$/, '');
+  if (/^[a-zA-Z]:/.test(normalized)) {
+    normalized = normalized.charAt(0).toUpperCase() + normalized.slice(1);
+  }
+  return normalized;
+}
+
+/**
+ * Validates that targetPath is strictly located inside or identical to rootPath.
+ * Immune to prefix/sibling traps (e.g. "/app" vs "/app-sibling") and cross-drive issues.
+ */
+export function isPathInsideRoot(rootPath: string, targetPath: string): boolean {
+  const normRoot = normalizePath(rootPath);
+  const normTarget = normalizePath(targetPath);
+  if (!normRoot || !normTarget) return false;
+  if (normRoot === normTarget) return true;
+
+  const relative = normalizePath(path.relative(normRoot, normTarget));
+  if (!relative || relative === '.') return true;
+
+  if (relative.startsWith('..') || path.isAbsolute(relative) || /^[a-zA-Z]:/.test(relative)) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -126,9 +150,20 @@ export function resolveScopePath(
     return { isValid: true, absolutePath: normalizedRoot, isRoot: true };
   }
 
-  const resolved = normalizePath(path.join(normalizedRoot, selectedRelativePath));
-  if (fs.existsSync(resolved) && resolved.startsWith(normalizedRoot)) {
-    return { isValid: true, absolutePath: resolved, isRoot: false };
+  const trimmed = selectedRelativePath.trim();
+  let candidateAbsolute: string;
+
+  // Support directly supplied absolute paths if they lie within the workspace root
+  if (path.isAbsolute(trimmed) || /^[a-zA-Z]:/.test(trimmed)) {
+    candidateAbsolute = normalizePath(trimmed);
+  } else {
+    candidateAbsolute = normalizePath(path.join(normalizedRoot, trimmed));
+  }
+
+  // Verify disk existence and strict directory containment
+  if (fs.existsSync(candidateAbsolute) && isPathInsideRoot(normalizedRoot, candidateAbsolute)) {
+    const isRoot = candidateAbsolute === normalizedRoot;
+    return { isValid: true, absolutePath: candidateAbsolute, isRoot };
   }
 
   // Graceful fallback to root

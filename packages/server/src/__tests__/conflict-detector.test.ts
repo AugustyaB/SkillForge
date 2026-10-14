@@ -220,4 +220,90 @@ describe('ConflictDetector', () => {
     expect(results[0]!.conflictWith).toContain('angular');
     expect(results[0]!.conflictWarning).toContain("already-installed 'angular'");
   });
+
+  describe('Clean Foundation / Utility Fitness Rubric (UFR) — Zero False Conflicts on Companions', () => {
+    const fullRepo = new SkillsRepository();
+    const liveDetector = new ConflictDetector(fullRepo);
+
+    it('does not flag conflict between browser-use and installed playwright', () => {
+      const browserUse = fullRepo.getSkillById('browser-use');
+      expect(browserUse).toBeDefined();
+
+      const suggested = makeSuggested({
+        id: browserUse!.id,
+        name: browserUse!.name,
+        alternatives: browserUse!.alternatives,
+        worksWellWith: browserUse!.worksWellWith,
+      });
+
+      const results = liveDetector.detectConflicts([suggested], ['playwright']);
+      expect(results[0]!.conflictWith).toBeUndefined();
+      expect(results[0]!.conflictWarning).toBeUndefined();
+    });
+
+    it('does not flag conflict between outlines-ai and installed pydantic', () => {
+      const outlines = fullRepo.getSkillById('outlines-ai');
+      expect(outlines).toBeDefined();
+
+      const suggested = makeSuggested({
+        id: outlines!.id,
+        name: outlines!.name,
+        alternatives: outlines!.alternatives,
+        worksWellWith: outlines!.worksWellWith,
+      });
+
+      const results = liveDetector.detectConflicts([suggested], ['pydantic']);
+      expect(results[0]!.conflictWith).toBeUndefined();
+      expect(results[0]!.conflictWarning).toBeUndefined();
+    });
+
+    it('does not flag conflict between mcp-sdk and installed langchain', () => {
+      const mcp = fullRepo.getSkillById('mcp-sdk');
+      expect(mcp).toBeDefined();
+
+      const suggested = makeSuggested({
+        id: mcp!.id,
+        name: mcp!.name,
+        alternatives: mcp!.alternatives,
+        worksWellWith: mcp!.worksWellWith,
+      });
+
+      const results = liveDetector.detectConflicts([suggested], ['langchain']);
+      expect(results[0]!.conflictWith).toBeUndefined();
+      expect(results[0]!.conflictWarning).toBeUndefined();
+    });
+
+    it('does not flag conflict between husky and installed lint-staged', () => {
+      const husky = fullRepo.getSkillById('husky');
+      expect(husky).toBeDefined();
+
+      const suggested = makeSuggested({
+        id: husky!.id,
+        name: husky!.name,
+        alternatives: husky!.alternatives,
+        worksWellWith: husky!.worksWellWith,
+      });
+
+      const results = liveDetector.detectConflicts([suggested], ['lint-staged']);
+      expect(results[0]!.conflictWith).toBeUndefined();
+      expect(results[0]!.conflictWarning).toBeUndefined();
+    });
+
+    it('correctly flags genuine rival conflict: browser-use vs open-interpreter', () => {
+      const browserUse = fullRepo.getSkillById('browser-use');
+      expect(browserUse).toBeDefined();
+
+      const suggested = makeSuggested({
+        id: browserUse!.id,
+        name: browserUse!.name,
+        alternatives: browserUse!.alternatives,
+        worksWellWith: browserUse!.worksWellWith,
+      });
+
+      const results = liveDetector.detectConflicts([suggested], ['open-interpreter']);
+      expect(results[0]!.conflictWith).toContain('open-interpreter');
+      expect(results[0]!.conflictWarning).toContain("already-installed 'open-interpreter'");
+    });
+  });
 });
+

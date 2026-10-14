@@ -27,6 +27,7 @@ import { SkillForgeCodeLensProvider } from './providers/codelens-provider.js';
 import { TerminalRunner } from './terminal/terminal-runner.js';
 import { ContextTreeProvider } from './views/context-tree-provider.js';
 import { QuickActionsTreeProvider } from './views/quick-actions-tree-provider.js';
+import { CommandsTreeProvider } from './views/commands-tree-provider.js';
 import { RecentQueriesTreeProvider } from './views/recent-queries-tree-provider.js';
 import { BookmarksTreeProvider } from './views/bookmarks-tree-provider.js';
 import { BookmarkManager } from './bookmarks/bookmark-manager.js';
@@ -51,6 +52,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   // 2. Initialize Sidebar Tree Providers
   const contextTreeProvider = new ContextTreeProvider(scopeManager);
   const quickActionsTreeProvider = new QuickActionsTreeProvider();
+  const commandsTreeProvider = new CommandsTreeProvider();
   const recentQueriesTreeProvider = new RecentQueriesTreeProvider(context);
   const bookmarksTreeProvider = new BookmarksTreeProvider(bookmarkManager);
   SuggestionPanel.setBookmarkManager(bookmarkManager, bookmarksTreeProvider);
@@ -58,6 +60,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   context.subscriptions.push(
     vscode.window.registerTreeDataProvider('skillforge.contextView', contextTreeProvider),
     vscode.window.registerTreeDataProvider('skillforge.quickActionsView', quickActionsTreeProvider),
+    vscode.window.registerTreeDataProvider('skillforge.commandsView', commandsTreeProvider),
     vscode.window.registerTreeDataProvider('skillforge.recentQueriesView', recentQueriesTreeProvider),
     vscode.window.registerTreeDataProvider('skillforge.bookmarksView', bookmarksTreeProvider)
   );
@@ -140,57 +143,58 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     outputChannel.appendLine(`[SkillForge Client] Error starting LSP server: ${msg}`);
   }
 
-  // Command: Test Server Connection
+  // Command: Check Offline Engine Status
   const testConnCmd = vscode.commands.registerCommand('skillforge.testConnection', async () => {
     if (!client || !client.isRunning()) {
-      vscode.window.showErrorMessage('SkillForge LSP server is not running.');
+      vscode.window.showErrorMessage('SkillForge local background engine is not running.');
       return;
     }
 
     try {
       const ping = await client.sendRequest<PingResult>(SKILLFORGE_PING_METHOD);
       vscode.window.showInformationMessage(
-        `SkillForge LSP Server Connected! Version: ${ping.version} (Status: ${ping.status})`
+        `SkillForge Offline Engine is active (v${ping.version}) — 363 vetted libraries ready on your computer. No internet required.`
       );
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      vscode.window.showErrorMessage(`SkillForge ping failed: ${msg}`);
+      vscode.window.showErrorMessage(`SkillForge local engine check failed: ${msg}`);
     }
   });
   context.subscriptions.push(testConnCmd);
 
-  // Command: Select Active Context Scope
+  // Command: Choose Project Folder Scope
   const selectScopeCmd = vscode.commands.registerCommand('skillforge.selectScope', async () => {
     const selected = await scopeManager.promptScopeSelection();
     if (selected) {
-      vscode.window.showInformationMessage(`SkillForge: Scope set to "${selected.label}"`);
+      vscode.window.showInformationMessage(`SkillForge: Active project folder set to "${selected.label}"`);
     }
   });
   context.subscriptions.push(selectScopeCmd);
 
-  // Command: Rescan Workspace Stack
+  // Command: Refresh Installed Packages
   const rescanCmd = vscode.commands.registerCommand('skillforge.rescanWorkspace', () => {
     contextTreeProvider.refresh();
-    vscode.window.showInformationMessage('SkillForge: Project stack re-scanned.');
+    vscode.window.showInformationMessage('SkillForge: Project files re-scanned for installed packages.');
   });
   context.subscriptions.push(rescanCmd);
 
-  // Command: Clear Recent Discoveries History
+  // Command: Clear Search History
   const clearRecentCmd = vscode.commands.registerCommand('skillforge.clearRecentQueries', async () => {
     await recentQueriesTreeProvider.clearHistory();
-    vscode.window.showInformationMessage('SkillForge: Recent discoveries cleared.');
+    vscode.window.showInformationMessage('SkillForge: Recent library search history cleared.');
   });
   context.subscriptions.push(clearRecentCmd);
 
-  // Command: Run Install Command in Terminal
+  // Command: Install Package in Terminal
   const runInstallCmd = vscode.commands.registerCommand('skillforge.runInstallCommand', (cmd?: string) => {
     if (cmd && typeof cmd === 'string') {
       TerminalRunner.runCommand(cmd, scopeManager.activeScope.absolutePath);
     } else {
       vscode.window
         .showInputBox({
-          title: 'SkillForge: Run Command',
-          prompt: 'Enter shell command to execute in SkillForge terminal',
+          title: 'Install a Library or Package in Your Project Terminal',
+          prompt: `Type the package installation command to run inside your project folder (${scopeManager.activeScope.label}):`,
+          placeHolder: 'e.g., npm install zod, pnpm add tailwindcss, pip install fastapi',
         })
         .then((input) => {
           if (input) {
@@ -207,8 +211,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     async () => {
       const activeEditor = vscode.window.activeTextEditor;
       let promptPrefill = '';
-      if (activeEditor) {
-        const baseName = path.basename(activeEditor.document.uri.fsPath);
+      if (
+        activeEditor &&
+        (activeEditor.document.uri.scheme === 'file' || activeEditor.document.uri.scheme === 'untitled')
+      ) {
+        const baseName =
+          activeEditor.document.uri.scheme === 'file'
+            ? path.basename(activeEditor.document.uri.fsPath)
+            : 'scratchpad';
         promptPrefill = `Tools and libraries for ${baseName}`;
       }
       await vscode.commands.executeCommand('skillforge.suggest', {
@@ -219,40 +229,53 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
   context.subscriptions.push(suggestForFileCmd);
 
-  // Command: Open Suggestion Canvas
+  // Command: Open Results Dashboard
   const showCanvasCmd = vscode.commands.registerCommand('skillforge.showCanvas', () => {
     SuggestionPanel.createOrShow(context.extensionUri, scopeManager.activeScope);
   });
   context.subscriptions.push(showCanvasCmd);
 
-  // Command: Open Welcome Walkthrough
+  // Command: Open Beginner Guide
   const openWalkthroughCmd = vscode.commands.registerCommand('skillforge.openWalkthrough', () => {
     vscode.commands.executeCommand(
       'workbench.action.openWalkthrough',
-      'skillforge#skillforge.walkthrough',
+      'skillforge.skillforge#skillforge.walkthrough',
       false
     );
   });
   context.subscriptions.push(openWalkthroughCmd);
 
-  // Command: Set BYOK API Key
+  // Command: Save AI API Key (Optional)
   const setApiKeyCmd = vscode.commands.registerCommand('skillforge.setApiKey', async (targetProvider?: ProviderType) => {
     let provider = targetProvider;
     if (!provider || provider === 'local' || provider === 'hybrid') {
       const pick = await vscode.window.showQuickPick(
         [
-          { label: 'OpenAI', value: 'openai' as ProviderType, description: 'Requires OpenAI API key (gpt-4o-mini)' },
-          { label: 'Google Gemini', value: 'gemini' as ProviderType, description: 'Requires Google AI Studio API key (gemini-1.5-flash)' },
+          {
+            label: '$(sparkle) Google Gemini',
+            value: 'gemini' as ProviderType,
+            description: 'Free tier available (gemini-2.0-flash)',
+            detail: 'Uses your Google AI Studio API key (aistudio.google.com). Only needed if you enable Gemini search mode.',
+          },
+          {
+            label: '$(sparkle) OpenAI',
+            value: 'openai' as ProviderType,
+            description: 'Standard API tier (gpt-4o-mini)',
+            detail: 'Uses your OpenAI API key (platform.openai.com). Only needed if you enable OpenAI search mode.',
+          },
         ],
-        { placeHolder: 'Select provider to store API key for:' }
+        {
+          title: 'Save Your Personal AI API Key (Optional — Not Needed for Offline Mode)',
+          placeHolder: 'Which AI service do you want to save an API key for?',
+        }
       );
       if (!pick) return;
       provider = pick.value;
     }
 
     const key = await vscode.window.showInputBox({
-      title: `SkillForge: Set ${provider.toUpperCase()} API Key`,
-      prompt: `Enter your ${provider} API key (stored securely in your OS keychain):`,
+      title: `Save ${provider === 'gemini' ? 'Google Gemini' : 'OpenAI'} API Key`,
+      prompt: `Paste your ${provider === 'gemini' ? 'Google Gemini' : 'OpenAI'} API key below. It is encrypted in your computer's keychain and never saved in project files:`,
       password: true,
       ignoreFocusOut: true,
       placeHolder: provider === 'openai' ? 'sk-...' : 'AIzaSy...',
@@ -261,20 +284,31 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     if (key && key.trim()) {
       await secretManager.storeApiKey(provider, key);
       vscode.window.showInformationMessage(
-        `SkillForge: API key for ${provider} securely saved in OS keychain.`
+        `SkillForge: API key for ${provider} securely saved in your OS keychain.`
       );
     }
   });
   context.subscriptions.push(setApiKeyCmd);
 
-  // Command: Clear Stored API Key
+  // Command: Remove Saved API Key
   const clearApiKeyCmd = vscode.commands.registerCommand('skillforge.clearApiKey', async () => {
     const pick = await vscode.window.showQuickPick(
       [
-        { label: 'OpenAI', value: 'openai' as ProviderType },
-        { label: 'Google Gemini', value: 'gemini' as ProviderType },
+        {
+          label: 'Google Gemini API Key',
+          value: 'gemini' as ProviderType,
+          description: 'Remove saved Gemini key from OS keychain',
+        },
+        {
+          label: 'OpenAI API Key',
+          value: 'openai' as ProviderType,
+          description: 'Remove saved OpenAI key from OS keychain',
+        },
       ],
-      { placeHolder: 'Select API key to remove from OS keychain:' }
+      {
+        title: 'Remove a Saved AI API Key from Your Computer',
+        placeHolder: 'Select which saved API key you want to delete from your OS keychain:',
+      }
     );
     if (pick) {
       await secretManager.deleteApiKey(pick.value);
@@ -285,40 +319,140 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   });
   context.subscriptions.push(clearApiKeyCmd);
 
-  // Command: Choose Suggestion Provider
+  // Command: Switch Search Engine Mode
   const configureProviderCmd = vscode.commands.registerCommand('skillforge.configureProvider', async () => {
+    const config = vscode.workspace.getConfiguration('skillforge');
+    const currentGeminiModel = config.get<string>('gemini.model') || 'gemini-2.0-flash';
+    const currentOpenAIModel = config.get<string>('openai.model') || 'gpt-4o-mini';
+
     const pick = await vscode.window.showQuickPick(
       [
         {
-          label: '$(shield) 100% Offline & Private (Default)',
+          label: '$(shield) 100% Offline Local Database (Default — Free)',
           value: 'local' as ProviderType,
-          description: 'Zero code leaves machine. Curated offline database.',
+          description: 'No API key or internet needed',
+          detail: 'Searches SkillForge\'s built-in catalog of 378 vetted libraries right on your computer. 100% private.',
         },
         {
-          label: '$(sparkle) OpenAI (BYOK)',
-          value: 'openai' as ProviderType,
-          description: 'Uses gpt-4o-mini with your API key. Only prompt sent; no code files.',
-        },
-        {
-          label: '$(sparkle) Google Gemini (BYOK)',
+          label: '$(sparkle) Google Gemini AI (Uses Your API Key)',
           value: 'gemini' as ProviderType,
-          description: 'Uses Gemini with your API key. Only prompt sent; no code files.',
+          description: `Model: ${currentGeminiModel}`,
+          detail: 'Combines the offline database with Google Gemini AI for custom reasoning. Supports free, paid & custom models.',
+        },
+        {
+          label: '$(sparkle) OpenAI (Uses Your API Key)',
+          value: 'openai' as ProviderType,
+          description: `Model: ${currentOpenAIModel}`,
+          detail: 'Combines the offline database with OpenAI for custom reasoning. Supports gpt-4o-mini, gpt-4o, o3-mini & custom models.',
         },
       ],
-      { placeHolder: 'Select SkillForge Suggestion Provider:' }
+      {
+        title: 'Choose How SkillForge Searches for Libraries',
+        placeHolder: 'Pick 100% Offline mode (default, free) or Cloud AI mode (uses your personal API key):',
+      }
     );
 
     if (pick) {
-      await vscode.workspace.getConfiguration('skillforge').update('provider', pick.value, vscode.ConfigurationTarget.Global);
-      vscode.window.showInformationMessage(`SkillForge: Provider set to "${pick.value}".`);
+      await config.update('provider', pick.value, vscode.ConfigurationTarget.Global);
+      vscode.window.showInformationMessage(`SkillForge: Search engine mode set to "${pick.value}".`);
+
+      if (pick.value === 'gemini' || pick.value === 'openai') {
+        const customize = await vscode.window.showQuickPick(
+          [
+            { label: 'Use Current Model', detail: `Keep "${pick.value === 'gemini' ? currentGeminiModel : currentOpenAIModel}"` },
+            { label: '$(edit) Change AI Model', detail: 'Select free, paid flagship, reasoning, or enter any custom model name' },
+          ],
+          { placeHolder: 'Do you want to customize the AI model for this provider?' }
+        );
+        if (customize && customize.label.includes('Change AI Model')) {
+          await vscode.commands.executeCommand('skillforge.configureModel', pick.value);
+        }
+      }
     }
   });
   context.subscriptions.push(configureProviderCmd);
 
+  // Command: Configure AI Model (Free, Paid & Custom)
+  const configureModelCmd = vscode.commands.registerCommand('skillforge.configureModel', async (targetProvider?: 'gemini' | 'openai') => {
+    let provider = targetProvider;
+    if (!provider) {
+      const pPick = await vscode.window.showQuickPick(
+        [
+          { label: '$(sparkle) Google Gemini', value: 'gemini' as const, detail: 'Configure model for Google Gemini (Free, Paid Pro, or Custom)' },
+          { label: '$(sparkle) OpenAI', value: 'openai' as const, detail: 'Configure model for OpenAI (Mini, Flagship 4o, Reasoning o3/o1, or Custom)' },
+        ],
+        { title: 'Select Provider to Change Model', placeHolder: 'Which provider do you want to configure a model for?' }
+      );
+      if (!pPick) return;
+      provider = pPick.value;
+    }
+
+    const config = vscode.workspace.getConfiguration('skillforge');
+
+    if (provider === 'gemini') {
+      const current = config.get<string>('gemini.model') || 'gemini-2.0-flash';
+      const modelPick = await vscode.window.showQuickPick(
+        [
+          { label: 'gemini-2.0-flash', description: 'Recommended (Fast & Free-tier eligible)', detail: 'High performance default for developer discovery' },
+          { label: 'gemini-1.5-pro', description: 'Paid / Flagship Reasoning', detail: 'Complex multi-turn architectural reasoning' },
+          { label: 'gemini-2.5-pro', description: 'Paid / Experimental', detail: 'Highest reasoning depth on Google AI Studio' },
+          { label: 'gemini-1.5-flash', description: 'Base Tier', detail: 'Standard low-latency generation' },
+          { label: '$(edit) Enter Custom Model Name...', description: 'Custom / Fine-Tuned / Private', detail: 'Type any valid Gemini model identifier' },
+        ],
+        { title: `Configure Google Gemini Model (Current: ${current})`, placeHolder: 'Select a recommended model or enter any custom model name:' }
+      );
+      if (!modelPick) return;
+
+      let finalModel = modelPick.label;
+      if (modelPick.label.includes('Enter Custom Model Name')) {
+        const custom = await vscode.window.showInputBox({
+          title: 'Enter Custom Google Gemini Model ID',
+          prompt: 'Enter the exact model identifier from Google AI Studio (e.g. gemini-2.0-flash-thinking-exp, your-tuned-model):',
+          value: current,
+          ignoreFocusOut: true,
+        });
+        if (!custom || !custom.trim()) return;
+        finalModel = custom.trim();
+      }
+
+      await config.update('gemini.model', finalModel, vscode.ConfigurationTarget.Global);
+      vscode.window.showInformationMessage(`SkillForge: Google Gemini model set to "${finalModel}".`);
+    } else {
+      const current = config.get<string>('openai.model') || 'gpt-4o-mini';
+      const modelPick = await vscode.window.showQuickPick(
+        [
+          { label: 'gpt-4o-mini', description: 'Recommended (Fast & Inexpensive)', detail: 'Fast, high-quality tool discovery default' },
+          { label: 'gpt-4o', description: 'Paid / Flagship Omnimodel', detail: 'Advanced reasoning and architectural trade-off synthesis' },
+          { label: 'o3-mini', description: 'Paid / Reasoning Tier', detail: 'High-speed reasoning model tailored for coding' },
+          { label: 'o1', description: 'Paid / Deep Reasoning', detail: 'Deepest reasoning model for complex architectural problems' },
+          { label: '$(edit) Enter Custom Model Name...', description: 'Custom / Proxy / Local / Fine-Tuned', detail: 'Type any model name (e.g. deepseek-chat, mistral, llama3, or your proxy model)' },
+        ],
+        { title: `Configure OpenAI Model (Current: ${current})`, placeHolder: 'Select a recommended model or enter any custom model name:' }
+      );
+      if (!modelPick) return;
+
+      let finalModel = modelPick.label;
+      if (modelPick.label.includes('Enter Custom Model Name')) {
+        const custom = await vscode.window.showInputBox({
+          title: 'Enter Custom OpenAI-Compatible Model ID',
+          prompt: 'Enter the exact model identifier (e.g. gpt-4o, o3-mini, deepseek-chat, local-llama):',
+          value: current,
+          ignoreFocusOut: true,
+        });
+        if (!custom || !custom.trim()) return;
+        finalModel = custom.trim();
+      }
+
+      await config.update('openai.model', finalModel, vscode.ConfigurationTarget.Global);
+      vscode.window.showInformationMessage(`SkillForge: OpenAI model set to "${finalModel}".`);
+    }
+  });
+  context.subscriptions.push(configureModelCmd);
+
   // Helper: Run side-by-side comparison via LSP server
   const runComparison = async (skillIds: string[]): Promise<ComparisonMatrix | undefined> => {
     if (!client || !client.isRunning()) {
-      vscode.window.showErrorMessage('SkillForge LSP server is not running.');
+      vscode.window.showErrorMessage('SkillForge local engine is not running.');
       return undefined;
     }
     const workspaceCtx = scopeManager.buildWorkspaceContext();
@@ -330,7 +464,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   };
   SuggestionPanel.setCompareHandler(runComparison);
 
-  // Command: Toggle Skill Bookmark
+  // Command: Manage Saved Bookmarks
   const toggleBookmarkCmd = vscode.commands.registerCommand(
     'skillforge.toggleBookmark',
     async (arg?: any) => {
@@ -338,16 +472,22 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       if (!skill || !skill.id) {
         const bookmarks = bookmarkManager.getBookmarks();
         if (bookmarks.length === 0) {
-          vscode.window.showInformationMessage('SkillForge: No bookmarks saved yet.');
+          vscode.window.showInformationMessage(
+            'SkillForge: You have no saved bookmarks yet. Click the star icon on any recommended library in the Results Dashboard to bookmark it.'
+          );
           return;
         }
         const pick = await vscode.window.showQuickPick(
           bookmarks.map((b) => ({
-            label: b.name,
+            label: `$(bookmark) ${b.name}`,
             description: `[${b.ecosystem}] ${b.category}`,
+            detail: `Click to remove "${b.name}" from your saved bookmarks — ${b.whyUseIt}`,
             skill: b,
           })),
-          { placeHolder: 'Select bookmark to toggle/remove:' }
+          {
+            title: 'Manage Your Saved Library Bookmarks',
+            placeHolder: 'Select any bookmarked library below to remove it from your saved list:',
+          }
         );
         if (!pick) return;
         skill = pick.skill;
@@ -373,7 +513,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         return;
       }
       const choice = await vscode.window.showWarningMessage(
-        `Clear all ${count} saved bookmarks?`,
+        `Clear all ${count} saved library bookmarks?`,
         { modal: true },
         'Clear All Bookmarks'
       );
@@ -386,7 +526,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
   context.subscriptions.push(clearBookmarksCmd);
 
-  // Command: Compare Skills Side-by-Side
+  // Command: Compare Libraries Side-by-Side
   const compareSkillsCmd = vscode.commands.registerCommand(
     'skillforge.compareSkills',
     async (args?: { skillIds?: string[] } | string[]) => {
@@ -402,24 +542,24 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
               skillId: b.id,
             })),
             {
-              title: 'SkillForge: Select 2 or 3 Tools to Compare',
+              title: 'Compare Libraries Side-by-Side: Pick 2 or 3 Bookmarked Tools',
               canPickMany: true,
-              placeHolder: 'Select 2 or 3 bookmarked tools to compare side-by-side',
+              placeHolder: 'Check 2 or 3 libraries to compare side-by-side (or press Esc to type names manually)',
             }
           );
           if (picks && picks.length >= 2 && picks.length <= 3) {
             skillIds = picks.map((p) => p.skillId);
           } else if (picks && (picks.length < 2 || picks.length > 3)) {
-            vscode.window.showWarningMessage('Please select exactly 2 or 3 tools to compare.');
+            vscode.window.showWarningMessage('Please select 2 or 3 libraries to compare.');
             return;
           }
         }
 
         if (!skillIds || skillIds.length < 2) {
           const input = await vscode.window.showInputBox({
-            title: 'SkillForge: Compare Technologies',
-            prompt: 'Enter 2 or 3 tool IDs separated by commas (e.g. "react, vue" or "fastapi, express"):',
-            placeHolder: 'tool1, tool2, [tool3]',
+            title: 'Compare 2 or 3 Libraries Side-by-Side',
+            prompt: 'Type 2 or 3 library names separated by commas to compare their downloads, pros/cons, and compatibility:',
+            placeHolder: 'e.g., react, vue, svelte   OR   fastapi, django, flask',
           });
           if (input && input.trim()) {
             skillIds = input.split(',').map((s) => s.trim()).filter(Boolean);
@@ -432,7 +572,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       }
 
       if (skillIds.length > 3) {
-        vscode.window.showWarningMessage('Comparison supports up to 3 tools simultaneously.');
+        vscode.window.showWarningMessage('Comparison supports up to 3 libraries simultaneously.');
         skillIds = skillIds.slice(0, 3);
       }
 
@@ -453,21 +593,21 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
   context.subscriptions.push(compareSkillsCmd);
 
-  // Command: Generate Agent Skill Directive (Phase 9)
+  // Command: Create AI Rules File (Phase 9)
   const generateAgentSkillCmd = vscode.commands.registerCommand(
     'skillforge.generateAgentSkill',
     async (args?: { skillId?: string; skillName?: string; format?: AgentSkillFormat }) => {
       if (!client || !client.isRunning()) {
-        vscode.window.showErrorMessage('SkillForge LSP server is not running.');
+        vscode.window.showErrorMessage('SkillForge local engine is not running.');
         return;
       }
 
       let skillId = args?.skillId;
       if (!skillId) {
         const input = await vscode.window.showInputBox({
-          title: 'SkillForge: Generate Agent Skill Directive',
-          prompt: 'Enter the skill or library ID (e.g., zod, fastapi, jev, rea-re, tailwind):',
-          placeHolder: 'zod',
+          title: 'Create AI Rules File (Step 1/2): Which Library?',
+          prompt: 'Type a library name (e.g., react, fastapi, tailwind, zod). SkillForge will create a markdown guide in your project that teaches your AI assistant how to write code with it:',
+          placeHolder: 'e.g., react, fastapi, tailwind, prisma, zod',
         });
         if (!input || !input.trim()) {
           return;
@@ -480,33 +620,33 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         const pick = await vscode.window.showQuickPick(
           [
             {
-              label: 'Antigravity & Claude Code (Recommended)',
-              description: `.agent/skills/${skillId}/SKILL.md`,
-              detail: 'Standard modular skill format with YAML frontmatter and Karpathy rules',
+              label: '$(hubot) Antigravity & Claude Code (Recommended)',
+              description: `Saves to .agent/skills/${skillId}/SKILL.md`,
+              detail: 'Creates a step-by-step markdown guide that Antigravity and Claude read automatically when writing code for you.',
               value: 'agent-skill' as AgentSkillFormat,
             },
             {
-              label: 'Cursor IDE Rule',
-              description: `.cursor/rules/${skillId}.mdc`,
-              detail: 'Ecosystem-scoped glob rules for Cursor IDE',
+              label: '$(file-code) Cursor IDE Rule',
+              description: `Saves to .cursor/rules/${skillId}.mdc`,
+              detail: 'Creates an automatic coding rule for Cursor IDE whenever you edit matching code files.',
               value: 'cursor-rule' as AgentSkillFormat,
             },
             {
-              label: 'Claude Code Dedicated Skill',
-              description: `.claude/skills/${skillId}/SKILL.md`,
-              detail: 'Dedicated Claude Code workspace skill folder',
+              label: '$(terminal) Claude Code Dedicated Skill',
+              description: `Saves to .claude/skills/${skillId}/SKILL.md`,
+              detail: 'Creates a dedicated skill instruction file inside the .claude/skills folder.',
               value: 'claude-skill' as AgentSkillFormat,
             },
             {
-              label: 'Repository Root Directive',
-              description: 'AGENTS.md',
-              detail: 'Root-level agent guidelines file for all AI assistants',
+              label: '$(book) Universal Project AI Guide',
+              description: 'Saves to AGENTS.md in project root',
+              detail: 'Creates a single top-level AGENTS.md guide read by all AI coding assistants.',
               value: 'root-agents' as AgentSkillFormat,
             },
           ],
           {
-            title: `SkillForge: Choose Agent Skill Target for ${args?.skillName || skillId}`,
-            placeHolder: 'Select target agent platform format...',
+            title: `Create AI Rules File (Step 2/2): Choose Format for "${args?.skillName || skillId}"`,
+            placeHolder: 'Where should SkillForge save the AI coding instructions for this library?',
           }
         );
         if (!pick) {
@@ -528,9 +668,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
           req
         );
 
-        const rootPath =
-          scopeManager.activeScope.absolutePath ||
-          vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        // Workspace-level directives (AGENTS.md, .cursor/rules) belong at the repository root;
+        // package-specific skill folders (.agent/skills, .claude/skills) can reside in active subscope.
+        const isRootFormat = format === 'root-agents' || format === 'cursor-rule';
+        const rootPath = isRootFormat
+          ? (scopeManager.workspaceRoot || scopeManager.activeScope.absolutePath)
+          : (scopeManager.activeScope.absolutePath || scopeManager.workspaceRoot);
 
         if (!rootPath) {
           const doc = await vscode.workspace.openTextDocument({
@@ -539,7 +682,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
           });
           await vscode.window.showTextDocument(doc);
           vscode.window.showInformationMessage(
-            `SkillForge: Generated ${generated.skillName} agent directive in editor.`
+            `SkillForge: Created AI rules file for ${generated.skillName} in editor.`
           );
           return;
         }
@@ -553,7 +696,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await vscode.workspace.fs.writeFile(targetUri, encoder.encode(generated.markdownContent));
 
         const choice = await vscode.window.showInformationMessage(
-          `SkillForge: Generated ${generated.suggestedFilePath} for ${generated.skillName}!`,
+          `SkillForge: Created AI rules file (${generated.suggestedFilePath}) to guide your AI on ${generated.skillName}!`,
           'Open File'
         );
 
@@ -563,27 +706,27 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
-        vscode.window.showErrorMessage(`SkillForge: Failed to generate agent skill: ${msg}`);
+        vscode.window.showErrorMessage(`SkillForge: Failed to create AI rules file: ${msg}`);
       }
     }
   );
   context.subscriptions.push(generateAgentSkillCmd);
 
-  // Command: Suggest Skills for My Idea (Core suggestion flow)
+  // Command: Find Libraries for Idea (Core suggestion flow)
   const suggestCmd = vscode.commands.registerCommand(
     'skillforge.suggest',
     async (args?: { intent?: string; source?: string; promptUser?: boolean }) => {
       if (!client || !client.isRunning()) {
-        vscode.window.showErrorMessage('SkillForge LSP server is not running.');
+        vscode.window.showErrorMessage('SkillForge local engine is not running.');
         return;
       }
 
       let intent = args?.intent;
       if (!intent || args?.promptUser) {
         intent = await vscode.window.showInputBox({
-          title: 'SkillForge: Suggest Skills',
-          prompt: 'What do you want to build? (e.g., "real-time chat app", "REST API with auth")',
-          placeHolder: 'Describe your idea or feature...',
+          title: 'Find the Right Libraries & Tools for Your Idea',
+          prompt: 'Describe what you want to build in plain English — SkillForge will recommend vetted libraries and explain why to use them:',
+          placeHolder: 'e.g., user login with Google, fast Python web API, React state management, PDF generator...',
           value: intent || '',
         });
       }
@@ -705,11 +848,22 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   if (!hasShownOnboarding) {
     vscode.commands.executeCommand(
       'workbench.action.openWalkthrough',
-      'skillforge#skillforge.walkthrough',
+      'skillforge.skillforge#skillforge.walkthrough',
       false
     );
     context.globalState.update(ONBOARDING_SHOWN_KEY, true);
   }
+
+  // 13. Persistent Status Bar Item (1-Click Fast Access)
+  const statusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right,
+    100
+  );
+  statusBarItem.command = 'skillforge.suggest';
+  statusBarItem.text = '$(sparkle) SkillForge';
+  statusBarItem.tooltip = 'SkillForge: Map ideas to libraries & agent directives (Ctrl+Alt+S / ⌥⌘S)';
+  statusBarItem.show();
+  context.subscriptions.push(statusBarItem);
 }
 
 export async function deactivate(): Promise<void> {

@@ -7,7 +7,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "frontend-framework",
     "difficulty": "beginner",
     "description": "A JavaScript library for building component-driven user interfaces with a declarative mental model.",
-    "whyUseIt": "The most popular frontend library in the industry with an enormous ecosystem and massive job market.",
+    "whyUseIt": "The premier component-driven UI library with an unrivaled ecosystem, powering modern full-stack web architectures via Vite, Next.js, and React Server Components.",
     "tags": [
       "react",
       "ui",
@@ -41,7 +41,17 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "nextjs",
       "tailwind-css",
       "zustand",
-      "tanstack-query"
+      "tanstack-query",
+      "vite",
+      "typescript",
+      "tanstack-virtual",
+      "floating-ui",
+      "fusejs",
+      "react-dropzone",
+      "katex-math",
+      "peerjs",
+      "react-datepicker-pkg",
+      "react-pdf-pkg"
     ],
     "prerequisites": [
       "javascript",
@@ -59,7 +69,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "frontend-framework",
     "difficulty": "beginner",
     "description": "Progressive JavaScript framework that is approachable, performant, and versatile.",
-    "whyUseIt": "Gentle learning curve with clean template syntax and first-party routing and state tools.",
+    "whyUseIt": "Progressive, approachable framework with excellent reactivity, clean single-file components (SFCs), and first-class Vite integration.",
     "tags": [
       "vue",
       "frontend",
@@ -85,7 +95,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "pinia",
       "nuxt",
-      "tailwind-css"
+      "tailwind-css",
+      "vite",
+      "typescript"
     ],
     "prerequisites": [
       "javascript",
@@ -102,7 +114,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "frontend-framework",
     "difficulty": "beginner",
     "description": "Cybernetically enhanced web apps that compile away into tiny, reactive vanilla JavaScript.",
-    "whyUseIt": "Zero virtual DOM overhead, concise syntax, and exceptional developer satisfaction.",
+    "whyUseIt": "Compiles reactive components directly to minimal vanilla JavaScript with zero virtual DOM overhead, powered by modern runes and Vite.",
     "tags": [
       "svelte",
       "frontend",
@@ -127,7 +139,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "sveltekit",
-      "tailwind-css"
+      "tailwind-css",
+      "vite",
+      "typescript"
     ],
     "prerequisites": [
       "javascript",
@@ -248,7 +262,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "remix",
       "astro",
-      "nuxt"
+      "nuxt",
+      "sveltekit"
     ],
     "worksWellWith": [
       "react",
@@ -454,7 +469,10 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "chakra-ui",
-      "bootstrap"
+      "bootstrap",
+      "styled-components",
+      "emotion",
+      "sass"
     ],
     "worksWellWith": [
       "react",
@@ -496,7 +514,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "material-ui",
       "shadcn-ui",
-      "tailwind-css"
+      "tailwind-css",
+      "ant-design",
+      "bootstrap"
     ],
     "worksWellWith": [
       "react",
@@ -536,13 +556,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "chakra-ui",
-      "material-ui"
+      "material-ui",
+      "daisyui"
     ],
     "worksWellWith": [
       "tailwind-css",
       "radix-ui",
       "react",
-      "nextjs"
+      "nextjs",
+      "lucide-react",
+      "sonner"
     ],
     "prerequisites": [
       "react",
@@ -578,7 +601,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "chakra-ui",
-      "ant-design"
+      "ant-design",
+      "shadcn-ui"
     ],
     "worksWellWith": [
       "react",
@@ -616,7 +640,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "headless-ui"
+      "headless-ui",
+      "react-aria",
+      "downshift-pkg"
     ],
     "worksWellWith": [
       "tailwind-css",
@@ -673,8 +699,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "name": "styled-components",
     "category": "ui-library",
     "difficulty": "intermediate",
-    "description": "Visual primitives for the component age using tagged template literals in JavaScript.",
-    "whyUseIt": "Pioneered CSS-in-JS, encapsulating component styles alongside component logic.",
+    "description": "CSS-in-JS library for styling React components using tagged template literals and scoped CSS injection.",
+    "whyUseIt": "Pioneered component-scoped CSS-in-JS; note that it requires use-client boundaries in React Server Components and incurs runtime style injection overhead compared to Tailwind CSS.",
     "tags": [
       "css-in-js",
       "styling",
@@ -710,8 +736,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "name": "Emotion",
     "category": "ui-library",
     "difficulty": "intermediate",
-    "description": "Performant and flexible CSS-in-JS library supporting string and object styles.",
-    "whyUseIt": "Predictable styling engine with great source maps and SSR support, powers MUI.",
+    "description": "Flexible CSS-in-JS styling library supporting string and object styles, widely used as the styling engine behind Material UI.",
+    "whyUseIt": "Powers Material UI (MUI) styling and offers flexible css prop syntax; note runtime CSS injection overhead in server-component architectures.",
     "tags": [
       "emotion",
       "css-in-js",
@@ -808,7 +834,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "tailwind-css",
-      "chakra-ui"
+      "chakra-ui",
+      "daisyui"
     ],
     "worksWellWith": [
       "html",
@@ -847,11 +874,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "zustand",
-      "pinia"
+      "pinia",
+      "mobx",
+      "xstate",
+      "ngrx"
     ],
     "worksWellWith": [
       "react",
-      "nextjs"
+      "nextjs",
+      "immer"
     ],
     "prerequisites": [
       "react",
@@ -887,7 +918,10 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "redux-toolkit",
-      "jotai"
+      "jotai",
+      "mobx",
+      "recoil",
+      "xstate"
     ],
     "worksWellWith": [
       "react",
@@ -923,7 +957,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "vuex"
+      "vuex",
+      "redux-toolkit",
+      "ngrx"
     ],
     "worksWellWith": [
       "vue",
@@ -960,7 +996,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "redux-toolkit",
-      "zustand"
+      "zustand",
+      "ngrx"
     ],
     "worksWellWith": [
       "react"
@@ -978,8 +1015,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "name": "Recoil",
     "category": "state-management",
     "difficulty": "intermediate",
-    "description": "Experimental state management library for React providing atomic state definitions.",
-    "whyUseIt": "Allows managing fine-grained derived data with atoms and selectors alongside React concurrent features.",
+    "description": "Atomic state management library for React developed by Meta, organizing state into independent atoms and derived selectors.",
+    "whyUseIt": "Pioneered the atomic state model, but is largely unmaintained by Meta; modern projects should strongly prefer active atomic alternatives like Jotai or stores like Zustand.",
     "tags": [
       "recoil",
       "atoms",
@@ -1157,7 +1194,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "passport",
       "prisma",
       "cors",
-      "helmet"
+      "helmet",
+      "sharp",
+      "dotenv",
+      "express-rate-limit",
+      "lodash",
+      "uuid"
     ],
     "prerequisites": [
       "javascript",
@@ -1173,7 +1215,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "backend-framework",
     "difficulty": "intermediate",
     "description": "Fast and low overhead web framework for Node.js with built-in schema validation.",
-    "whyUseIt": "Significantly higher throughput than Express, built-in JSON schema validation, and first-class TypeScript support.",
+    "whyUseIt": "High-performance Node.js web framework with built-in JSON schema compilation and serialization, delivering up to 4x faster throughput than Express.",
     "tags": [
       "fastify",
       "backend",
@@ -1193,12 +1235,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "express",
-      "hono"
+      "hono",
+      "nestjs",
+      "koa",
+      "elysia"
     ],
     "worksWellWith": [
       "pino",
       "prisma",
-      "zod"
+      "zod",
+      "fast-json-stringify"
     ],
     "prerequisites": [
       "javascript",
@@ -1234,7 +1280,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "express",
       "fastify",
-      "spring-boot"
+      "spring-boot",
+      "aspnet-core"
     ],
     "worksWellWith": [
       "typeorm",
@@ -1293,7 +1340,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "backend-framework",
     "difficulty": "beginner",
     "description": "Ultrafast, lightweight web framework built on Web Standards that runs anywhere (Cloudflare, Deno, Bun, Node).",
-    "whyUseIt": "Edge-native, tiny bundle size, superb TypeScript types, and zero dependencies.",
+    "whyUseIt": "Ultrafast web standards-based router running seamlessly across Cloudflare Workers, Deno, Bun, and Node.js with built-in TypeScript validation.",
     "tags": [
       "hono",
       "edge",
@@ -1312,12 +1359,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "express",
-      "fastify"
+      "fastify",
+      "elysia"
     ],
     "worksWellWith": [
       "cloudflare-workers",
       "zod",
-      "drizzle-orm"
+      "drizzle-orm",
+      "bun",
+      "typescript"
     ],
     "prerequisites": [
       "typescript",
@@ -1354,7 +1404,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "fastapi",
       "flask",
-      "rails"
+      "ruby-on-rails"
     ],
     "worksWellWith": [
       "postgresql",
@@ -1398,7 +1448,13 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "sqlalchemy",
       "pydantic",
-      "uvicorn"
+      "uvicorn",
+      "asyncpg",
+      "orjson",
+      "strawberry-graphql",
+      "slowapi",
+      "redis-om-py",
+      "cryptography-py"
     ],
     "prerequisites": [
       "python"
@@ -1471,12 +1527,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "nestjs",
-      "aspnet-core"
+      "aspnet-core",
+      "micronaut",
+      "quarkus"
     ],
     "worksWellWith": [
       "postgresql",
       "hibernate",
-      "docker"
+      "docker",
+      "spring-security",
+      "mapstruct-java"
     ],
     "prerequisites": [
       "java"
@@ -1510,11 +1570,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "go-chi"
+      "go-chi",
+      "echo-go",
+      "fiber-go"
     ],
     "worksWellWith": [
       "gorm",
-      "docker"
+      "docker",
+      "zap-go",
+      "casbin-go",
+      "testify-go"
     ],
     "prerequisites": [
       "go"
@@ -1547,10 +1612,11 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "gin"
+      "gin",
+      "echo-go"
     ],
     "worksWellWith": [
-      "sqlx",
+      "sqlx-rust",
       "net/http"
     ],
     "prerequisites": [
@@ -1603,7 +1669,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "backend-framework",
     "difficulty": "intermediate",
     "description": "Ergonomic and modular web application framework built with Tokio, Tower, and Hyper in Rust.",
-    "whyUseIt": "Official Tokio project web framework offering seamless async Rust patterns without macros.",
+    "whyUseIt": "Ergonomic and modular Rust web framework built directly on Tokio, Tower, and Hyper, providing type-safe extractors and zero-cost abstractions.",
     "tags": [
       "rust",
       "tokio",
@@ -1625,8 +1691,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "tokio",
-      "tower",
-      "sqlx"
+      "tower-rust",
+      "sqlx-rust",
+      "leptos"
     ],
     "prerequisites": [
       "rust"
@@ -1737,19 +1804,26 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "mysql",
-      "sqlite"
+      "sqlite",
+      "mongodb",
+      "neon"
     ],
     "worksWellWith": [
       "prisma",
       "drizzle-orm",
-      "docker"
+      "docker",
+      "sqlalchemy",
+      "asyncpg"
     ],
     "prerequisites": [
       "sql"
     ],
     "stackIndicators": [
       "pg",
-      "postgres"
+      "postgres",
+      "psycopg2",
+      "psycopg2-binary",
+      "asyncpg"
     ]
   },
   {
@@ -1814,11 +1888,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "postgresql"
+      "postgresql",
+      "duckdb"
     ],
     "worksWellWith": [
-      "better-sqlite3",
-      "prisma"
+      "prisma",
+      "drizzle-orm"
     ],
     "prerequisites": [
       "sql"
@@ -1857,7 +1932,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "mongoose",
-      "express"
+      "express",
+      "motor",
+      "beanie"
     ],
     "prerequisites": [
       "json"
@@ -1896,7 +1973,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "express",
       "socket-io",
-      "bullmq"
+      "bullmq",
+      "ioredis",
+      "fastapi-cache2"
     ],
     "prerequisites": [
       "networking"
@@ -2003,7 +2082,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "firebase-auth",
-      "neon"
+      "neon",
+      "amplify-aws"
     ],
     "worksWellWith": [
       "nextjs",
@@ -2080,7 +2160,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "meilisearch"
+      "meilisearch",
+      "clickhouse"
     ],
     "worksWellWith": [
       "docker",
@@ -2154,17 +2235,23 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "pinecone"
+      "pinecone",
+      "qdrant",
+      "weaviate"
     ],
     "worksWellWith": [
       "langchain",
-      "openai-sdk"
+      "openai-sdk",
+      "llamaindex",
+      "anthropic-sdk",
+      "fastembed"
     ],
     "prerequisites": [
       "python"
     ],
     "stackIndicators": [
-      "chromadb"
+      "chromadb",
+      "chromadb-default-embed"
     ]
   },
   {
@@ -2191,11 +2278,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "chromadb"
+      "chromadb",
+      "qdrant",
+      "weaviate"
     ],
     "worksWellWith": [
       "langchain",
-      "openai-sdk"
+      "openai-sdk",
+      "llamaindex",
+      "anthropic-sdk"
     ],
     "prerequisites": [
       "ai-concepts"
@@ -2230,7 +2321,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "drizzle-orm",
-      "typeorm"
+      "typeorm",
+      "mongoose"
     ],
     "worksWellWith": [
       "postgresql",
@@ -2285,7 +2377,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "typescript"
     ],
     "stackIndicators": [
-      "drizzle-orm"
+      "drizzle-orm",
+      "drizzle-kit"
     ]
   },
   {
@@ -2388,7 +2481,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "tortoise-orm"
+      "tortoise-orm",
+      "sqlmodel"
     ],
     "worksWellWith": [
       "fastapi",
@@ -2426,7 +2520,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "sqlalchemy"
+      "sqlalchemy",
+      "sqlmodel"
     ],
     "worksWellWith": [
       "fastapi",
@@ -2464,7 +2559,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "sqlx"
+      "sqlc-go",
+      "ent-go"
     ],
     "worksWellWith": [
       "gin",
@@ -2502,7 +2598,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "sqlx"
+      "sqlx-rust",
+      "sea-orm"
     ],
     "worksWellWith": [
       "actix-web",
@@ -2540,7 +2637,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "liquibase"
+      "liquibase",
+      "alembic"
     ],
     "worksWellWith": [
       "postgresql",
@@ -2577,7 +2675,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "flyway"
+      "flyway",
+      "alembic"
     ],
     "worksWellWith": [
       "spring-boot",
@@ -2655,7 +2754,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "clerk",
-      "lucia"
+      "lucia",
+      "passport"
     ],
     "worksWellWith": [
       "nextjs",
@@ -2733,7 +2833,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "clerk",
-      "supabase"
+      "supabase",
+      "auth0"
     ],
     "worksWellWith": [
       "react",
@@ -2772,7 +2873,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "next-auth",
-      "auth0"
+      "auth0",
+      "firebase-auth"
     ],
     "worksWellWith": [
       "nextjs",
@@ -2893,7 +2995,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "express",
       "passport",
-      "prisma"
+      "prisma",
+      "passlib"
     ],
     "prerequisites": [
       "nodejs"
@@ -2926,9 +3029,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       }
     ],
-    "alternatives": [
-      "cors"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "express",
       "cors"
@@ -2963,12 +3064,11 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       }
     ],
-    "alternatives": [
-      "helmet"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "express",
-      "fastify"
+      "fastify",
+      "helmet"
     ],
     "prerequisites": [
       "http-basics"
@@ -3002,12 +3102,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "ws",
-      "pusher"
+      "pusher",
+      "colyseus"
     ],
     "worksWellWith": [
       "express",
       "react",
-      "redis"
+      "redis",
+      "webrtc"
     ],
     "prerequisites": [
       "javascript",
@@ -3115,12 +3217,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "apollo-graphql"
+      "apollo-graphql",
+      "grpc"
     ],
     "worksWellWith": [
       "nextjs",
       "zod",
-      "tanstack-query"
+      "tanstack-query",
+      "typescript"
     ],
     "prerequisites": [
       "typescript"
@@ -3192,8 +3296,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "socket-io",
-      "ably"
+      "socket-io"
     ],
     "worksWellWith": [
       "react",
@@ -3230,9 +3333,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       }
     ],
-    "alternatives": [
-      "socket-io"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "socket-io",
       "javascript"
@@ -3380,12 +3481,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "kubernetes"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "docker-compose",
-      "github-actions"
+      "github-actions",
+      "kubernetes",
+      "act-ci"
     ],
     "prerequisites": [
       "cli"
@@ -3461,7 +3562,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "docker",
-      "terraform"
+      "terraform",
+      "vault"
     ],
     "prerequisites": [
       "docker",
@@ -3496,10 +3598,11 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "aws-cdk"
+      "aws-cdk",
+      "pulumi",
+      "ansible"
     ],
     "worksWellWith": [
-      "aws-cdk",
       "docker"
     ],
     "prerequisites": [
@@ -3570,7 +3673,10 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "terraform"
+      "terraform",
+      "pulumi",
+      "sst-dev",
+      "serverless-framework"
     ],
     "worksWellWith": [
       "typescript",
@@ -3608,7 +3714,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "railway",
-      "render"
+      "render",
+      "cloudflare-workers"
     ],
     "worksWellWith": [
       "nextjs",
@@ -3646,7 +3753,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "render",
-      "fly-io"
+      "fly-io",
+      "vercel"
     ],
     "worksWellWith": [
       "docker",
@@ -3684,7 +3792,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "railway",
-      "fly-io"
+      "fly-io",
+      "vercel"
     ],
     "worksWellWith": [
       "postgresql",
@@ -3835,7 +3944,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "vite",
       "react",
-      "typescript"
+      "typescript",
+      "msw",
+      "faker-js"
     ],
     "prerequisites": [
       "typescript"
@@ -3905,7 +4016,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "cypress"
+      "cypress",
+      "supertest"
     ],
     "worksWellWith": [
       "react",
@@ -4020,7 +4132,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "fastapi",
-      "django"
+      "django",
+      "hypothesis-py",
+      "pytest-asyncio",
+      "pytest-cov",
+      "pytest-mock",
+      "tox-py"
     ],
     "prerequisites": [
       "python"
@@ -4051,9 +4168,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       }
     ],
-    "alternatives": [
-      "easymock"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "spring-boot",
       "junit"
@@ -4087,9 +4202,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       }
     ],
-    "alternatives": [
-      "enzyme"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "react",
       "vitest",
@@ -4126,11 +4239,20 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "llamaindex"
+      "llamaindex",
+      "huggingface-transformers",
+      "litellm",
+      "dspy"
     ],
     "worksWellWith": [
       "openai-sdk",
-      "chromadb"
+      "chromadb",
+      "anthropic-sdk",
+      "google-genai-sdk",
+      "qdrant",
+      "pinecone",
+      "weaviate",
+      "mcp-sdk"
     ],
     "prerequisites": [
       "python-or-typescript"
@@ -4164,18 +4286,26 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "langchain"
+      "langchain",
+      "dspy"
     ],
     "worksWellWith": [
       "chromadb",
-      "openai-sdk"
+      "openai-sdk",
+      "qdrant",
+      "pinecone",
+      "weaviate",
+      "anthropic-sdk",
+      "google-genai-sdk",
+      "fastembed"
     ],
     "prerequisites": [
       "python"
     ],
     "stackIndicators": [
       "llamaindex",
-      "llama-index"
+      "llama-index",
+      "@llamaindex/core"
     ]
   },
   {
@@ -4203,7 +4333,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "anthropic-sdk",
-      "google-genai"
+      "google-genai",
+      "google-genai-sdk"
     ],
     "worksWellWith": [
       "zod",
@@ -4242,7 +4373,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "yup",
       "joi",
-      "valibot"
+      "valibot",
+      "arktype",
+      "validator-js"
     ],
     "worksWellWith": [
       "react-hook-form",
@@ -4579,14 +4712,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "polars",
-      "duckdb"
+      "polars"
     ],
     "worksWellWith": [
       "numpy",
       "matplotlib",
       "scikit-learn",
-      "jupyter"
+      "jupyter",
+      "duckdb"
     ],
     "prerequisites": [
       "python"
@@ -4624,14 +4757,13 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "scipy",
-      "pytorch"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "pandas",
       "matplotlib",
-      "scikit-learn"
+      "scikit-learn",
+      "pytorch",
+      "scipy"
     ],
     "prerequisites": [
       "python"
@@ -4671,7 +4803,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "pytorch",
-      "tensorflow"
+      "tensorflow",
+      "statsmodels"
     ],
     "worksWellWith": [
       "numpy",
@@ -4716,12 +4849,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "seaborn",
-      "plotly"
+      "plotly",
+      "altair-viz"
     ],
     "worksWellWith": [
       "numpy",
-      "pandas"
+      "pandas",
+      "seaborn",
+      "networkx"
     ],
     "prerequisites": [
       "python"
@@ -4759,8 +4894,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "matplotlib",
-      "plotly"
+      "plotly",
+      "altair-viz"
     ],
     "worksWellWith": [
       "pandas",
@@ -4805,12 +4940,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "pandas",
-      "duckdb"
+      "pandas"
     ],
     "worksWellWith": [
       "numpy",
-      "pyarrow"
+      "pyarrow",
+      "duckdb"
     ],
     "prerequisites": [
       "python"
@@ -4987,7 +5122,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "fastapi",
-      "asyncio"
+      "asyncio",
+      "tenacity"
     ],
     "prerequisites": [
       "python"
@@ -5073,7 +5209,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "fastapi",
-      "sqlmodel"
+      "sqlmodel",
+      "pydantic-settings"
     ],
     "prerequisites": [
       "python"
@@ -5156,7 +5293,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "rq",
-      "dramatiq"
+      "dramatiq",
+      "apscheduler",
+      "temporal"
     ],
     "worksWellWith": [
       "redis",
@@ -5201,8 +5340,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "django-migrations",
-      "flyway"
+      "flyway",
+      "liquibase"
     ],
     "worksWellWith": [
       "sqlalchemy",
@@ -5249,8 +5388,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "sqlalchemy",
-      "tortoise-orm",
-      "peewee"
+      "tortoise-orm"
     ],
     "worksWellWith": [
       "fastapi",
@@ -5425,7 +5563,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "uv",
+      "uv-pkg",
       "pipenv",
       "pdm"
     ],
@@ -5491,7 +5629,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "mobile",
     "difficulty": "intermediate",
     "description": "Framework for building native mobile applications for iOS and Android using React and JavaScript.",
-    "whyUseIt": "Build native iOS and Android apps with a single React codebase, native performance, and huge component ecosystem.",
+    "whyUseIt": "Premier cross-platform mobile framework leveraging React and the New Architecture (Fabric renderer and TurboModules) to build truly native iOS and Android apps.",
     "tags": [
       "react-native",
       "mobile",
@@ -5516,13 +5654,18 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "flutter",
-      "expo",
-      "ionic"
+      "ionic",
+      "capacitor"
     ],
     "worksWellWith": [
       "expo",
       "react-navigation",
-      "typescript"
+      "typescript",
+      "react-native-mmkv",
+      "react-native-keychain",
+      "react-native-fast-image",
+      "react-native-maps",
+      "react-native-video"
     ],
     "prerequisites": [
       "react",
@@ -5538,7 +5681,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "mobile",
     "difficulty": "intermediate",
     "description": "Google multi-platform UI toolkit for building natively compiled mobile, web, and desktop apps from a single Dart codebase.",
-    "whyUseIt": "Delivers 60/120fps hardware-accelerated graphics using Skia/Impeller and rich customizable widget sets across all platforms.",
+    "whyUseIt": "Hardware-accelerated multi-platform UI framework using the Impeller rendering engine to deliver consistent 60/120 FPS performance across iOS, Android, web, and desktop from a single Dart codebase.",
     "tags": [
       "flutter",
       "dart",
@@ -5564,11 +5707,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "react-native",
-      "expo"
+      "expo",
+      "ionic"
     ],
     "worksWellWith": [
       "dart",
-      "firebase"
+      "firebase-auth",
+      "dio-flutter",
+      "flutter-secure-storage",
+      "go-router-flutter",
+      "intl-flutter"
     ],
     "prerequisites": [
       "dart"
@@ -5583,7 +5731,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "mobile",
     "difficulty": "beginner",
     "description": "Open-source framework and platform for universal native apps for Android, iOS, and the web with React Native.",
-    "whyUseIt": "The recommended way to start React Native apps without configuring native Xcode/Android Studio toolchains.",
+    "whyUseIt": "The recommended way to build universal native React Native applications with file-based routing, instant OTA updates, and native module auto-linking without complex Xcode or Android Studio configuration.",
     "tags": [
       "expo",
       "react-native",
@@ -5607,13 +5755,13 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "react-native",
       "flutter"
     ],
     "worksWellWith": [
       "react-native",
       "typescript",
-      "expo-router"
+      "expo-router",
+      "react-native-svg"
     ],
     "prerequisites": [
       "react",
@@ -5656,7 +5804,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "react-native",
-      "expo"
+      "expo",
+      "react-native-screens",
+      "react-native-safe-area-context"
     ],
     "prerequisites": [
       "react-native"
@@ -5788,7 +5938,6 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "cordova",
       "react-native"
     ],
     "worksWellWith": [
@@ -5836,12 +5985,17 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "tensorflow",
-      "jax"
+      "jax",
+      "scikit-learn",
+      "keras",
+      "llm-c",
+      "micrograd"
     ],
     "worksWellWith": [
       "numpy",
       "huggingface-transformers",
-      "cuda"
+      "cuda",
+      "unsloth"
     ],
     "prerequisites": [
       "python",
@@ -5882,7 +6036,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "pytorch",
-      "jax"
+      "jax",
+      "scikit-learn"
     ],
     "worksWellWith": [
       "keras",
@@ -5926,7 +6081,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "langchain",
-      "ollama"
+      "ollama",
+      "nanogpt",
+      "fastembed"
     ],
     "worksWellWith": [
       "pytorch",
@@ -6060,7 +6217,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "vllm",
       "lmstudio",
-      "llamacpp"
+      "llamacpp",
+      "huggingface-transformers"
     ],
     "worksWellWith": [
       "langchain",
@@ -6109,7 +6267,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "langchain",
       "llamaindex",
-      "openai-sdk"
+      "openai-sdk",
+      "fastembed",
+      "anthropic-sdk"
     ],
     "prerequisites": [],
     "stackIndicators": [
@@ -6152,7 +6312,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "langchain",
-      "llamaindex"
+      "llamaindex",
+      "openai-sdk",
+      "anthropic-sdk"
     ],
     "prerequisites": [],
     "stackIndicators": [
@@ -6190,7 +6352,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "wandb",
-      "dvc"
+      "dvc",
+      "autoresearch"
     ],
     "worksWellWith": [
       "scikit-learn",
@@ -6234,7 +6397,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "mlflow",
-      "tensorboard"
+      "tensorboard",
+      "autoresearch"
     ],
     "worksWellWith": [
       "pytorch",
@@ -6281,7 +6445,10 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "axum",
       "reqwest",
-      "serde"
+      "serde",
+      "clap",
+      "tracing-rust",
+      "dashmap-rust"
     ],
     "prerequisites": [
       "rust"
@@ -6325,7 +6492,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "tokio",
       "axum",
-      "serde_json"
+      "serde-json",
+      "chrono-rust"
     ],
     "prerequisites": [
       "rust"
@@ -6457,7 +6625,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "tokio",
       "serde",
-      "serde_json"
+      "serde-json"
     ],
     "prerequisites": [
       "rust"
@@ -6636,7 +6804,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "gorm",
-      "sqlx-go"
+      "sqlc-go"
     ],
     "prerequisites": [
       "go"
@@ -7063,8 +7231,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "jooq",
-      "mybatis"
+      "spring-data-jpa"
     ],
     "worksWellWith": [
       "spring-boot",
@@ -7290,7 +7457,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "grafana",
       "kubernetes",
-      "docker"
+      "docker",
+      "opentelemetry"
     ],
     "prerequisites": [],
     "stackIndicators": [
@@ -7411,7 +7579,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "trivy",
-      "dependabot"
+      "dependabot-tool"
     ],
     "worksWellWith": [
       "github-actions",
@@ -7452,8 +7620,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "snyk",
-      "grype"
+      "snyk"
     ],
     "worksWellWith": [
       "docker",
@@ -7754,7 +7921,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "kbar"
+      "kbar",
+      "downshift-pkg"
     ],
     "worksWellWith": [
       "shadcn-ui",
@@ -7971,8 +8139,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "click",
-      "argparse"
+      "click"
     ],
     "worksWellWith": [
       "rich",
@@ -8015,8 +8182,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "typer",
-      "argparse"
+      "typer"
     ],
     "worksWellWith": [
       "flask",
@@ -8059,13 +8225,13 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "textual",
       "colorama"
     ],
     "worksWellWith": [
       "typer",
       "click",
-      "logging"
+      "logging",
+      "textual"
     ],
     "prerequisites": [
       "python"
@@ -8103,7 +8269,6 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "curses",
       "blessed"
     ],
     "worksWellWith": [
@@ -8326,8 +8491,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "numpy",
-      "sympy"
+      "sympy",
+      "statsmodels"
     ],
     "worksWellWith": [
       "numpy",
@@ -8529,7 +8694,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "mobile",
     "difficulty": "beginner",
     "description": "Universal styling system for React Native using Tailwind CSS with compile-time styling compilation.",
-    "whyUseIt": "Write identical Tailwind CSS utility classes across React Native and web with native performance.",
+    "whyUseIt": "Universal styling engine bringing Tailwind CSS utility classes to React Native with native style compilation and zero runtime overhead.",
     "tags": [
       "nativewind",
       "tailwind",
@@ -8552,7 +8717,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "react-native-stylesheet"
+      "tamagui"
     ],
     "worksWellWith": [
       "expo",
@@ -8594,9 +8759,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "react-native-animated"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "react-native-gesture-handler",
       "expo"
@@ -8681,7 +8844,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "riverpod",
-      "provider-flutter"
+      "provider-flutter",
+      "flutter-hooks"
     ],
     "worksWellWith": [
       "flutter",
@@ -8726,7 +8890,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "flutter-bloc",
-      "provider-flutter"
+      "provider-flutter",
+      "flutter-hooks"
     ],
     "worksWellWith": [
       "flutter",
@@ -8902,13 +9067,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "clsx"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "clsx",
       "tailwind-css",
-      "shadcn-ui"
+      "shadcn-ui",
+      "cva"
     ],
     "prerequisites": [
       "tailwind-css"
@@ -9078,7 +9242,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "agenda",
-      "bee-queue"
+      "bee-queue",
+      "node-cron",
+      "temporal"
     ],
     "worksWellWith": [
       "redis",
@@ -9122,13 +9288,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "redis"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "bullmq",
       "express",
-      "nestjs"
+      "nestjs",
+      "redis"
     ],
     "prerequisites": [
       "redis",
@@ -9255,7 +9420,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "artillery",
-      "locust",
+      "locust-load",
       "autocannon"
     ],
     "worksWellWith": [
@@ -9301,7 +9466,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "prettier",
-      "eslint"
+      "eslint",
+      "oxc-tool"
     ],
     "worksWellWith": [
       "typescript",
@@ -9342,7 +9508,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "nx",
-      "lerna"
+      "lerna",
+      "vite"
     ],
     "worksWellWith": [
       "pnpm",
@@ -9385,9 +9552,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "esbuild",
       "unbuild",
-      "rollup"
+      "rollup",
+      "vite"
     ],
     "worksWellWith": [
       "typescript",
@@ -9471,9 +9638,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "husky"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "husky",
       "prettier",
@@ -9522,7 +9687,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "react",
       "vue",
       "svelte",
-      "rust"
+      "rust",
+      "wasm-bindgen"
     ],
     "prerequisites": [
       "rust",
@@ -9954,8 +10120,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "lexical",
-      "quill",
-      "slate"
+      "quill-editor",
+      "slate-editor"
     ],
     "worksWellWith": [
       "react",
@@ -10000,7 +10166,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "tiptap",
-      "slate"
+      "slate-editor",
+      "quill-editor"
     ],
     "worksWellWith": [
       "react"
@@ -10042,7 +10209,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "mdx"
+      "mdx-js"
     ],
     "worksWellWith": [
       "remark-gfm",
@@ -10339,9 +10506,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "child_process"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "nodejs"
     ],
@@ -10380,9 +10545,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "fs.watch"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "vite",
       "nodejs"
@@ -10427,7 +10590,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "husky",
-      "semantic-release"
+      "semantic-release-pkg"
     ],
     "prerequisites": [
       "git"
@@ -10466,7 +10629,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "semantic-release",
+      "semantic-release-pkg",
       "lerna"
     ],
     "worksWellWith": [
@@ -10596,8 +10759,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "ujson",
-      "json"
+      "ujson"
     ],
     "worksWellWith": [
       "fastapi",
@@ -10644,7 +10806,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "worksWellWith": [
       "fastapi",
-      "mongodb"
+      "mongodb",
+      "beanie"
     ],
     "prerequisites": [
       "python",
@@ -10683,7 +10846,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "motor"
+      "motor",
+      "beanie"
     ],
     "worksWellWith": [
       "django",
@@ -10726,9 +10890,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "graphene"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "fastapi",
       "django"
@@ -10812,9 +10974,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "pytest"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "pytest",
       "pydantic"
@@ -10855,7 +11015,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "sphinx",
+      "sphinx-doc",
       "docusaurus"
     ],
     "worksWellWith": [
@@ -10876,7 +11036,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "category": "mobile",
     "difficulty": "intermediate",
     "description": "Style system and component suite for React Native and Web with an optimizing compiler.",
-    "whyUseIt": "Delivers zero-runtime compiled CSS styles for web and typed React Native components with responsive themes.",
+    "whyUseIt": "Universal UI system delivering zero-runtime compiled CSS styles for web and optimized React Native components with typed themes and media queries.",
     "tags": [
       "tamagui",
       "ui",
@@ -11208,7 +11368,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "cadence",
-      "asynq"
+      "asynq-go"
     ],
     "worksWellWith": [
       "go"
@@ -11248,11 +11408,10 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "crossbeam"
-    ],
+    "alternatives": [],
     "worksWellWith": [
-      "rust"
+      "rust",
+      "crossbeam-rust"
     ],
     "prerequisites": [
       "rust"
@@ -11420,8 +11579,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "hibernate",
-      "jooq"
+      "hibernate"
     ],
     "worksWellWith": [
       "spring-boot",
@@ -11511,7 +11669,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "ktor",
       "spring-boot",
-      "android"
+      "android",
+      "ktor-client-jvm"
     ],
     "prerequisites": [
       "kotlin"
@@ -11550,7 +11709,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "depcheck",
+      "depcheck-tool",
       "ts-prune"
     ],
     "worksWellWith": [
@@ -11637,7 +11796,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "workerpool"
+      "workerpool-js"
     ],
     "worksWellWith": [
       "nodejs"
@@ -11806,9 +11965,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "limits"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "fastapi",
       "redis"
@@ -11851,8 +12008,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "motor",
-      "mongoengine"
+      "pymongo"
     ],
     "worksWellWith": [
       "fastapi",
@@ -12027,9 +12183,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "bcrypt"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "fastapi",
       "bcrypt"
@@ -12243,9 +12397,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "panresponder"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "react-native-reanimated",
       "expo"
@@ -12932,7 +13084,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "minikube",
+      "minikube-k8s",
       "k3d"
     ],
     "worksWellWith": [
@@ -13018,7 +13170,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "dependabot"
+      "dependabot-tool"
     ],
     "worksWellWith": [
       "github-actions",
@@ -13232,7 +13384,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "python-social-auth"
+      "python-social-auth",
+      "pyjwt-pkg",
+      "fastapi-users-pkg"
     ],
     "worksWellWith": [
       "fastapi",
@@ -13317,12 +13471,11 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "react-native"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "react-navigation",
-      "expo"
+      "expo",
+      "react-native"
     ],
     "prerequisites": [
       "react-native"
@@ -13401,9 +13554,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "safeareaview"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "react-navigation",
       "nativewind",
@@ -13576,9 +13727,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       }
     ],
-    "alternatives": [
-      "json-stringify-safe"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "fastify",
       "nodejs"
@@ -14740,7 +14889,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "outlines",
+      "outlines-ai",
       "instructor"
     ],
     "worksWellWith": [
@@ -15012,12 +15161,13 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "playwright"
+      "open-interpreter"
     ],
     "worksWellWith": [
       "playwright",
       "pydantic",
-      "langchain"
+      "langchain",
+      "anthropic-sdk"
     ],
     "prerequisites": [
       "python"
@@ -15054,13 +15204,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "tutorial"
       }
     ],
-    "alternatives": [
-      "langchain"
-    ],
+    "alternatives": [],
     "worksWellWith": [
       "typescript",
       "python",
-      "fastapi"
+      "fastapi",
+      "langchain",
+      "anthropic-sdk",
+      "google-genai-sdk",
+      "rea-re"
     ],
     "prerequisites": [],
     "stackIndicators": [
@@ -15146,7 +15298,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "langchain",
-      "instructor"
+      "instructor",
+      "anthropic-sdk",
+      "google-genai-sdk"
     ],
     "worksWellWith": [
       "fastapi",
@@ -15191,7 +15345,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "instructor",
-      "pydantic"
+      "jev"
     ],
     "worksWellWith": [
       "vllm",
@@ -15235,17 +15389,648 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
-      "langchain"
+      "browser-use"
     ],
     "worksWellWith": [
       "python",
-      "ollama"
+      "ollama",
+      "litellm",
+      "anthropic-sdk"
     ],
     "prerequisites": [
       "python"
     ],
     "stackIndicators": [
       "open-interpreter"
+    ]
+  },
+  {
+    "id": "typescript",
+    "name": "TypeScript",
+    "category": "utility",
+    "difficulty": "beginner",
+    "description": "A strongly typed programming language that builds on JavaScript, giving you compile-time type safety and advanced tooling.",
+    "whyUseIt": "Catches type errors before execution, provides premier auto-completion, and serves as the industry standard for enterprise JavaScript.",
+    "tags": [
+      "typescript",
+      "types",
+      "compiler",
+      "static-typing",
+      "javascript",
+      "tooling"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://www.typescriptlang.org",
+    "learnResources": [
+      {
+        "label": "TypeScript Handbook",
+        "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [],
+    "worksWellWith": [
+      "react",
+      "nextjs",
+      "vite",
+      "zod",
+      "vitest",
+      "eslint",
+      "bun",
+      "pnpm",
+      "fast-glob"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "typescript",
+      "tsc"
+    ]
+  },
+  {
+    "id": "vite",
+    "name": "Vite",
+    "category": "utility",
+    "difficulty": "beginner",
+    "description": "Next-generation frontend build tool providing an instantaneous development server via native ESM and optimized Rollup bundling.",
+    "whyUseIt": "Eliminates slow bundle compilation with sub-millisecond Hot Module Replacement (HMR) and zero-config framework templates.",
+    "tags": [
+      "vite",
+      "bundler",
+      "esm",
+      "hmr",
+      "build-tool",
+      "frontend",
+      "javascript"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://vite.dev",
+    "learnResources": [
+      {
+        "label": "Vite Documentation",
+        "url": "https://vite.dev/guide/",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "turborepo",
+      "tsup",
+      "bun"
+    ],
+    "worksWellWith": [
+      "react",
+      "vue",
+      "svelte",
+      "solidjs",
+      "tailwind-css",
+      "vitest",
+      "typescript",
+      "chokidar",
+      "execa"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "vite",
+      "@vitejs/plugin-react",
+      "@vitejs/plugin-vue"
+    ]
+  },
+  {
+    "id": "bun",
+    "name": "Bun",
+    "category": "utility",
+    "difficulty": "intermediate",
+    "description": "Ultra-fast all-in-one JavaScript and TypeScript runtime, native package manager, test runner, and bundler written in Zig.",
+    "whyUseIt": "Executes TypeScript directly without transpilation, installs node_modules up to 20x faster, and offers drop-in Node.js compatibility.",
+    "tags": [
+      "bun",
+      "runtime",
+      "package-manager",
+      "zig",
+      "fast",
+      "bundler",
+      "javascript",
+      "typescript"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://bun.sh",
+    "learnResources": [
+      {
+        "label": "Bun Documentation",
+        "url": "https://bun.sh/docs",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "vite",
+      "pnpm"
+    ],
+    "worksWellWith": [
+      "typescript",
+      "react",
+      "hono",
+      "tailwind-css"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "bun",
+      "bun-types"
+    ]
+  },
+  {
+    "id": "eslint",
+    "name": "ESLint",
+    "category": "utility",
+    "difficulty": "beginner",
+    "description": "The premier pluggable and configurable static analysis tool for identifying programmatic bugs and style issues in JavaScript and TypeScript.",
+    "whyUseIt": "Enforces robust team code quality standards, eliminates syntax antipatterns automatically, and supports modern flat-config pipelines.",
+    "tags": [
+      "eslint",
+      "linter",
+      "static-analysis",
+      "code-quality",
+      "javascript",
+      "typescript"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://eslint.org",
+    "learnResources": [
+      {
+        "label": "ESLint Getting Started",
+        "url": "https://eslint.org/docs/latest/use/getting-started",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "biome",
+      "oxc-tool"
+    ],
+    "worksWellWith": [
+      "prettier",
+      "typescript",
+      "lint-staged",
+      "husky"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "eslint",
+      "@typescript-eslint/parser",
+      "@typescript-eslint/eslint-plugin"
+    ]
+  },
+  {
+    "id": "pnpm",
+    "name": "pnpm",
+    "category": "utility",
+    "difficulty": "beginner",
+    "description": "Fast, disk space-efficient package manager leveraging a content-addressable store and hard links to eliminate duplicate dependencies.",
+    "whyUseIt": "Saves dozens of gigabytes of disk space, prevents phantom dependencies with non-flat node_modules, and accelerates monorepo CI builds.",
+    "tags": [
+      "pnpm",
+      "package-manager",
+      "monorepo",
+      "symlinks",
+      "fast",
+      "javascript"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://pnpm.io",
+    "learnResources": [
+      {
+        "label": "pnpm Motivation & Docs",
+        "url": "https://pnpm.io/motivation",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "bun"
+    ],
+    "worksWellWith": [
+      "turborepo",
+      "changesets",
+      "typescript",
+      "vite"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "pnpm"
+    ]
+  },
+  {
+    "id": "rxjs",
+    "name": "RxJS",
+    "category": "utility",
+    "difficulty": "advanced",
+    "description": "Reactive Extensions library for JavaScript that leverages observable sequences for composing asynchronous and event-driven programs.",
+    "whyUseIt": "Declarative stream operators simplify complex async workflows, event debouncing, race condition management, and real-time sockets.",
+    "tags": [
+      "rxjs",
+      "reactive",
+      "observables",
+      "streams",
+      "async",
+      "angular",
+      "javascript"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://rxjs.dev",
+    "learnResources": [
+      {
+        "label": "RxJS Guide",
+        "url": "https://rxjs.dev/guide/overview",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [],
+    "worksWellWith": [
+      "angular",
+      "ngrx",
+      "typescript"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "rxjs"
+    ]
+  },
+  {
+    "id": "ngrx",
+    "name": "NgRx",
+    "category": "state-management",
+    "difficulty": "advanced",
+    "description": "Reactive state management framework for Angular providing Redux-inspired store, side effect isolation, and entity management.",
+    "whyUseIt": "Provides a deterministic single source of truth for large Angular architectures with memoized selectors and strict action dispatching.",
+    "tags": [
+      "ngrx",
+      "angular",
+      "state-management",
+      "store",
+      "effects",
+      "redux",
+      "typescript"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://ngrx.io",
+    "learnResources": [
+      {
+        "label": "NgRx Documentation",
+        "url": "https://ngrx.io/docs",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "redux-toolkit",
+      "pinia",
+      "mobx"
+    ],
+    "worksWellWith": [
+      "angular",
+      "rxjs",
+      "typescript"
+    ],
+    "prerequisites": [
+      "rxjs"
+    ],
+    "stackIndicators": [
+      "@ngrx/store",
+      "@ngrx/effects",
+      "@ngrx/entity"
+    ]
+  },
+  {
+    "id": "clickhouse",
+    "name": "ClickHouse",
+    "category": "database",
+    "difficulty": "intermediate",
+    "description": "Fast open-source column-oriented database management system for real-time analytical reporting and event telemetry aggregation.",
+    "whyUseIt": "Executes analytical SQL queries up to 100x faster than traditional row-oriented databases with extraordinary columnar data compression.",
+    "tags": [
+      "clickhouse",
+      "database",
+      "analytics",
+      "columnar",
+      "olap",
+      "sql",
+      "big-data"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://clickhouse.com",
+    "learnResources": [
+      {
+        "label": "ClickHouse Documentation",
+        "url": "https://clickhouse.com/docs",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "duckdb",
+      "elasticsearch"
+    ],
+    "worksWellWith": [
+      "grafana",
+      "prometheus",
+      "python",
+      "docker"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "@clickhouse/client",
+      "clickhouse-connect",
+      "clickhouse"
+    ]
+  },
+  {
+    "id": "caddy",
+    "name": "Caddy",
+    "category": "devops-container",
+    "difficulty": "beginner",
+    "description": "Modern, enterprise-ready, open-source web server and reverse proxy with automatic HTTPS and certificate renewal written in Go.",
+    "whyUseIt": "Automates TLS certificate management with zero manual configuration, featuring clean Caddyfile syntax and rock-solid reverse proxying.",
+    "tags": [
+      "caddy",
+      "web-server",
+      "reverse-proxy",
+      "https",
+      "ssl",
+      "tls",
+      "devops",
+      "go"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://caddyserver.com",
+    "learnResources": [
+      {
+        "label": "Caddy Documentation",
+        "url": "https://caddyserver.com/docs/",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "nginx"
+    ],
+    "worksWellWith": [
+      "docker",
+      "docker-compose"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "caddy"
+    ]
+  },
+  {
+    "id": "temporal",
+    "name": "Temporal",
+    "category": "utility",
+    "difficulty": "advanced",
+    "description": "Open-source durable execution platform that orchestrates complex distributed workflows and guarantees state preservation across process crashes.",
+    "whyUseIt": "Eliminates complex manual saga patterns, retries, and queues by treating multi-step distributed operations as durable code.",
+    "tags": [
+      "temporal",
+      "workflow",
+      "orchestration",
+      "durable-execution",
+      "microservices",
+      "distributed-systems"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://temporal.io",
+    "learnResources": [
+      {
+        "label": "Temporal Documentation",
+        "url": "https://docs.temporal.io",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "celery",
+      "bullmq"
+    ],
+    "worksWellWith": [
+      "temporal-go",
+      "typescript",
+      "python",
+      "docker"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "@temporalio/workflow",
+      "temporalio"
+    ]
+  },
+  {
+    "id": "anthropic-sdk",
+    "name": "Anthropic Claude SDK",
+    "category": "ai-ml",
+    "difficulty": "beginner",
+    "description": "Official SDK for interacting with Anthropic Claude models, supporting streaming completions, tool use, and structured prompt caching.",
+    "whyUseIt": "The definitive client library for building Claude-powered AI agents, MCP servers, and vision pipelines with native prompt caching and system prompt ergonomics.",
+    "tags": [
+      "anthropic",
+      "claude",
+      "llm",
+      "ai",
+      "agents",
+      "mcp",
+      "prompt-caching",
+      "tool-use"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://docs.anthropic.com",
+    "learnResources": [
+      {
+        "label": "Anthropic Claude API Reference",
+        "url": "https://docs.anthropic.com/en/api/getting-started",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "openai-sdk",
+      "litellm",
+      "google-genai-sdk"
+    ],
+    "worksWellWith": [
+      "mcp-sdk",
+      "langchain",
+      "llamaindex",
+      "typescript",
+      "python"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "@anthropic-ai/sdk",
+      "anthropic"
+    ]
+  },
+  {
+    "id": "google-genai-sdk",
+    "name": "Google GenAI SDK",
+    "category": "ai-ml",
+    "difficulty": "beginner",
+    "description": "Official client library for the Google Gemini API, enabling multimodal reasoning across text, code, audio, images, and video with large context windows.",
+    "whyUseIt": "Connects applications to Gemini models with native 1M+ token context windows, built-in function calling, and optimized multimodal streaming.",
+    "tags": [
+      "google-genai",
+      "gemini",
+      "multimodal",
+      "llm",
+      "ai",
+      "google",
+      "agents"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://ai.google.dev",
+    "learnResources": [
+      {
+        "label": "Gemini API Documentation",
+        "url": "https://ai.google.dev/gemini-api/docs",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "openai-sdk",
+      "litellm",
+      "anthropic-sdk"
+    ],
+    "worksWellWith": [
+      "mcp-sdk",
+      "langchain",
+      "llamaindex",
+      "python",
+      "typescript"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "@google/genai",
+      "google-genai",
+      "google-generativeai"
+    ]
+  },
+  {
+    "id": "instructor",
+    "name": "Instructor",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "Library for structured LLM data extraction that guarantees outputs conform strictly to Pydantic and Zod data schemas with automated retry loops.",
+    "whyUseIt": "Eliminates unparseable JSON and hallucinated fields by binding LLM function calling directly to validation schemas with automated retry logic on validation failure.",
+    "tags": [
+      "instructor",
+      "structured-outputs",
+      "pydantic",
+      "zod",
+      "json-schema",
+      "llm",
+      "ai",
+      "extraction"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://python.useinstructor.com",
+    "learnResources": [
+      {
+        "label": "Instructor Documentation",
+        "url": "https://python.useinstructor.com",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "outlines-ai",
+      "jev",
+      "litellm"
+    ],
+    "worksWellWith": [
+      "openai-sdk",
+      "anthropic-sdk",
+      "google-genai-sdk",
+      "pydantic",
+      "fastapi"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "instructor",
+      "@instructor-ai/instructor"
+    ]
+  },
+  {
+    "id": "dspy",
+    "name": "DSPy",
+    "category": "ai-ml",
+    "difficulty": "advanced",
+    "description": "Stanford framework for algorithmically optimizing LLM prompts and weights, treating prompt engineering as modular program compilation.",
+    "whyUseIt": "Replaces brittle manual prompt hacking with programmatic teleprompters and optimizers that tune instructions and few-shot examples against quantifiable metric assertions.",
+    "tags": [
+      "dspy",
+      "stanford",
+      "prompt-optimization",
+      "few-shot",
+      "teleprompter",
+      "llm",
+      "ai-agents",
+      "evaluation"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://dspy-docs.vercel.app",
+    "learnResources": [
+      {
+        "label": "DSPy Documentation",
+        "url": "https://dspy-docs.vercel.app",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "langchain",
+      "llamaindex"
+    ],
+    "worksWellWith": [
+      "openai-sdk",
+      "anthropic-sdk",
+      "fastembed",
+      "python"
+    ],
+    "prerequisites": [
+      "python"
+    ],
+    "stackIndicators": [
+      "dspy-ai",
+      "dspy"
+    ]
+  },
+  {
+    "id": "fastembed",
+    "name": "FastEmbed",
+    "category": "ai-ml",
+    "difficulty": "beginner",
+    "description": "Fast, lightweight Python library for generating vector embeddings locally using ONNX Runtime with zero heavy PyTorch dependencies.",
+    "whyUseIt": "Generates embeddings up to 5x faster than sentence-transformers while reducing docker image sizes by eliminating large CUDA and PyTorch runtime dependencies.",
+    "tags": [
+      "fastembed",
+      "embeddings",
+      "vector-search",
+      "onnx",
+      "rag",
+      "qdrant",
+      "ai",
+      "python"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://qdrant.github.io/fastembed/",
+    "learnResources": [
+      {
+        "label": "FastEmbed Documentation",
+        "url": "https://qdrant.github.io/fastembed/",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "huggingface-transformers"
+    ],
+    "worksWellWith": [
+      "qdrant",
+      "chromadb",
+      "llamaindex",
+      "python"
+    ],
+    "prerequisites": [
+      "python"
+    ],
+    "stackIndicators": [
+      "fastembed"
     ]
   }
 ]) as unknown as Skill[];

@@ -66,6 +66,27 @@ describe('CommentParser', () => {
       expect(parseCommentLine('const idea = "my idea";', 0)).toBeNull();
     });
 
+    it('rejects Python floor division operations and inline strings (Anti-Happy-Path)', () => {
+      // Floor division must never trigger CodeLens
+      expect(parseCommentLine('x = a // b', 0)).toBeNull();
+      expect(parseCommentLine('val = count // 2  # integer divide', 0)).toBeNull();
+      expect(parseCommentLine('const ratio = total // step;', 0)).toBeNull();
+
+      // URLs and hex colors must never trigger CodeLens
+      expect(parseCommentLine('const url = "https://example.com/api";', 0)).toBeNull();
+      expect(parseCommentLine('const color = "#18181b";', 0)).toBeNull();
+    });
+
+    it('parses deeply indented Python # IDEA: comments correctly', () => {
+      const line = '        # IDEA: async postgres connection pool with alembic';
+      const parsed = parseCommentLine(line, 14);
+
+      expect(parsed).toBeDefined();
+      expect(parsed?.keyword).toBe('IDEA');
+      expect(parsed?.intent).toBe('async postgres connection pool with alembic');
+      expect(parsed?.lineNumber).toBe(14);
+    });
+
     it('handles mixed casing (// idea: and // Skill:)', () => {
       const parsed1 = parseCommentLine('// idea: lowercase keyword', 0);
       expect(parsed1?.keyword).toBe('IDEA');

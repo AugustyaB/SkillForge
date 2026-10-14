@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   buildContextTreeItems,
   buildQuickActionItems,
+  buildAllCommandsItems,
   buildRecentQueriesItems,
   type RecentQueryEntry,
 } from '../views/tree-view-models.js';
@@ -99,6 +100,28 @@ describe('TreeViewModels', () => {
 
       const icons = items.map((i) => i.iconId);
       expect(icons).toEqual(['sparkle', 'search', 'refresh']);
+    });
+  });
+
+  describe('buildAllCommandsItems', () => {
+    it('returns all 16 SkillForge commands with icons, descriptions, and non-collapsible state', () => {
+      const items = buildAllCommandsItems();
+      expect(items).toHaveLength(16);
+
+      for (const item of items) {
+        expect(item.id).toMatch(/^cmd-/);
+        expect(item.label.length).toBeGreaterThan(3);
+        expect(item.commandId).toMatch(/^skillforge\./);
+        expect(item.iconId).toBeTruthy();
+        expect(item.collapsibleState).toBe('none');
+      }
+
+      const commandIds = items.map((i) => i.commandId);
+      expect(commandIds).toContain('skillforge.suggest');
+      expect(commandIds).toContain('skillforge.suggestForCurrentFile');
+      expect(commandIds).toContain('skillforge.compareSkills');
+      expect(commandIds).toContain('skillforge.generateAgentSkill');
+      expect(commandIds).toContain('skillforge.openWalkthrough');
     });
   });
 

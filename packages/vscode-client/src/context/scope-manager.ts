@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as fs from 'fs';
 import type { WorkspaceContext, DetectedPackage } from '@skillforge/shared';
 import {
   findCandidateScopes,
   resolveScopePath,
   normalizePath,
+  isPathInsideRoot,
   detectManifestInDir,
   readInstalledPackagesFromScope,
   type InstalledPackageInfo,
@@ -31,6 +33,19 @@ export class ScopeManager {
   }
 
   public get activeScope(): ScopeSelection {
+    if (this.currentScope.absolutePath && !fs.existsSync(this.currentScope.absolutePath)) {
+      const root = this.workspaceRoot;
+      const manifestInfo = detectManifestInDir(root);
+      this.currentScope = {
+        label: 'Entire Workspace',
+        relativePath: '',
+        absolutePath: root,
+        isRoot: true,
+        ecosystem: manifestInfo?.ecosystem,
+      };
+      this.context.workspaceState.update(STORAGE_KEY_SCOPE, '');
+      this._onDidChangeScope.fire(this.currentScope);
+    }
     return this.currentScope;
   }
 
@@ -86,9 +101,9 @@ export class ScopeManager {
 
     const items: ScopeQuickPickItem[] = [
       {
-        label: '$(root-folder) Entire Workspace',
-        description: 'Scan dependencies across all workspace folders',
-        detail: root,
+        label: '$(root-folder) Entire Workspace (Default)',
+        description: 'Scan all folders in your project',
+        detail: `Reads package files across your whole workspace (${root})`,
         scopeRelative: '',
         isRoot: true,
       },
@@ -97,23 +112,24 @@ export class ScopeManager {
     for (const c of candidates) {
       items.push({
         label: `$(folder) ${c.relativePath}`,
-        description: `Ecosystem: ${c.ecosystem} (${c.manifestFile})`,
-        detail: c.absolutePath,
+        description: `Detected: ${c.ecosystem} (${c.manifestFile})`,
+        detail: `Focus recommendations and terminal installs inside ${c.relativePath}`,
         scopeRelative: c.relativePath,
         isRoot: false,
       });
     }
 
     items.push({
-      label: '$(folder-opened) Browse custom folder...',
-      description: 'Select any subfolder in this project',
+      label: '$(folder-opened) Browse for another subfolder...',
+      description: 'Pick any folder inside this workspace',
+      detail: 'Opens a folder picker so you can target a custom directory',
       scopeRelative: '__browse__',
       isRoot: false,
     });
 
     const selected = await vscode.window.showQuickPick(items, {
-      title: 'SkillForge: Select Active Context Scope',
-      placeHolder: 'Select a project subfolder or entire workspace...',
+      title: 'Choose Which Project Folder SkillForge Should Use',
+      placeHolder: 'Select your whole project or a specific subfolder (SkillForge will scan and install packages there):',
     });
 
     if (!selected) {
@@ -132,6 +148,12 @@ export class ScopeManager {
         return undefined;
       }
       const chosenPath = normalizePath(uris[0]!.fsPath);
+      if (!isPathInsideRoot(root, chosenPath)) {
+        vscode.window.showWarningMessage(
+          `SkillForge: Selected folder "${chosenPath}" is outside the active workspace. Falling back to Entire Workspace.`
+        );
+        return await this.setScope('');
+      }
       const relative = normalizePath(path.relative(root, chosenPath));
       return await this.setScope(relative);
     }

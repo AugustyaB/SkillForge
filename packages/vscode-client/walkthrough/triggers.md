@@ -13,12 +13,21 @@ Click the **SkillForge Anvil Icon** in the VS Code Activity Bar on the left to s
 - **Saved Bookmarks**: Your curated library of bookmarked tools organized by category.
 
 ### 3. Inline CodeLens Comments
-While coding in any of the 11 supported languages (TypeScript, JavaScript, Python, Rust, Go, Java, C, C++, C#), simply type a comment:
+While coding in any of the 11 supported languages, simply type a comment in your language's standard comment syntax:
+
+**JavaScript / TypeScript / Rust / Go / C / C++ / C# / Java:**
 ```typescript
 // IDEA: user authentication with OAuth2 and sessions
 // SKILL: high performance background queue
 ```
+
+**Python:**
+```python
+# IDEA: async postgres connection pool with alembic
+# SKILL: distributed task queue with redis
+```
+
 SkillForge will automatically render an inline CodeLens button above the comment:
-`SkillForge: Suggest libraries for "user authentication..."`. Click it to get recommendations for that exact feature without leaving your code editor!
+`SkillForge: Suggest libraries for "..."`. Click it to get recommendations for that exact feature without leaving your code editor!
 
 [Try a Suggestion Now](command:skillforge.suggest)

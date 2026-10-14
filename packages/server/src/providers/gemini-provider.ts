@@ -44,7 +44,7 @@ export class GeminiProvider implements SuggestionProvider {
     }
 
     const endpointBase = (config.endpoint || 'https://generativelanguage.googleapis.com').replace(/\/+$/, '');
-    const model = config.model || 'gemini-1.5-flash';
+    const model = (config.model && config.model.trim()) ? config.model.trim() : 'gemini-2.0-flash';
     const apiKey = config.apiKey.trim();
     const effectiveTimeout =
       typeof config.timeoutMs === 'number' && config.timeoutMs > 0

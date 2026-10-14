@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 
 export class TerminalRunner {
   private static terminalName = 'SkillForge';
@@ -66,13 +67,21 @@ export class TerminalRunner {
       return;
     }
 
-    const terminal = TerminalRunner.getOrCreateTerminal(cwd);
+    let effectiveCwd = cwd?.trim();
+    if (effectiveCwd && !fs.existsSync(effectiveCwd)) {
+      const folders = vscode.workspace?.workspaceFolders;
+      effectiveCwd = folders && folders.length > 0 ? folders[0]!.uri.fsPath : undefined;
+      vscode.window?.showWarningMessage?.(
+        `SkillForge: Target directory "${cwd}" no longer exists on disk. Falling back to workspace root.`
+      );
+    }
+
+    const terminal = TerminalRunner.getOrCreateTerminal(effectiveCwd);
     terminal.show(false);
 
-    if (cwd && cwd.trim() && cwd.trim() !== TerminalRunner.lastCwd) {
-      const normalizedCwd = cwd.trim();
-      terminal.sendText(`cd "${normalizedCwd}"`, true);
-      TerminalRunner.lastCwd = normalizedCwd;
+    if (effectiveCwd && effectiveCwd !== TerminalRunner.lastCwd) {
+      terminal.sendText(`cd "${effectiveCwd}"`, true);
+      TerminalRunner.lastCwd = effectiveCwd;
     }
 
     terminal.sendText(command.trim(), true);

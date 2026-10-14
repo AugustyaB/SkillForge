@@ -2,8 +2,8 @@
 
 > **Document Type**: Defect & Technical Debt Register  
 > **Target Audience**: Development Pair, Next Chat/Agent, QA Review  
-> **Last Updated**: 2026-10-12  
-> **Audit Status**: Complete — All 23 tracked bugs (BUG-01..BUG-23) identified, reproduced, documented, and 100% resolved. Marketplace Readiness Audit verified with 307/307 tests passing.
+> **Last Updated**: 2026-10-14  
+> **Audit Status**: Complete — All 29 tracked bugs (BUG-01..BUG-29) identified, reproduced, documented, and 100% resolved. Marketplace, MCP & Resilience Audits verified with 375/375 tests passing across 31 suites.
 
 ---
 
@@ -35,6 +35,16 @@
 - [x] **BUG-21** (Medium): Toggling a bookmark in `SuggestionPanel` re-renders Webview with `showFeedbackPrompt: true`, resurrecting a submitted feedback bar
 - [x] **BUG-22** (Low): Comparison Matrix displays `npm install` instead of `pnpm add`, retains stale tab title on reuse, and uses `unsafe-inline` style CSP
 - [x] **BUG-23** (High): `SkillsRepository.search()` substring check `trimmed.includes(lowerName)` false-positives short skill names (`"Ent"`, `"Gin"`) inside unrelated words (`"authentication"`, `"nonexistent"`, `"login"`)
+
+### Antigravity IDE QA & UX Polish Audit (Resolved)
+- [x] **BUG-24** (High): `workbench.action.openWalkthrough` parameter omitted extension name segment (`skillforge#skillforge.walkthrough`), causing IDE fallback to generic welcome tab
+- [x] **BUG-25** (Medium): Suggestion Canvas rendered ambiguous `"Health: Pending Verification"` badge on curated catalog tools
+- [x] **BUG-26** (High): Discovering skills required navigating command palette without persistent status bar, title bar, or default keybinding shortcuts
+- [x] **BUG-27** (High): Comparison Matrix `.sf-comparison-grid` clipped horizontally without scrollbar on narrow and split viewports
+
+### Pre-Publication Resilience & MCP Standalone Audit (Resolved)
+- [x] **BUG-28** (Critical): `ComparisonEngine` crash on uncataloged alternatives (`pinia` vs `vuex`) & misleading MCP error
+- [x] **BUG-29** (Critical): `@skillforge/mcp` server runtime failure on `npx` due to unbundled private monorepo dependencies
 
 ---
 
@@ -462,8 +472,91 @@
 - **Remediation**:
   Use a delimiter-bounded regex `(?:^|[\s,./_-])${escapeRegExp(lowerName)}(?:$|[\s,./_-])` so multi-word and punctuation-containing skill names (`"next.js"`, `"c++"`) still match while internal word substrings do not.
 
+### BUG-24: Walkthrough Trigger Command Missing Extension Name Segment
+- **Severity**: High (Walkthrough fails to open; falls back to generic IDE welcome)
+- **Files Affected**: [`packages/vscode-client/src/extension.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/extension.ts#L232)
+- **Root Cause**: `workbench.action.openWalkthrough` expects `${publisher}.${name}#${walkthroughId}`. Passing `'skillforge#skillforge.walkthrough'` omitted the extension name segment, causing VS Code / Antigravity IDE to fail resolution and open the standard IDE welcome screen.
+- **Remediation**: Updated parameter to `'skillforge.skillforge#skillforge.walkthrough'` in both `openWalkthroughCmd` and first-run trigger. Added regression assertion in `marketplace-readiness.test.ts`.
+
+---
+
+### BUG-25: Ambiguous "Pending Verification" Health Status on Curated Skills
+- **Severity**: Medium (Confusing UX / falsely implies tool is unvetted or untrustworthy)
+- **File Affected**: [`packages/vscode-client/src/webview/webview-html.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/webview/webview-html.ts#L125-L135)
+- **Root Cause**: When a skill has no live registry telemetry, `renderHealthBar` displayed `"Health: Pending Verification"` with orange aging styling.
+- **Remediation**: Render `<span class="sf-health-healthy">Catalog Verified • Curated Tool</span>` with an inline vector checkmark icon (`ICON_CHECK`) and clear explanatory tooltips.
+
+---
+
+### BUG-26: High Friction Discovery Workflow (Missing Status Bar, Keybindings & Title Icons)
+- **Severity**: High (Accessibility & ergonomics blocker)
+- **Files Affected**:
+  - [`packages/vscode-client/package.json`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/package.json)
+  - [`packages/vscode-client/src/extension.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/extension.ts)
+- **Root Cause**: Users were required to repeatedly open Command Palette (`Ctrl+Shift+P`), type `"skillforge"`, and locate commands.
+- **Remediation**:
+  1. Created permanent status bar item `$(sparkle) SkillForge` running `skillforge.suggest`.
+  2. Contributed global keybindings: `Ctrl+Alt+S` / `Cmd+Alt+S` for `skillforge.suggest`, and `Ctrl+Alt+F` / `Cmd+Alt+F` for `skillforge.suggestForCurrentFile`.
+  3. Contributed 1-click `editor/title` icon for active file suggestions.
+  4. Added `view/title` action buttons on `quickActionsView`.
+
+---
+
+### BUG-27: Comparison Matrix Horizontal Overflow & Truncated Columns on Narrow Screens
+- **Severity**: High (Information loss on standard & split viewports)
+- **File Affected**: [`packages/vscode-client/src/webview/comparison-html.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/vscode-client/src/webview/comparison-html.ts)
+- **Root Cause**: The grid had `overflow: hidden` on `.sf-comparison-grid` without a parent scroll container. On narrow or split viewports, columns on the right (like Vue.js in React vs Vue comparisons) were clipped and impossible to scroll into view.
+- **Remediation**:
+  1. Wrapped the grid in `.sf-matrix-scroll-wrapper` with `overflow-x: auto;` and styled custom scrollbars.
+  2. Set `.sf-comparison-grid` min-width to `calc(180px + ${colCount} * 280px)` and column minmax to `280px`.
+  3. Made the row labels column sticky (`position: sticky; left: 0; z-index: 2; box-shadow: 2px 0 4px rgba(0,0,0,0.08);`) so row labels stay visible while scrolling across columns.
+
+---
+
+### BUG-28: ComparisonEngine Crash on Uncataloged Alternatives & Misleading MCP Error
+
+- **Severity**: Critical (Causes unhandled exception in comparison panel and false error reporting in MCP)
+- **Files Affected**:
+  - [`packages/server/src/engine/comparison-engine.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/engine/comparison-engine.ts)
+  - [`packages/mcp/src/tools/compare-tool.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/mcp/src/tools/compare-tool.ts)
+- **Reproduction**:
+  ```ts
+  new ComparisonEngine().compare({ skillIds: ['pinia', 'vuex'] });
+  ```
+  **Output Before Fix**:
+  ```
+  Error: Failed to generate comparison: skill(s) not found: "vuex"
+  ```
+  In MCP, this triggered a catch block returning `None of the requested libraries (pinia, vuex) were found in the curated catalog.` (even though `pinia` is in the catalog!).
+- **Root Cause**:
+  `ComparisonEngine` threw an unhandled exception if any requested ID was not in the catalog, even when the ID was explicitly declared in `skill.alternatives`. Furthermore, `handleCompareTool` returned a blanket error claiming neither skill existed.
+- **Remediation**:
+  1. Updated `ComparisonEngine` to dynamically synthesize resilient unanchored comparison columns (`trustTier: 'suggested'`) for missing IDs declared in `alternatives` or `worksWellWith`.
+  2. Maintained conflict detection across both curated and unanchored tools (`"Pinia" and "Vuex" are direct alternatives in state-management`).
+  3. Updated `handleCompareTool` in MCP to cleanly render comparisons and only report not found when none of the tools are known or related.
+  4. Added regression suite `comparison-resilience.test.ts` (9 tests).
+
+---
+
+### BUG-29: Standalone MCP Server Execution Failure via `npx` due to Unbundled Private Dependencies
+
+- **Severity**: Critical (External runtime failure for all non-monorepo users)
+- **Files Affected**:
+  - [`packages/mcp/package.json`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/mcp/package.json)
+  - `packages/mcp/esbuild.mjs` (New)
+  - [`packages/server/src/api.ts`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/packages/server/src/api.ts)
+  - [`.github/workflows/ci.yml`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/.github/workflows/ci.yml)
+- **Root Cause**:
+  `packages/mcp` compiled solely with `tsc -b`, leaving direct imports to `@skillforge/server` and `@skillforge/shared`. Because those packages are `"private": true` and not published to npm, running `npx @skillforge/mcp` outside the monorepo failed immediately with `Cannot find module '@skillforge/server'`. Additionally, `packages/server/src/api.ts` re-exported `SkillForgeServer`, pulling in `vscode-languageserver` and causing ESM `require('node:fs')` runtime syntax errors.
+- **Remediation**:
+  1. Removed `SkillForgeServer` from `api.ts`, cleanly decoupling headless engines from LSP dependencies.
+  2. Created `packages/mcp/esbuild.mjs` to bundle `@skillforge/server`, `@skillforge/shared`, and dataset into a self-contained executable at `packages/mcp/dist/index.js` with `createRequire` banner and shebang.
+  3. Updated build script in `packages/mcp/package.json` to `tsc -b && node esbuild.mjs`.
+  4. Added standalone MCP execution verification to CI workflow `.github/workflows/ci.yml`.
+  5. Verified live stdio JSON-RPC handshake with 0 missing dependency errors.
+
 ---
 
 ## 🛠️ Instructions for Next Chat / Developer
 
-All 23 identified bugs (`BUG-01` through `BUG-23`) have been resolved and verified with regression tests. Follow the **Mandatory Gating Protocol** in [`PROJECT_RULES.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/PROJECT_RULES.md) for any future enhancements.
+All 29 identified bugs (`BUG-01` through `BUG-29`) have been resolved and verified with regression tests. Follow the **Mandatory Gating Protocol** in [`PROJECT_RULES.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/PROJECT_RULES.md) for any future enhancements.

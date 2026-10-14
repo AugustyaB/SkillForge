@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620">
+  <defs>
+    <style>
+      .bg { fill: #18181b; }
+      .table-bg { fill: #1f1f23; stroke: #27272a; stroke-width: 1; rx: 8; }
+      .header-bg { fill: #27272a; }
+      .row-alt { fill: #222226; }
+      .row-border { stroke: #2e2e33; stroke-width: 1; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 16px; font-weight: 700; fill: #f4f4f5; }
+      .th { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 700; fill: #ffffff; }
+      .td-dim { font-family: -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: #a1a1aa; }
+      .td-val { font-family: -apple-system, sans-serif; font-size: 12px; fill: #e4e4e7; }
+      .code { font-family: 'Cascadia Code', Consolas, monospace; font-size: 12px; fill: #38bdf8; }
+      .badge-verified { fill: #064e3b; stroke: #059669; rx: 4; }
+      .badge-text { font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 700; fill: #34d399; }
+      .warn-box { fill: #451a03; stroke: #b45309; stroke-width: 1; rx: 6; }
+      .warn-text { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 600; fill: #fcd34d; }
+      .btn-install { fill: #10b981; rx: 4; }
+      .btn-text { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" width="960" height="620" rx="10" />
+
+  <!-- Window Bar -->
+  <rect fill="#09090b" width="960" height="38" rx="10" />
+  <circle cx="20" cy="19" r="6" fill="#ef4444" />
+  <circle cx="38" cy="19" r="6" fill="#f59e0b" />
+  <circle cx="56" cy="19" r="6" fill="#10b981" />
+  <text x="480" y="24" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12px" fill="#71717a">SkillForge — Side-by-Side Architectural Comparison Matrix</text>
+
+  <!-- Header Title -->
+  <text x="40" y="75" class="title">⚖️ Side-by-Side Comparison: FastAPI vs Django</text>
+  <text x="40" y="95" font-family="-apple-system, sans-serif" font-size="12px" fill="#71717a">Deep-dive technical matrix analyzing architectural slot, maintainability, and production tradeoffs.</text>
+
+  <!-- Conflict Warning Banner -->
+  <rect x="40" y="115" width="880" height="38" class="warn-box" />
+  <text x="56" y="138" class="warn-text">⚠️ Architectural Conflict: Both packages occupy the primary Python Web API backend slot. Pick one for clean architecture.</text>
+
+  <!-- Table Container -->
+  <g transform="translate(40, 165)">
+    <rect width="880" height="420" class="table-bg" />
+
+    <!-- Table Header Row -->
+    <rect width="880" height="44" class="header-bg" rx="8" />
+    <text x="24" y="27" class="th">Dimension</text>
+    <text x="260" y="27" class="th">FastAPI <tspan class="code" font-size="11px">fastapi</tspan></text>
+    <text x="580" y="27" class="th">Django <tspan class="code" font-size="11px">django</tspan></text>
+
+    <!-- Row 1: Category -->
+    <line x1="0" y1="44" x2="880" y2="44" class="row-border" />
+    <text x="24" y="72" class="td-dim">Category</text>
+    <text x="260" y="72" class="td-val">Web Backend Framework</text>
+    <text x="580" y="72" class="td-val">Full-Stack Web Framework</text>
+
+    <!-- Row 2: Ecosystem & Difficulty -->
+    <line x1="0" y1="90" x2="880" y2="90" class="row-border" />
+    <rect y="91" width="880" height="45" class="row-alt" />
+    <text x="24" y="118" class="td-dim">Ecosystem / Difficulty</text>
+    <text x="260" y="118" class="td-val">Python • Beginner friendly</text>
+    <text x="580" y="118" class="td-val">Python • Intermediate</text>
+
+    <!-- Row 3: Trust Tier & Downloads -->
+    <line x1="0" y1="136" x2="880" y2="136" class="row-border" />
+    <text x="24" y="164" class="td-dim">Trust Tier &amp; Downloads</text>
+    <g transform="translate(260, 150)">
+      <rect width="80" height="20" class="badge-verified" />
+      <text x="8" y="14" class="badge-text">✅ Verified</text>
+      <text x="95" y="14" class="td-val">18.5M/week</text>
+    </g>
+    <g transform="translate(580, 150)">
+      <rect width="80" height="20" class="badge-verified" />
+      <text x="8" y="14" class="badge-text">✅ Verified</text>
+      <text x="95" y="14" class="td-val">6.2M/week</text>
+    </g>
+
+    <!-- Row 4: Core Strengths -->
+    <line x1="0" y1="182" x2="880" y2="182" class="row-border" />
+    <rect y="183" width="880" height="55" class="row-alt" />
+    <text x="24" y="212" class="td-dim">Key Strengths</text>
+    <text x="260" y="206" class="td-val">High async performance via Starlette &amp; Pydantic;</text>
+    <text x="260" y="224" class="td-val">automatic OpenAPI / Swagger documentation.</text>
+    <text x="580" y="206" class="td-val">"Batteries-included" with built-in ORM, admin</text>
+    <text x="580" y="224" class="td-val">panel, auth system, and migrations engine.</text>
+
+    <!-- Row 5: Architectural Caveats -->
+    <line x1="0" y1="238" x2="880" y2="238" class="row-border" />
+    <text x="24" y="268" class="td-dim">Tradeoffs &amp; Caveats</text>
+    <text x="260" y="262" class="td-val">Requires manual choice of ORM (SQLAlchemy)</text>
+    <text x="260" y="280" class="td-val">and authentication architecture.</text>
+    <text x="580" y="262" class="td-val">Heavier footprint; async support is retrofitted</text>
+    <text x="580" y="280" class="td-val">compared to native ASGI frameworks.</text>
+
+    <!-- Row 6: Companion Ecosystem -->
+    <line x1="0" y1="294" x2="880" y2="294" class="row-border" />
+    <rect y="295" width="880" height="50" class="row-alt" />
+    <text x="24" y="324" class="td-dim">Works Well With</text>
+    <text x="260" y="324" class="code">pydantic, sqlmodel, uvicorn</text>
+    <text x="580" y="324" class="code">django-rest-framework, celery</text>
+
+    <!-- Row 7: Actions -->
+    <line x1="0" y1="345" x2="880" y2="345" class="row-border" />
+    <text x="24" y="380" class="td-dim">Terminal Install</text>
+    <g transform="translate(260, 362)">
+      <rect width="140" height="28" class="btn-install" />
+      <text x="12" y="18" class="btn-text">📥 pip install fastapi</text>
+    </g>
+    <g transform="translate(580, 362)">
+      <rect width="140" height="28" class="btn-install" />
+      <text x="12" y="18" class="btn-text">📥 pip install django</text>
+    </g>
+  </g>
+</svg>

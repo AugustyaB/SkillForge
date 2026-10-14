@@ -1,30 +1,19 @@
 # STATE.md — Session Memory
 
-> **Last Updated**: 2026-10-12
-> **Current Phase**: Phase 9 (Agent Skill Generation & Usability Validation Engine) — COMPLETE
+> **Last Updated**: 2026-10-14
+> **Current Phase**: Open VSX Marketplace Quality & Trust Audit Remediation — COMPLETE (v0.1.1)
 > **Context Health**: PEAK
 
 ## Active Session
 
-- **Status**: Phase 9 + Post-Phase 6/7 Adversarial QA Audit (`BUG-14` through `BUG-23`) fully implemented, empirically verified, and documented across all 3 gates.
+- **Status**: External Open VSX Quality & Trust Audit (10 findings) fully remediated, empirically verified across 4 waves, and packaged as `skillforge-0.1.1.vsix`.
 - **Verification Proof**:
-  - `tsc -b`: Clean across all monorepo packages with 0 diagnostics.
-  - Vitest Unit Tests: **307/307 tests passing** across 26 test suites in 1.24s (including 15 new marketplace readiness & manifest audit tests).
-  - Knowledge Base: **363 thoroughly vetted skills** across 8 ecosystems and 15 categories, including trending GitHub innovations (Jev, REA, Andrej Karpathy repos, Browser Use, MCP, Unsloth, LiteLLM, Outlines, Open Interpreter).
-  - Agent Skill Generator: Generates compliant, agent-parseable directives in 4 formats (`.agent/skills/<id>/SKILL.md`, `.cursor/rules/<id>.mdc`, `.claude/skills/<id>/SKILL.md`, `AGENTS.md`) embedding Andrej Karpathy's 4 coding disciplines and deterministic verification commands.
-  - Production Bundle: `esbuild` dual-bundle generated in **99ms**:
-    - `dist/extension.js`: 523.6 KB
-    - `dist/server.js`: 287.4 KB (self-contained with all 363 skills and AgentSkillGenerator inlined)
-  - VSIX Release Package: `skillforge-0.1.0.vsix` packaged cleanly via `@vscode/vsce`:
-    - **Total VSIX file size: 269.11 KB** (budget: <5MB).
-    - Uncompressed package contains 53 files (0 source code or map leaks).
-- **Milestone v1.0 + Phase 9 Extension**: All 9 roadmap phases (Phase 1 through Phase 9) are complete and verified.
-
-## Current Position
-
-- **Phase**: Complete & Marketplace Audited → 100% Production Ready for Public Marketplace & Open VSX Deployment.
-- **Artifacts**: `skillforge-0.1.0.vsix` (267.66 KB), `icon.png` (256x256), `walkthrough/` (5 guide steps), `README.md`, `LICENSE`.
-- **Defects**: 0 open bugs in `BUGS.md` (all 23 tracked bugs `BUG-01` through `BUG-23` resolved and verified).
+  - `tsc -b`: Clean across all 4 monorepo packages (`shared`, `server`, `vscode-client`, `mcp`) with 0 diagnostics.
+  - Vitest Unit Tests: **381/381 tests passing** across 31 test suites in 1.56s.
+  - VSIX Packaging: `skillforge-0.1.1.vsix` (**568.59 KB**, 70 files) packaged cleanly with `CHANGELOG.md`, `NOTICE`, and 4 high-res PNG screenshots bundled at package root.
+  - Zero Source Code Leaks: `src/` excluded; package size well under the 1.5 MB performance budget.
+- **Defects**: 0 open bugs in `BUGS.md`.
+- **Marketplace Readiness**: Repository links updated to `https://github.com/AugustyaB/SkillForge`, valid default AI models (`gemini-2.0-flash`, `gpt-4o-mini`), Python `# IDEA:` CodeLens syntax documented with floor-division anti-happy-path tests passing, and dual-licensing formalized.
 
 ## Completed Work in Phase 9
 1. **Shared Agent Skill Contracts (`packages/shared`)**:

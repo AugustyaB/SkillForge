@@ -187,7 +187,7 @@ describe('FeedbackManager', () => {
         'Need boost/asio & c++20 networking'
       );
 
-      expect(url).toContain('https://github.com/skillforge/skillforge/issues/new');
+      expect(url).toContain('https://github.com/AugustyaB/SkillForge/issues/new');
       expect(url).toContain('title=%5BSkill%20Request%5D%3A%20c%2B%2B%20%26%20asio%20tools');
       expect(url).toContain('labels=skill-request');
       expect(url).toContain('boost%2Fasio%20%26%20c%2B%2B20%20networking');

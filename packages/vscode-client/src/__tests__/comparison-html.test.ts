@@ -234,4 +234,19 @@ describe('generateComparisonHtml', () => {
     expect(html).not.toContain("style-src 'unsafe-inline'");
     expect(html).toContain('<style nonce="strict-nonce-999">');
   });
+
+  it('renders responsive horizontal scroll wrapper and sticky row labels for narrow viewports (BUG-27)', () => {
+    const html = generateComparisonHtml({
+      nonce: 'responsive-test-nonce',
+      cspSource: 'vscode-webview:',
+      matrix: sampleMatrix,
+    });
+
+    expect(html).toContain('sf-matrix-scroll-wrapper');
+    expect(html).toContain('role="region"');
+    expect(html).toContain('aria-label="Comparison Table"');
+    expect(html).toContain('overflow-x: auto');
+    expect(html).toContain('position: sticky');
+    expect(html).toContain('min-width: calc(180px + 2 * 280px)');
+  });
 });

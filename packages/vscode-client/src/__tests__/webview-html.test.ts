@@ -125,7 +125,14 @@ describe('WebviewHtml (Clean Developer UI)', () => {
 
     it('renders fallback when health object is missing or unverified', () => {
       const html = renderHealthBar(undefined);
-      expect(html).toContain('Pending Verification');
+      expect(html).toContain('Catalog Verified • Curated Tool');
+      expect(html).toContain('sf-health-healthy');
+    });
+
+    it('handles minimal health object gracefully with default healthy verdict', () => {
+      const html = renderHealthBar({ packageExists: true });
+      expect(html).toContain('Healthy');
+      expect(html).toContain('recent');
     });
   });
 

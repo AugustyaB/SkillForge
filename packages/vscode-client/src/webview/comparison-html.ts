@@ -263,21 +263,53 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
       color: var(--sf-fg);
     }
 
+    /* Comparison Scroll Wrapper & Custom Scrollbars */
+    .sf-matrix-scroll-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--sf-card-border);
+      border-radius: 8px;
+      background: var(--sf-card-bg);
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .sf-matrix-scroll-wrapper::-webkit-scrollbar {
+      height: 10px;
+    }
+    .sf-matrix-scroll-wrapper::-webkit-scrollbar-track {
+      background: var(--sf-code-bg);
+      border-radius: 6px;
+    }
+    .sf-matrix-scroll-wrapper::-webkit-scrollbar-thumb {
+      background: var(--vscode-scrollbarSlider-background, rgba(128, 128, 128, 0.4));
+      border-radius: 6px;
+      border: 2px solid var(--sf-code-bg);
+    }
+    .sf-matrix-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+      background: var(--vscode-scrollbarSlider-hoverBackground, rgba(128, 128, 128, 0.7));
+    }
+
     /* Comparison Grid Table */
     .sf-comparison-grid {
       display: grid;
-      grid-template-columns: 200px repeat(${colCount}, minmax(260px, 1fr));
-      border: 1px solid var(--sf-card-border);
-      border-radius: 8px;
-      overflow: hidden;
+      grid-template-columns: 180px repeat(${colCount}, minmax(280px, 1fr));
+      min-width: calc(180px + ${colCount} * 280px);
+      width: 100%;
       background: var(--sf-card-bg);
     }
 
     /* Sticky Header Row */
     .sf-matrix-header-corner {
+      position: sticky;
+      left: 0;
+      z-index: 3;
       background: var(--sf-card-bg);
       border-bottom: 2px solid var(--sf-card-border);
-      border-right: 1px solid var(--sf-card-border);
+      border-right: 2px solid var(--sf-card-border);
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.08);
       padding: 16px;
       font-size: 11px;
       font-weight: 600;
@@ -296,6 +328,7 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      min-width: 280px;
     }
 
     .sf-matrix-header-col:last-child {
@@ -336,11 +369,15 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
       margin-top: 4px;
     }
 
-    /* Row Styling */
+    /* Row Styling with Sticky Row Labels */
     .sf-grid-row-label {
-      background: rgba(128, 128, 128, 0.04);
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: var(--sf-card-bg);
       border-bottom: 1px solid var(--sf-card-border);
-      border-right: 1px solid var(--sf-card-border);
+      border-right: 2px solid var(--sf-card-border);
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.08);
       padding: 14px 16px;
       font-weight: 600;
       font-size: 12px;
@@ -355,6 +392,7 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
       padding: 14px 16px;
       font-size: 12px;
       line-height: 1.5;
+      min-width: 280px;
     }
 
     .sf-grid-cell:last-child {
@@ -514,18 +552,20 @@ export function generateComparisonHtml(options: ComparisonHtmlOptions): string {
     ${conflictBanner}
     ${crossEcoBanner}
 
-    <div class="sf-comparison-grid">
-      <!-- Sticky Column Headers -->
-      <div class="sf-matrix-header-corner">Tool Architecture</div>
-      ${headerCards}
+    <div class="sf-matrix-scroll-wrapper" role="region" aria-label="Comparison Table" tabindex="0">
+      <div class="sf-comparison-grid">
+        <!-- Sticky Column Headers -->
+        <div class="sf-matrix-header-corner">Tool Architecture</div>
+        ${headerCards}
 
-      <!-- Grid Rows -->
-      ${rowPositioning}
-      ${rowMetrics}
-      ${rowPros}
-      ${rowCaveats}
-      ${rowCompanions}
-      ${rowCommand}
+        <!-- Grid Rows -->
+        ${rowPositioning}
+        ${rowMetrics}
+        ${rowPros}
+        ${rowCaveats}
+        ${rowCompanions}
+        ${rowCommand}
+      </div>
     </div>
   </div>
 

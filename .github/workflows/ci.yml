@@ -46,6 +46,26 @@ jobs:
       - name: Monorepo Build
         run: pnpm build
 
+      - name: Verify MCP Standalone Executable
+        shell: bash
+        run: |
+          echo "Verifying @skillforge/mcp standalone executable..."
+          node -e "
+            const { spawn } = require('child_process');
+            const child = spawn('node', ['packages/mcp/dist/index.js']);
+            let stderr = '';
+            child.stderr.on('data', (d) => { stderr += d.toString(); });
+            setTimeout(() => {
+              child.kill();
+              if (!stderr.includes('[SkillForge MCP] Server running on stdio')) {
+                console.error('MCP server failed to emit startup banner on stderr. Got:', stderr);
+                process.exit(1);
+              }
+              console.log('MCP server standalone execution verified successfully!');
+              process.exit(0);
+            }, 800);
+          "
+
   package-audit:
     name: VSIX Package Audit
     runs-on: ubuntu-latest

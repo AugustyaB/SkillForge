@@ -82,6 +82,8 @@ describe('Pluggable BYOK Suggestion Providers', () => {
       );
 
       expect(mockFetch).toHaveBeenCalledTimes(1);
+      const [, openaiInit] = mockFetch.mock.calls[0]!;
+      expect(JSON.parse(openaiInit.body).model).toBe('gpt-4o-mini');
       expect(result.providerUsed).toBe('openai');
       expect(result.llmEnhanced).toBe(true);
       expect(result.privacyNotice).toContain('Zero source code transmitted');
@@ -96,6 +98,45 @@ describe('Pluggable BYOK Suggestion Providers', () => {
       const novelSkill = result.skills.find((s) => s.id === 'novel-tool');
       expect(novelSkill).toBeDefined();
       expect(novelSkill?.trustTier).toBe('suggested');
+    });
+
+    it('accepts paid flagship, reasoning, or arbitrary custom model strings', async () => {
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({ skills: [{ name: 'FastAPI', description: 'Web framework' }] }),
+              },
+            },
+          ],
+        }),
+      } as unknown as Response);
+
+      const provider = new OpenAIProvider({ repository, fetchFn: mockFetch });
+
+      // Test with paid flagship gpt-4o
+      await provider.suggest(
+        { intent: 'web api' },
+        { provider: 'openai', apiKey: 'sk-test', model: 'gpt-4o' }
+      );
+      expect(JSON.parse(mockFetch.mock.calls[0]![1].body).model).toBe('gpt-4o');
+
+      // Test with reasoning tier o3-mini
+      await provider.suggest(
+        { intent: 'web api' },
+        { provider: 'openai', apiKey: 'sk-test', model: '  o3-mini  ' }
+      );
+      expect(JSON.parse(mockFetch.mock.calls[1]![1].body).model).toBe('o3-mini');
+
+      // Test with arbitrary custom proxy model name
+      await provider.suggest(
+        { intent: 'web api' },
+        { provider: 'openai', apiKey: 'sk-test', model: 'deepseek-chat-v3' }
+      );
+      expect(JSON.parse(mockFetch.mock.calls[2]![1].body).model).toBe('deepseek-chat-v3');
     });
 
     it('handles markdown code fences in model output (Anti-Happy-Path)', () => {
@@ -202,11 +243,46 @@ describe('Pluggable BYOK Suggestion Providers', () => {
       );
 
       expect(mockFetch).toHaveBeenCalledTimes(1);
+      const [calledUrl, calledInit] = mockFetch.mock.calls[0]!;
+      expect(calledUrl).toContain('gemini-2.0-flash:generateContent');
+      expect( JSON.parse(calledInit.body).generationConfig.responseMimeType ).toBe('application/json');
       expect(result.providerUsed).toBe('gemini');
       expect(result.llmEnhanced).toBe(true);
       expect(result.skills).toHaveLength(1);
       expect(result.skills[0]?.id).toBe('zod');
       expect(result.skills[0]?.trustTier).toBe('verified');
+    });
+
+    it('accepts paid flagship, reasoning, or arbitrary custom Gemini models', async () => {
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          candidates: [
+            {
+              content: {
+                parts: [{ text: JSON.stringify({ skills: [{ name: 'Zod', description: 'Validation' }] }) }],
+              },
+            },
+          ],
+        }),
+      } as unknown as Response);
+
+      const provider = new GeminiProvider({ repository, fetchFn: mockFetch });
+
+      // Test with paid / flagship gemini-1.5-pro
+      await provider.suggest(
+        { intent: 'validation' },
+        { provider: 'gemini', apiKey: 'AIzaSy-test', model: 'gemini-1.5-pro' }
+      );
+      expect(mockFetch.mock.calls[0]![0]).toContain('gemini-1.5-pro:generateContent');
+
+      // Test with custom or experimental model
+      await provider.suggest(
+        { intent: 'validation' },
+        { provider: 'gemini', apiKey: 'AIzaSy-test', model: '  gemini-2.0-flash-thinking-exp  ' }
+      );
+      expect(mockFetch.mock.calls[1]![0]).toContain('gemini-2.0-flash-thinking-exp:generateContent');
     });
 
     it('throws error when Gemini API key is missing', async () => {

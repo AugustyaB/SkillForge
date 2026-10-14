@@ -10,6 +10,17 @@ const mockTerminal = {
 
 let closeCallback: ((t: { name: string }) => void) | undefined;
 
+vi.mock('fs', async (importOriginal) => {
+  const actual: any = await importOriginal();
+  return {
+    ...actual,
+    existsSync: vi.fn((p: string) => {
+      if (typeof p === 'string' && p.includes('/workspace/root')) return true;
+      return actual.existsSync(p);
+    }),
+  };
+});
+
 vi.mock('vscode', () => ({
   window: {
     terminals: [] as typeof mockTerminal[],
@@ -23,9 +34,13 @@ vi.mock('vscode', () => ({
       return term;
     }),
     showInformationMessage: vi.fn(),
+    showWarningMessage: vi.fn(),
     onDidCloseTerminal: vi.fn((cb: (t: { name: string }) => void) => {
       closeCallback = cb;
     }),
+  },
+  workspace: {
+    workspaceFolders: [{ uri: { fsPath: '/workspace/root' } }],
   },
 }));
 
@@ -34,6 +49,7 @@ const mockVscodeWindow = vscode.window as unknown as {
   terminals: (typeof mockTerminal)[];
   createTerminal: ReturnType<typeof vi.fn>;
   showInformationMessage: ReturnType<typeof vi.fn>;
+  showWarningMessage: ReturnType<typeof vi.fn>;
 };
 
 import { TerminalRunner } from '../terminal/terminal-runner.js';

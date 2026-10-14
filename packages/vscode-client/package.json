@@ -1,8 +1,8 @@
 {
   "name": "skillforge",
   "displayName": "SkillForge",
-  "description": "Cross-IDE skill suggestion engine for developers: map natural language ideas to vetted libraries and frameworks",
-  "version": "0.1.0",
+  "description": "Cross-IDE developer skill discovery engine: map natural language ideas to vetted libraries, frameworks, and architecture patterns",
+  "version": "0.1.1",
   "publisher": "skillforge",
   "engines": {
     "vscode": "^1.85.0"
@@ -11,12 +11,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/skillforge-team/skillforge"
+    "url": "https://github.com/AugustyaB/SkillForge"
   },
   "bugs": {
-    "url": "https://github.com/skillforge-team/skillforge/issues"
+    "url": "https://github.com/AugustyaB/SkillForge/issues"
   },
-  "homepage": "https://github.com/skillforge-team/skillforge#readme",
+  "homepage": "https://github.com/AugustyaB/SkillForge#readme",
   "keywords": [
     "skills",
     "developer-tools",
@@ -51,6 +51,7 @@
     "onLanguage:csharp",
     "onView:skillforge.contextView",
     "onView:skillforge.quickActionsView",
+    "onView:skillforge.commandsView",
     "onView:skillforge.recentQueriesView",
     "onView:skillforge.bookmarksView",
     "onCommand:skillforge.testConnection",
@@ -64,6 +65,7 @@
     "onCommand:skillforge.setApiKey",
     "onCommand:skillforge.clearApiKey",
     "onCommand:skillforge.configureProvider",
+    "onCommand:skillforge.configureModel",
     "onCommand:skillforge.toggleBookmark",
     "onCommand:skillforge.clearBookmarks",
     "onCommand:skillforge.compareSkills",
@@ -91,81 +93,87 @@
           "name": "Quick Actions"
         },
         {
+          "id": "skillforge.commandsView",
+          "name": "All SkillForge Commands"
+        },
+        {
           "id": "skillforge.recentQueriesView",
           "name": "Recent Discoveries"
         },
         {
           "id": "skillforge.bookmarksView",
-          "name": "Bookmarked Tools"
+          "name": "Bookmarked Tools",
+          "visibility": "collapsed"
         }
       ]
     },
     "commands": [
       {
         "command": "skillforge.testConnection",
-        "title": "SkillForge: Test Server Connection",
+        "title": "Check Offline Engine Status",
         "category": "SkillForge"
       },
       {
         "command": "skillforge.suggest",
-        "title": "SkillForge: Suggest Skills for My Idea",
-        "category": "SkillForge"
+        "title": "Find Libraries for Idea",
+        "category": "SkillForge",
+        "icon": "$(sparkle)"
       },
       {
         "command": "skillforge.selectScope",
-        "title": "Select Context Scope",
+        "title": "Choose Project Folder Scope",
         "category": "SkillForge",
         "icon": "$(folder)"
       },
       {
         "command": "skillforge.rescanWorkspace",
-        "title": "Re-scan Project Stack",
+        "title": "Refresh Installed Packages",
         "category": "SkillForge",
         "icon": "$(refresh)"
       },
       {
         "command": "skillforge.suggestForCurrentFile",
-        "title": "SkillForge: Suggest Skills for Active File",
+        "title": "Suggest for Current File",
         "category": "SkillForge",
         "icon": "$(sparkle)"
       },
       {
         "command": "skillforge.runInstallCommand",
-        "title": "SkillForge: Run Install Command in Terminal",
+        "title": "Install Package in Terminal",
         "category": "SkillForge"
       },
       {
         "command": "skillforge.clearRecentQueries",
-        "title": "Clear Discoveries History",
+        "title": "Clear Search History",
         "category": "SkillForge",
         "icon": "$(clear-all)"
       },
       {
         "command": "skillforge.showCanvas",
-        "title": "Open Suggestion Canvas",
+        "title": "Open Results Dashboard",
         "category": "SkillForge",
         "icon": "$(layout)"
       },
       {
         "command": "skillforge.setApiKey",
-        "title": "SkillForge: Set BYOK API Key (OpenAI / Gemini)",
+        "title": "Save AI API Key (Optional)",
         "category": "SkillForge",
         "icon": "$(key)"
       },
       {
         "command": "skillforge.clearApiKey",
-        "title": "SkillForge: Clear Stored API Key",
+        "title": "Remove Saved API Key",
         "category": "SkillForge"
       },
       {
         "command": "skillforge.configureProvider",
-        "title": "SkillForge: Choose Suggestion Provider (Local / BYOK)",
+        "title": "Switch Search Engine Mode (Offline / Cloud AI)",
         "category": "SkillForge",
         "icon": "$(settings-gear)"
       },
       {
         "command": "skillforge.toggleBookmark",
-        "title": "SkillForge: Toggle Skill Bookmark",
+        "title": "Manage Saved Bookmarks",
         "category": "SkillForge",
         "icon": "$(bookmark)"
       },
@@ -177,24 +185,48 @@
       },
       {
         "command": "skillforge.compareSkills",
-        "title": "SkillForge: Compare Libraries Side-by-Side",
+        "title": "Compare Libraries Side-by-Side",
         "category": "SkillForge",
         "icon": "$(split-horizontal)"
       },
       {
         "command": "skillforge.generateAgentSkill",
-        "title": "SkillForge: Generate Agent Skill Directive (SKILL.md / .mdc)",
+        "title": "Create AI Rules File (Guide AI on a Library)",
         "category": "SkillForge",
         "icon": "$(robot)"
       },
       {
         "command": "skillforge.openWalkthrough",
-        "title": "Open Welcome Walkthrough",
+        "title": "Open Beginner Guide",
         "category": "SkillForge",
         "icon": "$(mortar-board)"
+      },
+      {
+        "command": "skillforge.configureModel",
+        "title": "Configure AI Model (Free, Paid & Custom)",
+        "category": "SkillForge",
+        "icon": "$(sparkle)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "skillforge.suggest",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s"
+      },
+      {
+        "command": "skillforge.suggestForCurrentFile",
+        "key": "ctrl+alt+f",
+        "mac": "cmd+alt+f"
       }
     ],
     "menus": {
+      "editor/title": [
+        {
+          "command": "skillforge.suggestForCurrentFile",
+          "group": "navigation@10"
+        }
+      ],
       "view/title": [
         {
           "command": "skillforge.selectScope",
@@ -215,6 +247,16 @@
           "command": "skillforge.openWalkthrough",
           "when": "view == skillforge.contextView",
           "group": "navigation@4"
+        },
+        {
+          "command": "skillforge.suggest",
+          "when": "view == skillforge.quickActionsView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "skillforge.showCanvas",
+          "when": "view == skillforge.quickActionsView",
+          "group": "navigation@2"
         },
         {
           "command": "skillforge.clearRecentQueries",
@@ -242,27 +284,42 @@
           {
             "id": "welcome",
             "title": "Welcome to SkillForge",
-            "description": "walkthrough/welcome.md"
+            "description": "Map natural language ideas to 360+ vetted libraries, frameworks, and AI agent directives — 100% offline by default.\n[Suggest Skills for My Idea](command:skillforge.suggest)",
+            "media": {
+              "markdown": "walkthrough/welcome.md"
+            }
           },
           {
             "id": "scoping",
             "title": "Scope Your Context",
-            "description": "walkthrough/scoping.md"
+            "description": "Target the entire workspace, a specific monorepo package, or the active file so recommendations match your stack.\n[Select Context Scope](command:skillforge.selectScope)",
+            "media": {
+              "markdown": "walkthrough/scoping.md"
+            }
           },
           {
             "id": "triggers",
-            "title": "Inline & Palette Triggers",
-            "description": "walkthrough/triggers.md"
+            "title": "1-Click & Inline Triggers",
+            "description": "Click $(sparkle) SkillForge in the bottom status bar, press Ctrl+Alt+S, or write // skillforge: comments in your code.\n[Suggest for Active File](command:skillforge.suggestForCurrentFile)",
+            "media": {
+              "markdown": "walkthrough/triggers.md"
+            }
           },
           {
             "id": "comparison",
             "title": "Side-by-Side Tool Comparison",
-            "description": "walkthrough/comparison.md"
+            "description": "Compare libraries head-to-head across registry health, architectural caveats, and strengths.\n[Compare Libraries Side-by-Side](command:skillforge.compareSkills)",
+            "media": {
+              "markdown": "walkthrough/comparison.md"
+            }
           },
           {
             "id": "privacy",
-            "title": "Local & Private by Default",
-            "description": "walkthrough/privacy.md"
+            "title": "Agent Directives & Privacy",
+            "description": "Generate SKILL.md or .mdc agent rules with 1 click, or optionally configure BYOK AI providers.\n[Generate Agent Skill Directive](command:skillforge.generateAgentSkill)",
+            "media": {
+              "markdown": "walkthrough/privacy.md"
+            }
           }
         ]
       }
@@ -291,7 +348,7 @@
         "skillforge.openai.model": {
           "type": "string",
           "default": "gpt-4o-mini",
-          "description": "OpenAI model to use for BYOK discovery."
+          "description": "OpenAI model to use for BYOK discovery. Accepts free/base tiers (e.g. gpt-4o-mini), paid flagships (e.g. gpt-4o), reasoning models (e.g. o3-mini, o1), or any custom endpoint model name."
         },
         "skillforge.openai.endpoint": {
           "type": "string",
@@ -300,8 +357,8 @@
         },
         "skillforge.gemini.model": {
           "type": "string",
-          "default": "gemini-1.5-flash",
-          "description": "Google Gemini model to use for BYOK discovery."
+          "default": "gemini-2.0-flash",
+          "description": "Google Gemini model to use for BYOK discovery. Accepts free/base tiers (e.g. gemini-2.0-flash), paid reasoning models (e.g. gemini-1.5-pro, gemini-2.5-pro), or any custom model ID."
         },
         "skillforge.gemini.endpoint": {
           "type": "string",
@@ -317,11 +374,12 @@
     }
   },
   "scripts": {
+    "copy-docs": "node -e \"const fs = require('fs'); fs.copyFileSync('../../CHANGELOG.md', 'CHANGELOG.md');\"",
     "compile": "tsc -b",
     "bundle": "node esbuild.mjs",
     "bundle:prod": "node esbuild.mjs --production",
-    "build": "tsc -b && node esbuild.mjs --production",
-    "package": "vsce package --no-dependencies",
+    "build": "pnpm run copy-docs && tsc -b && node esbuild.mjs --production",
+    "package": "pnpm run copy-docs && vsce package --no-dependencies",
     "publish:vsce": "vsce publish --no-dependencies",
     "publish:ovsx": "ovsx publish --no-dependencies",
     "clean": "rimraf dist tsconfig.tsbuildinfo"
