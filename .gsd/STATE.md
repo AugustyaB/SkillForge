@@ -6,16 +6,19 @@
 
 ## Active Session
 
-- **Status**: External Open VSX Quality & Trust Audit (10 findings) fully remediated, empirically verified across 4 waves, synchronized with GitHub remote `https://github.com/AugustyaB/SkillForge`, and successfully published live to Open VSX Registry as `SkillForge.skillforge v0.1.1`.
+- **Status**: External Open VSX Quality & Trust Audit (10 findings) fully remediated, empirically verified across 4 waves, synchronized with GitHub remote `https://github.com/AugustyaB/SkillForge`, published live to Open VSX Registry as `SkillForge.skillforge v0.1.1`, and all GitHub Actions workflows (CI on Ubuntu/Windows + Release deployment) passing 100% green.
 - **Verification Proof**:
   - `tsc -b`: Clean across all 4 monorepo packages (`shared`, `server`, `vscode-client`, `mcp`) with 0 diagnostics.
-  - Vitest Unit Tests: **383/383 tests passing** across 31 test suites in 1.64s.
+  - Vitest Unit Tests: **383/383 tests passing** across 31 test suites in 1.69s.
   - VSIX Packaging: `skillforge-0.1.1.vsix` (**569.65 KB**, 70 files) packaged cleanly with `CHANGELOG.md`, `NOTICE`, and 4 high-res PNG screenshots bundled at package root.
   - Zero Source Code Leaks: `src/` excluded; package size well under the 1.5 MB performance budget.
 - **Defects**: 0 open bugs in `BUGS.md`.
 - **Marketplace Readiness**: Repository links updated to `https://github.com/AugustyaB/SkillForge`, valid default AI models (`gemini-2.0-flash`, `gpt-4o-mini`), Python `# IDEA:` CodeLens syntax documented with floor-division anti-happy-path tests passing, and dual-licensing formalized.
-- **Git & Remote Sync**: Local `main` branch merged with remote initial commit and pushed to `https://github.com/AugustyaB/SkillForge.git` with release tag `v0.1.1`.
+- **Git & Remote Sync**: Local `main` branch merged and pushed to `https://github.com/AugustyaB/SkillForge.git` with release tag `v0.1.1`.
 - **Open VSX Status**: Verified LIVE on registry (`ovsx show SkillForge.skillforge` confirms `v0.1.1` latest, updated 2026-10-14T08:14:21Z).
+- **GitHub Actions Status**: 
+  - `CI` workflow run `38536628829`: **100% Success** (`Verify (windows-latest)`, `Verify (ubuntu-latest)`, `VSIX Package Audit`).
+  - `Release & Marketplace Deployment` run `38536632459`: **100% Success**; created official GitHub Release `v0.1.1` with `skillforge-0.1.1.vsix` installer.
 
 ## Completed Work in Phase 9
 1. **Shared Agent Skill Contracts (`packages/shared`)**:
