@@ -24,12 +24,32 @@ import type {
   AgentSkillFormat,
   GenerateAgentSkillRequest,
   GeneratedAgentSkill,
+  IdeationPersona,
+  IdeationDomain,
+  TimeBudget,
+  IdeationWizardInput,
+  ProjectMilestone,
+  ProjectCharter,
+  CompileIdeaPromptRequest,
+  CompiledIdeaPrompt,
+  ScaffoldProjectRequest,
+  ScaffoldProjectResult,
 } from './schemas.js';
 
 export type {
   AgentSkillFormat,
   GenerateAgentSkillRequest,
   GeneratedAgentSkill,
+  IdeationPersona,
+  IdeationDomain,
+  TimeBudget,
+  IdeationWizardInput,
+  ProjectMilestone,
+  ProjectCharter,
+  CompileIdeaPromptRequest,
+  CompiledIdeaPrompt,
+  ScaffoldProjectRequest,
+  ScaffoldProjectResult,
 };
 
 export type Difficulty = InferredDifficulty;

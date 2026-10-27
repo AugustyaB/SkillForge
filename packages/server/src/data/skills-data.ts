@@ -61,7 +61,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "react",
       "react-dom"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "vue",
@@ -106,7 +114,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "vue"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "svelte",
@@ -150,7 +166,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "svelte"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "angular",
@@ -193,7 +217,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@angular/core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "solidjs",
@@ -233,7 +265,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "solid-js"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "nextjs",
@@ -278,7 +318,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "next"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "nuxt",
@@ -318,7 +366,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "nuxt"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sveltekit",
@@ -357,7 +413,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@sveltejs/kit"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "remix",
@@ -398,7 +462,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@remix-run/react",
       "@remix-run/node"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "astro",
@@ -441,7 +513,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "astro"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tailwind-css",
@@ -486,7 +566,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tailwindcss"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "chakra-ui",
@@ -528,7 +616,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@chakra-ui/react"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "shadcn-ui",
@@ -574,7 +670,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "clsx",
       "tailwind-merge"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "material-ui",
@@ -614,7 +718,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@mui/material"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "radix-ui",
@@ -655,7 +767,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@radix-ui/react-primitive",
       "@radix-ui/react-dialog"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ant-design",
@@ -692,7 +812,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "antd"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "styled-components",
@@ -729,7 +857,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "styled-components"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "emotion",
@@ -768,7 +904,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@emotion/react",
       "@emotion/styled"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "daisyui",
@@ -807,7 +951,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "daisyui"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "bootstrap",
@@ -847,7 +999,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "bootstrap"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "redux-toolkit",
@@ -891,7 +1051,18 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@reduxjs/toolkit",
       "react-redux"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "Small to medium applications where Zustand or Jotai provides equivalent state management with vastly less boilerplate",
+      "Pure server-side data fetching and cache invalidation (use TanStack Query instead)"
+    ],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "zustand",
@@ -932,7 +1103,18 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "zustand"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "Large multi-team codebases requiring strict action dispatch serialization and time-travel debugging out-of-the-box (use Redux Toolkit)",
+      "Complex server-state caching with background revalidation (use TanStack Query instead)"
+    ],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pinia",
@@ -970,7 +1152,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pinia"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mobx",
@@ -1008,7 +1198,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "mobx",
       "mobx-react-lite"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "recoil",
@@ -1044,7 +1242,19 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "recoil"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": true,
+    "whenNotToUse": [
+      "New greenfield React projects (use Jotai or Zustand instead)"
+    ],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled",
+    "deprecatedReason": "Meta has archived the Recoil repository and suspended active maintenance. Community has migrated to Jotai or Zustand.",
+    "migrationTarget": "jotai"
   },
   {
     "id": "jotai",
@@ -1064,7 +1274,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Jotai Documentation",
-        "url": "https://jotai.org/docs/basics/introduction",
+        "url": "https://jotai.org/docs",
         "type": "docs"
       }
     ],
@@ -1080,7 +1290,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "jotai"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tanstack-query",
@@ -1121,7 +1339,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@tanstack/react-query",
       "react-query"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "swr",
@@ -1138,7 +1364,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "hooks"
     ],
     "ecosystem": "javascript",
-    "officialUrl": "https://swr.vercel.app",
+    "officialUrl": "https://vercel.com/oss/swr",
     "learnResources": [
       {
         "label": "SWR Documentation",
@@ -1158,7 +1384,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "swr"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "express",
@@ -1207,7 +1441,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "express"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fastify",
@@ -1252,7 +1494,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fastify"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "nestjs",
@@ -1294,7 +1544,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@nestjs/core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "koa",
@@ -1332,7 +1590,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "koa"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "hono",
@@ -1375,7 +1641,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "hono"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "django",
@@ -1415,7 +1689,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "django"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fastapi",
@@ -1461,7 +1743,18 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fastapi"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "Monolithic full-stack web applications with built-in server-rendered HTML admin panels (use Django)",
+      "Synchronous long-running blocking CPU workloads without task worker queues"
+    ],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "flask",
@@ -1499,7 +1792,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "flask"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "spring-boot",
@@ -1543,7 +1844,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "spring-boot-starter-web"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "gin",
@@ -1565,7 +1873,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Gin Quickstart",
-        "url": "https://gin-gonic.com/docs/quickstart/",
+        "url": "https://gin-gonic.com/en/docs/quickstart/",
         "type": "tutorial"
       }
     ],
@@ -1586,7 +1894,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/gin-gonic/gin"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "go-chi",
@@ -1624,7 +1939,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/go-chi/chi"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "actix-web",
@@ -1661,7 +1983,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "actix-web"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "axum",
@@ -1700,7 +2030,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "axum"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "aspnet-core",
@@ -1738,7 +2076,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "Microsoft.AspNetCore.App"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ruby-on-rails",
@@ -1776,7 +2121,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "rails"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "postgresql",
@@ -1824,7 +2176,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "psycopg2",
       "psycopg2-binary",
       "asyncpg"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mysql",
@@ -1862,7 +2221,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "mysql2",
       "mysql"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sqlite",
@@ -1901,7 +2267,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "better-sqlite3",
       "sqlite3"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mongodb",
@@ -1942,7 +2315,17 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "mongodb",
       "mongoose"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "Strict relational architectures requiring multi-table ACID foreign key integrity (use PostgreSQL instead)",
+      "Complex OLAP analytical aggregation queries across millions of normalized rows"
+    ],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "redis",
@@ -1983,7 +2366,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "ioredis",
       "redis"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dynamodb",
@@ -2020,7 +2410,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@aws-sdk/client-dynamodb"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cassandra",
@@ -2040,7 +2437,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Cassandra Quickstart",
-        "url": "https://cassandra.apache.org/doc/latest/cassandra/getting_started/index.html",
+        "url": "https://cassandra.apache.org/doc/latest/cassandra/getting-started/",
         "type": "docs"
       }
     ],
@@ -2055,7 +2452,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "cassandra-driver"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "supabase",
@@ -2095,7 +2499,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@supabase/supabase-js"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "neon",
@@ -2134,7 +2546,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@neondatabase/serverless"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "elasticsearch",
@@ -2172,7 +2591,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@elastic/elasticsearch"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "meilisearch",
@@ -2209,7 +2635,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "meilisearch"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "chromadb",
@@ -2237,6 +2670,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "pinecone",
       "qdrant",
+      "faiss",
       "weaviate"
     ],
     "worksWellWith": [
@@ -2252,7 +2686,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "chromadb",
       "chromadb-default-embed"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pinecone",
@@ -2294,7 +2736,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@pinecone-database/pinecone",
       "pinecone-client"
-    ]
+    ],
+    "license": "Proprietary",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "prisma",
@@ -2315,7 +2764,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Prisma Quickstart",
-        "url": "https://www.prisma.io/docs/getting-started/quickstart",
+        "url": "https://www.prisma.io/docs/prisma-postgres/quickstart/prisma-orm",
         "type": "tutorial"
       }
     ],
@@ -2337,7 +2786,18 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@prisma/client",
       "prisma"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "Ultra-high-throughput bulk write operations where query engine overhead is prohibitive",
+      "Complex database engine-specific features not supported across Prisma schema (use Drizzle ORM or raw SQL instead)"
+    ],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "drizzle-orm",
@@ -2379,7 +2839,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "drizzle-orm",
       "drizzle-kit"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "typeorm",
@@ -2417,7 +2885,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "typeorm"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mongoose",
@@ -2455,7 +2931,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "mongoose"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sqlalchemy",
@@ -2495,7 +2979,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sqlalchemy"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tortoise-orm",
@@ -2533,7 +3025,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tortoise-orm"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "gorm",
@@ -2572,7 +3072,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "gorm.io/gorm"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "diesel",
@@ -2611,7 +3118,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "diesel"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "flyway",
@@ -2650,7 +3165,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "flyway-core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "liquibase",
@@ -2687,7 +3209,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "liquibase-core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "passport",
@@ -2727,7 +3256,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "passport"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "next-auth",
@@ -2767,7 +3304,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "next-auth",
       "@auth/core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "lucia",
@@ -2806,7 +3351,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "lucia"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "firebase-auth",
@@ -2846,7 +3399,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "firebase",
       "firebase-admin"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "clerk",
@@ -2886,7 +3446,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@clerk/nextjs",
       "@clerk/clerk-react"
-    ]
+    ],
+    "license": "Proprietary",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "auth0",
@@ -2926,7 +3494,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@auth0/nextjs-auth0",
       "auth0"
-    ]
+    ],
+    "license": "Proprietary",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "jose",
@@ -2964,7 +3539,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "jose"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "bcrypt",
@@ -3004,7 +3587,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "bcrypt",
       "bcryptjs"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "helmet",
@@ -3039,7 +3630,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "helmet"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cors",
@@ -3075,7 +3674,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "cors"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "socket-io",
@@ -3118,7 +3725,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "socket.io",
       "socket.io-client"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ws",
@@ -3154,7 +3769,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "ws"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "apollo-graphql",
@@ -3191,7 +3814,17 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@apollo/client",
       "@apollo/server"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "Simple uniform REST APIs where standard endpoints or tRPC provides sufficient type safety without GraphQL gateway overhead"
+    ],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "trpc",
@@ -3232,7 +3865,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@trpc/server",
       "@trpc/client"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "grpc",
@@ -3270,7 +3911,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@grpc/grpc-js"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pusher",
@@ -3308,7 +3956,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "pusher-js",
       "pusher"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "webrtc",
@@ -3344,7 +3999,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "simple-peer",
       "peerjs"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "axios",
@@ -3382,7 +4044,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "axios"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ky",
@@ -3420,7 +4090,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "ky"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "got",
@@ -3457,7 +4135,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "got"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "docker",
@@ -3494,7 +4180,17 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "Dockerfile",
       "docker-compose.yml"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "Simple single-file scripts or static landing pages where static hosting is simpler and zero-maintenance",
+      "Workloads requiring hard real-time sub-microsecond OS kernel determinism"
+    ],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "docker-compose",
@@ -3532,7 +4228,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "docker-compose.yml",
       "compose.yaml"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "kubernetes",
@@ -3572,7 +4275,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "k8s",
       "deployment.yaml"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "terraform",
@@ -3610,7 +4320,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "main.tf"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "github-actions",
@@ -3647,7 +4364,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       ".github/workflows"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "aws-cdk",
@@ -3687,7 +4411,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "aws-cdk-lib"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "vercel",
@@ -3726,7 +4458,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "vercel.json"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "railway",
@@ -3765,7 +4505,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "railway.json"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "render",
@@ -3785,8 +4532,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "officialUrl": "https://render.com",
     "learnResources": [
       {
-        "label": "Render Quickstarts",
-        "url": "https://render.com/docs/quickstarts",
+        "label": "Render Documentation",
+        "url": "https://render.com/docs",
         "type": "docs"
       }
     ],
@@ -3804,7 +4551,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "render.yaml"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fly-io",
@@ -3825,7 +4579,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Fly.io Hands-on",
-        "url": "https://fly.io/docs/hands-on/",
+        "url": "https://docs.fly.io/getting-started/launch-demo",
         "type": "docs"
       }
     ],
@@ -3841,7 +4595,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fly.toml"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cloudflare-workers",
@@ -3857,7 +4618,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "serverless"
     ],
     "ecosystem": "javascript",
-    "officialUrl": "https://workers.cloudflare.com",
+    "officialUrl": "https://www.cloudflare.com/products/workers/",
     "learnResources": [
       {
         "label": "Workers Getting Started",
@@ -3877,7 +4638,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "wrangler.toml"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "nginx",
@@ -3913,7 +4682,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "nginx.conf"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "vitest",
@@ -3953,7 +4729,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "vitest"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "jest",
@@ -3990,7 +4774,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "jest"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "playwright",
@@ -4029,7 +4821,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@playwright/test"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cypress",
@@ -4066,7 +4865,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "cypress"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "supertest",
@@ -4082,11 +4889,11 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "integration-testing"
     ],
     "ecosystem": "javascript",
-    "officialUrl": "https://github.com/ladjs/supertest",
+    "officialUrl": "https://github.com/forwardemail/supertest",
     "learnResources": [
       {
         "label": "Supertest Guide",
-        "url": "https://github.com/ladjs/supertest#readme",
+        "url": "https://github.com/forwardemail/supertest",
         "type": "docs"
       }
     ],
@@ -4103,7 +4910,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "supertest"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pytest",
@@ -4119,7 +4934,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "unit-test"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://docs.pytest.org",
+    "officialUrl": "https://docs.pytest.org/en/stable/",
     "learnResources": [
       {
         "label": "Pytest Getting Started",
@@ -4144,7 +4959,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pytest"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mockito",
@@ -4164,7 +4987,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Mockito Docs",
-        "url": "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html",
+        "url": "https://javadoc.io/doc/org.mockito/mockito-core/5.24.0/index.html",
         "type": "docs"
       }
     ],
@@ -4178,7 +5001,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "mockito-core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "testing-library",
@@ -4213,7 +5043,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@testing-library/react"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "langchain",
@@ -4260,7 +5098,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "langchain",
       "@langchain/core"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "llamaindex",
@@ -4306,7 +5151,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "llamaindex",
       "llama-index",
       "@llamaindex/core"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "openai-sdk",
@@ -4345,7 +5197,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "openai"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "zod",
@@ -4387,7 +5246,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "zod"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "lodash",
@@ -4424,7 +5291,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "lodash",
       "lodash-es"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "date-fns",
@@ -4461,7 +5336,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "date-fns"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sharp",
@@ -4482,7 +5365,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Sharp Documentation",
-        "url": "https://sharp.pixelplumbing.com/install",
+        "url": "https://sharp.pixelplumbing.com/install/",
         "type": "docs"
       }
     ],
@@ -4498,7 +5381,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sharp"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "winston",
@@ -4534,7 +5425,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "winston"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pino",
@@ -4571,7 +5470,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pino"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dotenv",
@@ -4608,7 +5515,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "dotenv"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "uuid",
@@ -4643,7 +5558,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "uuid"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "prettier",
@@ -4664,7 +5587,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Prettier Docs",
-        "url": "https://prettier.io/docs/en/",
+        "url": "https://prettier.io/docs/",
         "type": "docs"
       }
     ],
@@ -4680,7 +5603,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "prettier"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pandas",
@@ -4726,7 +5657,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pandas"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "numpy",
@@ -4770,7 +5709,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "numpy"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "scikit-learn",
@@ -4818,7 +5765,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "scikit-learn",
       "sklearn"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "matplotlib",
@@ -4863,7 +5818,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "matplotlib"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "seaborn",
@@ -4908,7 +5871,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "seaborn"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "polars",
@@ -4952,7 +5923,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "polars"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "duckdb",
@@ -4997,7 +5976,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "duckdb"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "uvicorn",
@@ -5015,16 +6001,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "fastapi"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://www.uvicorn.org",
+    "officialUrl": "https://uvicorn.dev",
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://www.uvicorn.org/",
+        "url": "https://uvicorn.dev/",
         "type": "docs"
       },
       {
         "label": "Uvicorn Deployment Guide",
-        "url": "https://www.uvicorn.org/deployment/",
+        "url": "https://uvicorn.dev/deployment/",
         "type": "docs"
       }
     ],
@@ -5041,7 +6027,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "uvicorn"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "gunicorn",
@@ -5062,12 +6056,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://docs.gunicorn.org/",
+        "url": "https://gunicorn.org/",
         "type": "docs"
       },
       {
         "label": "Gunicorn Configuration Guide",
-        "url": "https://docs.gunicorn.org/en/latest/configure.html",
+        "url": "https://gunicorn.org/reference/settings/",
         "type": "docs"
       }
     ],
@@ -5085,7 +6079,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "gunicorn"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "httpx",
@@ -5130,7 +6132,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "httpx"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "requests",
@@ -5173,7 +6183,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "requests"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pydantic",
@@ -5217,7 +6235,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pydantic"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "marshmallow",
@@ -5259,7 +6285,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "marshmallow"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "celery",
@@ -5308,7 +6342,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "celery"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "alembic",
@@ -5326,7 +6368,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "python"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://alembic.sqlalchemy.org",
+    "officialUrl": "https://alembic.sqlalchemy.org/en/latest/",
     "learnResources": [
       {
         "label": "Official Documentation",
@@ -5354,7 +6396,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "alembic"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sqlmodel",
@@ -5399,7 +6449,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sqlmodel"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ruff",
@@ -5444,7 +6502,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "ruff"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "black",
@@ -5488,7 +6554,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "black"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mypy",
@@ -5532,7 +6606,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "mypy"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "poetry",
@@ -5576,7 +6658,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "poetry"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "uv-pkg",
@@ -5621,7 +6711,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "uv"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native",
@@ -5673,7 +6771,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "flutter",
@@ -5723,7 +6829,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "flutter"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "expo",
@@ -5769,7 +6882,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "expo"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-navigation",
@@ -5814,7 +6935,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@react-navigation/native",
       "react-navigation"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "expo-router",
@@ -5857,7 +6986,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "expo-router"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ionic",
@@ -5906,7 +7043,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "@ionic/core",
       "@ionic/react",
       "@ionic/angular"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "capacitor",
@@ -5952,7 +7097,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@capacitor/core",
       "@capacitor/cli"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pytorch",
@@ -6004,7 +7157,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "torch",
       "torchvision"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tensorflow",
@@ -6048,7 +7209,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tensorflow"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "huggingface-transformers",
@@ -6080,6 +7248,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
+      "diffusers",
       "langchain",
       "ollama",
       "nanogpt",
@@ -6088,7 +7257,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "worksWellWith": [
       "pytorch",
       "tensorflow",
-      "tokenizers"
+      "tokenizers",
+      "onnxruntime",
+      "deepspeed"
     ],
     "prerequisites": [
       "python",
@@ -6096,7 +7267,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "transformers"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "keras",
@@ -6139,7 +7318,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "keras"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "vllm",
@@ -6172,6 +7359,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "ollama",
+      "sglang",
+      "llama-cpp-python",
       "tgi"
     ],
     "worksWellWith": [
@@ -6184,7 +7373,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "vllm"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ollama",
@@ -6216,6 +7413,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "alternatives": [
       "vllm",
+      "sglang",
+      "llama-cpp-python",
       "lmstudio",
       "llamacpp",
       "huggingface-transformers"
@@ -6228,7 +7427,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "ollama"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "qdrant",
@@ -6262,6 +7468,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "alternatives": [
       "pinecone",
       "chromadb",
+      "faiss",
       "weaviate"
     ],
     "worksWellWith": [
@@ -6275,7 +7482,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@qdrant/js-client-rest",
       "qdrant-client"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "weaviate",
@@ -6320,7 +7534,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "weaviate-ts-client",
       "weaviate-client"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mlflow",
@@ -6365,7 +7586,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "mlflow"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "wandb",
@@ -6409,7 +7638,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "wandb"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tokio",
@@ -6455,7 +7692,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tokio"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "serde",
@@ -6500,7 +7745,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "serde"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "serde-json",
@@ -6544,7 +7797,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "serde_json"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "clap",
@@ -6587,7 +7848,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "clap"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "reqwest",
@@ -6632,7 +7901,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "reqwest"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sqlx-rust",
@@ -6679,7 +7956,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sqlx"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sea-orm",
@@ -6705,7 +7990,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "SeaORM Tutorial",
-        "url": "https://www.sea-ql.org/SeaORM/docs/tutorial/index/",
+        "url": "https://www.sea-ql.org/sea-orm-tutorial/",
         "type": "tutorial"
       }
     ],
@@ -6723,7 +8008,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sea-orm"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tracing-rust",
@@ -6766,7 +8059,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tracing"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "echo-go",
@@ -6811,7 +8112,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/labstack/echo/v4"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fiber-go",
@@ -6854,7 +8162,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/gofiber/fiber/v2"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cobra-go",
@@ -6896,7 +8211,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/spf13/cobra"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "viper-go",
@@ -6939,7 +8261,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/spf13/viper"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "zap-go",
@@ -6983,7 +8312,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "go.uber.org/zap"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "testify-go",
@@ -7025,7 +8361,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/stretchr/testify"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "micronaut",
@@ -7070,7 +8413,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "io.micronaut"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "quarkus",
@@ -7114,7 +8464,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "io.quarkus"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "gradle",
@@ -7157,7 +8514,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "build.gradle",
       "build.gradle.kts"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "maven",
@@ -7199,7 +8563,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pom.xml"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "hibernate",
@@ -7243,7 +8614,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "org.hibernate.orm"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "junit",
@@ -7287,7 +8665,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "org.junit.jupiter"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "helm",
@@ -7329,7 +8714,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "Chart.yaml"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pulumi",
@@ -7375,7 +8767,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@pulumi/pulumi",
       "pulumi"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ansible",
@@ -7420,7 +8819,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "ansible"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "prometheus",
@@ -7464,7 +8870,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "prom-client",
       "prometheus"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "grafana",
@@ -7505,7 +8918,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "grafana"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "opentelemetry",
@@ -7547,7 +8967,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@opentelemetry/api",
       "opentelemetry-api"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "snyk",
@@ -7588,7 +9015,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "snyk"
-    ]
+    ],
+    "license": "Proprietary",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "trivy",
@@ -7630,7 +9064,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "trivy"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "vault",
@@ -7671,7 +9112,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "vault"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sass",
@@ -7715,7 +9163,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sass"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "postcss",
@@ -7741,7 +9197,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Getting Started with PostCSS",
-        "url": "https://postcss.org/docs/getting-started",
+        "url": "https://github.com/postcss/postcss#readme",
         "type": "tutorial"
       }
     ],
@@ -7757,7 +9213,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "postcss"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "framer-motion",
@@ -7802,7 +9266,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "framer-motion",
       "motion"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "gsap",
@@ -7846,7 +9318,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "gsap"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "lucide-react",
@@ -7890,7 +9370,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "lucide-react"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cmdk",
@@ -7934,7 +9422,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "cmdk"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sonner",
@@ -7978,7 +9474,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sonner"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "recharts",
@@ -7995,16 +9499,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "react"
     ],
     "ecosystem": "javascript",
-    "officialUrl": "https://recharts.org",
+    "officialUrl": "https://recharts.github.io",
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://recharts.org/en-US/guide/getting-started",
+        "url": "https://recharts.github.io/en-US/guide/getting-started/",
         "type": "docs"
       },
       {
         "label": "Recharts Examples",
-        "url": "https://recharts.org/en-US/examples",
+        "url": "https://recharts.github.io/en-US/examples/",
         "type": "tutorial"
       }
     ],
@@ -8021,7 +9525,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "recharts"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "chartjs",
@@ -8064,7 +9576,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "chart.js"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-hook-form",
@@ -8107,7 +9627,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-hook-form"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "typer",
@@ -8151,7 +9679,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "typer"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "click",
@@ -8168,11 +9704,11 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "python"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://click.palletsprojects.com",
+    "officialUrl": "https://click.palletsprojects.com/en/stable/",
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://click.palletsprojects.com/",
+        "url": "https://click.palletsprojects.com/en/stable/",
         "type": "docs"
       },
       {
@@ -8193,7 +9729,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "click"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "rich",
@@ -8238,7 +9782,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "rich"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "textual",
@@ -8280,7 +9832,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "textual"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "beautifulsoup4",
@@ -8326,7 +9886,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "beautifulsoup4",
       "bs4"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "scrapy",
@@ -8370,7 +9938,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "scrapy"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "streamlit",
@@ -8416,7 +9992,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "streamlit"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "gradio",
@@ -8460,7 +10044,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "gradio"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "scipy",
@@ -8504,7 +10096,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "scipy"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pillow",
@@ -8549,7 +10149,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "pillow",
       "PIL"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "opencv-python",
@@ -8567,21 +10175,22 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "python"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://opencv.org",
+    "officialUrl": "https://github.com/opencv/opencv-python",
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html",
+        "url": "https://github.com/opencv/opencv-python#readme",
         "type": "docs"
       },
       {
-        "label": "OpenCV Python Tutorials",
-        "url": "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html",
+        "label": "OpenCV Python PyPI Package",
+        "url": "https://pypi.org/project/opencv-python/",
         "type": "tutorial"
       }
     ],
     "alternatives": [
-      "pillow"
+      "pillow",
+      "timm"
     ],
     "worksWellWith": [
       "numpy",
@@ -8594,7 +10203,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "opencv-python",
       "cv2"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "asyncpg",
@@ -8639,7 +10256,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "asyncpg"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "psycopg2",
@@ -8686,7 +10311,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "psycopg2",
       "psycopg2-binary"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "nativewind",
@@ -8707,12 +10340,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://www.nativewind.dev/docs/getting-started",
+        "url": "https://www.nativewind.dev/docs/getting-started/installation",
         "type": "docs"
       },
       {
-        "label": "Expo Setup Guide",
-        "url": "https://www.nativewind.dev/docs/guides/frameworks/expo",
+        "label": "NativeWind GitHub Repository",
+        "url": "https://github.com/nativewind/nativewind#readme",
         "type": "tutorial"
       }
     ],
@@ -8729,7 +10362,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "nativewind"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-reanimated",
@@ -8769,7 +10410,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-reanimated"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-mmkv",
@@ -8812,7 +10461,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-mmkv"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "flutter-bloc",
@@ -8857,7 +10514,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "flutter_bloc",
       "bloc"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "riverpod",
@@ -8903,7 +10567,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "flutter_riverpod",
       "riverpod"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tanstack-table",
@@ -8949,7 +10620,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@tanstack/react-table",
       "@tanstack/table-core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tanstack-virtual",
@@ -8974,8 +10653,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       },
       {
-        "label": "Getting Started Guide",
-        "url": "https://tanstack.com/virtual/latest/docs/guide/introduction",
+        "label": "React Virtual Guide",
+        "url": "https://tanstack.com/virtual/latest/docs/framework/react/react-virtual",
         "type": "tutorial"
       }
     ],
@@ -8993,7 +10672,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@tanstack/react-virtual",
       "@tanstack/virtual-core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "floating-ui",
@@ -9037,7 +10724,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@floating-ui/react",
       "@floating-ui/dom"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tailwind-merge",
@@ -9079,7 +10774,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tailwind-merge"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "clsx",
@@ -9121,7 +10824,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "clsx"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cva",
@@ -9164,7 +10875,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "class-variance-authority"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "shiki",
@@ -9208,7 +10927,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "shiki"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "bullmq",
@@ -9235,8 +10962,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       },
       {
-        "label": "BullMQ Tutorial",
-        "url": "https://docs.bullmq.io/guide/tutorial",
+        "label": "BullMQ Guide & Tutorial",
+        "url": "https://docs.bullmq.io/guide/introduction",
         "type": "tutorial"
       }
     ],
@@ -9257,7 +10984,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "bullmq"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ioredis",
@@ -9279,7 +11014,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://ioredis.readthedocs.io/en/latest/",
+        "url": "https://github.com/redis/ioredis#readme",
         "type": "docs"
       },
       {
@@ -9301,7 +11036,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "ioredis"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "msw",
@@ -9328,7 +11071,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Getting Started Tutorial",
-        "url": "https://mswjs.io/docs/getting-started",
+        "url": "https://mswjs.io/docs/quick-start",
         "type": "tutorial"
       }
     ],
@@ -9345,7 +11088,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "msw"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "faker-js",
@@ -9388,7 +11139,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@faker-js/faker"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "k6",
@@ -9409,12 +11168,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://k6.io/docs/",
+        "url": "https://grafana.com/docs/k6/latest/",
         "type": "docs"
       },
       {
         "label": "k6 Quickstart",
-        "url": "https://k6.io/docs/get-started/running-k6/",
+        "url": "https://grafana.com/docs/k6/latest/get-started/running-k6/",
         "type": "tutorial"
       }
     ],
@@ -9433,7 +11192,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "k6"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "biome",
@@ -9455,12 +11221,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://biomejs.dev/guides/getting-started/",
+        "url": "https://biomejs.dev/installation/quick-start/",
         "type": "docs"
       },
       {
-        "label": "Biome Tutorial",
-        "url": "https://biomejs.dev/guides/first-party-rules/",
+        "label": "Biome Linter & Rules",
+        "url": "https://biomejs.dev/linter/",
         "type": "tutorial"
       }
     ],
@@ -9476,7 +11242,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "@biomejs/biome"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "turborepo",
@@ -9521,7 +11295,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "turbo"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tsup",
@@ -9565,7 +11347,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tsup"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "husky",
@@ -9608,7 +11398,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "husky"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "lint-staged",
@@ -9649,7 +11447,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "lint-staged"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tauri",
@@ -9697,7 +11503,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@tauri-apps/api",
       "@tauri-apps/cli"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "leptos",
@@ -9739,7 +11553,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "leptos"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tonic-grpc",
@@ -9783,7 +11605,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tonic"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "elysia",
@@ -9805,12 +11635,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://elysiajs.com/essential/overview.html",
+        "url": "https://elysiajs.com/quick-start",
         "type": "docs"
       },
       {
         "label": "Quick Start Guide",
-        "url": "https://elysiajs.com/at-glance.html",
+        "url": "https://elysiajs.com/at-glance",
         "type": "tutorial"
       }
     ],
@@ -9827,7 +11657,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "elysia"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "valibot",
@@ -9854,7 +11692,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Getting Started Guide",
-        "url": "https://valibot.dev/guides/getting-started/",
+        "url": "https://valibot.dev/guides/installation/",
         "type": "tutorial"
       }
     ],
@@ -9871,7 +11709,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "valibot"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "arktype",
@@ -9913,7 +11759,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "arktype"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "xstate",
@@ -9958,7 +11812,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "xstate"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "immer",
@@ -9984,7 +11846,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Getting Started Guide",
-        "url": "https://immerjs.github.io/immer/example-setstate",
+        "url": "https://immerjs.github.io/immer/example-setstate/",
         "type": "tutorial"
       }
     ],
@@ -10001,7 +11863,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "immer"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dayjs",
@@ -10044,7 +11914,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "dayjs"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fusejs",
@@ -10087,7 +11965,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fuse.js"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tiptap",
@@ -10109,7 +11995,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://tiptap.dev/docs/editor/introduction",
+        "url": "https://tiptap.dev/docs/editor/getting-started/overview",
         "type": "docs"
       },
       {
@@ -10134,7 +12020,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@tiptap/core",
       "@tiptap/react"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "lexical",
@@ -10178,7 +12072,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "lexical",
       "@lexical/react"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-markdown",
@@ -10221,7 +12123,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-markdown"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "express-rate-limit",
@@ -10263,7 +12173,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "express-rate-limit"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dompurify",
@@ -10306,7 +12224,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "dompurify"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "jsonwebtoken",
@@ -10350,7 +12276,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "jsonwebtoken"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "argon2",
@@ -10392,7 +12326,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "argon2"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-dropzone",
@@ -10434,7 +12376,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-dropzone"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fast-glob",
@@ -10476,7 +12426,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fast-glob"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "execa",
@@ -10515,7 +12473,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "execa"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "chokidar",
@@ -10555,7 +12521,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "chokidar"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "commitlint",
@@ -10598,7 +12572,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@commitlint/cli",
       "@commitlint/config-conventional"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "changesets",
@@ -10642,7 +12624,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "@changesets/cli"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "loguru",
@@ -10685,7 +12675,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "loguru"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tenacity",
@@ -10727,7 +12725,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tenacity"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "orjson",
@@ -10770,7 +12776,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "orjson"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "motor",
@@ -10815,7 +12829,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "motor"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pymongo",
@@ -10832,7 +12854,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "python"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://pymongo.readthedocs.io",
+    "officialUrl": "https://pymongo.readthedocs.io/en/stable/",
     "learnResources": [
       {
         "label": "Official Documentation",
@@ -10841,7 +12863,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "PyMongo Tutorial",
-        "url": "https://pymongo.readthedocs.io/en/stable/tutorial.html",
+        "url": "https://www.mongodb.com/docs/languages/python/pymongo-driver/current/get-started/",
         "type": "tutorial"
       }
     ],
@@ -10860,7 +12882,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pymongo"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "strawberry-graphql",
@@ -10886,7 +12916,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Quick Start Tutorial",
-        "url": "https://strawberry.rocks/docs/general/quick-start",
+        "url": "https://strawberry.rocks/docs/general/schema-basics",
         "type": "tutorial"
       }
     ],
@@ -10900,7 +12930,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "strawberry-graphql"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pytest-asyncio",
@@ -10926,7 +12964,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Quickstart Guide",
-        "url": "https://pytest-asyncio.readthedocs.io/en/latest/how-to-guides/run_session_tests.html",
+        "url": "https://pytest-asyncio.readthedocs.io/en/latest/how-to-guides/index.html",
         "type": "tutorial"
       }
     ],
@@ -10944,7 +12982,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pytest-asyncio"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "hypothesis-py",
@@ -10984,7 +13030,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "hypothesis"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mkdocs",
@@ -11028,7 +13082,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "mkdocs",
       "mkdocs-material"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tamagui",
@@ -11072,7 +13134,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tamagui"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-svg",
@@ -11115,7 +13185,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-svg"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dio-flutter",
@@ -11159,7 +13237,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "dio"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sqflite-flutter",
@@ -11202,7 +13287,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sqflite"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sqlc-go",
@@ -11248,7 +13340,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/sqlc-dev/sqlc"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ent-go",
@@ -11275,7 +13374,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Ent Quick Start",
-        "url": "https://entgo.io/docs/quick-walkthrough",
+        "url": "https://entgo.io/docs/tutorial-setup",
         "type": "tutorial"
       }
     ],
@@ -11291,7 +13390,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "entgo.io/ent"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "go-redis-pkg",
@@ -11335,7 +13441,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/redis/go-redis/v9"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "temporal-go",
@@ -11378,7 +13491,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "go.temporal.io/sdk"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "rayon-rust",
@@ -11418,7 +13538,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "rayon"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "crossbeam-rust",
@@ -11460,7 +13588,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "crossbeam"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "chrono-rust",
@@ -11502,7 +13638,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "chrono"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "spring-security",
@@ -11547,7 +13691,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "spring-boot-starter-security"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "spring-data-jpa",
@@ -11565,7 +13716,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "java"
     ],
     "ecosystem": "java",
-    "officialUrl": "https://spring.io/projects/spring-data-jpa",
+    "officialUrl": "https://spring.io/projects/spring-data-jpa/",
     "learnResources": [
       {
         "label": "Official Documentation",
@@ -11591,7 +13742,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "spring-boot-starter-data-jpa"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "lombok",
@@ -11632,7 +13790,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "org.projectlombok:lombok"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "kotlinx-coroutines",
@@ -11677,7 +13842,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "kotlinx-coroutines-core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "knip",
@@ -11721,7 +13893,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "knip"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "node-cron",
@@ -11764,7 +13944,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "node-cron"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "piscina",
@@ -11806,7 +13994,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "piscina"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "semantic-release-pkg",
@@ -11848,7 +14044,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "semantic-release"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pydantic-settings",
@@ -11866,16 +14070,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "fastapi"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://docs.pydantic.dev/latest/concepts/pydantic_settings/",
+    "officialUrl": "https://pydantic.dev/docs/validation/latest/concepts/pydantic_settings/",
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://docs.pydantic.dev/latest/concepts/pydantic_settings/",
+        "url": "https://pydantic.dev/docs/validation/latest/concepts/pydantic_settings/",
         "type": "docs"
       },
       {
         "label": "Usage Examples",
-        "url": "https://docs.pydantic.dev/latest/concepts/pydantic_settings/#usage",
+        "url": "https://pydantic.dev/docs/validation/latest/concepts/pydantic_settings/",
         "type": "tutorial"
       }
     ],
@@ -11892,7 +14096,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pydantic-settings"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "apscheduler",
@@ -11935,7 +14147,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "apscheduler"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "slowapi",
@@ -11976,7 +14196,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "slowapi"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "beanie",
@@ -12021,7 +14249,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "beanie"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dramatiq",
@@ -12066,7 +14302,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "dramatiq"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "structlog",
@@ -12108,7 +14352,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "structlog"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "cryptography-py",
@@ -12151,7 +14403,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "cryptography"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "passlib",
@@ -12193,7 +14453,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "passlib"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "locust-load",
@@ -12236,7 +14504,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "locust"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "jupyterlab",
@@ -12253,7 +14529,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "python"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://jupyterlab.readthedocs.io",
+    "officialUrl": "https://jupyterlab.readthedocs.io/en/latest/",
     "learnResources": [
       {
         "label": "Official Documentation",
@@ -12281,7 +14557,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "jupyterlab",
       "notebook"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "networkx",
@@ -12324,7 +14608,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "networkx"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-keychain",
@@ -12367,7 +14659,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-keychain"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-gesture-handler",
@@ -12407,7 +14707,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-gesture-handler"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "flutter-secure-storage",
@@ -12449,7 +14757,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "flutter_secure_storage"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "go-router-flutter",
@@ -12492,7 +14807,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "go_router"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "hive-flutter",
@@ -12536,7 +14858,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "hive",
       "hive_flutter"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tower-rust",
@@ -12579,7 +14908,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tower"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "wasm-bindgen",
@@ -12596,11 +14933,11 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "rust"
     ],
     "ecosystem": "rust",
-    "officialUrl": "https://rustwasm.github.io/wasm-bindgen/",
+    "officialUrl": "https://rustwasm.github.io/docs/wasm-bindgen/",
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://rustwasm.github.io/wasm-bindgen/",
+        "url": "https://rustwasm.github.io/docs/wasm-bindgen/",
         "type": "docs"
       },
       {
@@ -12621,7 +14958,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "wasm-bindgen"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dashmap-rust",
@@ -12638,7 +14983,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "rust"
     ],
     "ecosystem": "rust",
-    "officialUrl": "https://docs.rs/dashmap",
+    "officialUrl": "https://docs.rs/dashmap/latest/dashmap/",
     "learnResources": [
       {
         "label": "Official Documentation",
@@ -12663,7 +15008,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "dashmap"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native",
+      "wasm"
+    ],
+    "source": "bundled"
   },
   {
     "id": "asynq-go",
@@ -12707,7 +15060,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/hibiken/asynq"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "casbin-go",
@@ -12750,7 +15110,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "github.com/casbin/casbin/v2"
-    ]
+    ],
+    "license": "BSD-3-Clause",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "native"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mapstruct-java",
@@ -12792,7 +15159,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "org.mapstruct:mapstruct"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ktor-client-jvm",
@@ -12835,7 +15209,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "io.ktor:ktor-client-core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "headless-ui",
@@ -12881,7 +15262,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@headlessui/react",
       "@headlessui/vue"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-aria",
@@ -12925,7 +15314,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "react-aria",
       "react-aria-components"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mdx-js",
@@ -12970,7 +15367,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@mdx-js/react",
       "@mdx-js/mdx"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "katex-math",
@@ -13011,7 +15416,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "katex"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "validator-js",
@@ -13053,7 +15466,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "validator"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "kind-k8s",
@@ -13097,7 +15518,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "kind"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "act-ci",
@@ -13139,7 +15567,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "act"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "renovate-bot",
@@ -13181,7 +15616,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "renovate"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pytest-cov",
@@ -13224,7 +15666,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pytest-cov"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pytest-mock",
@@ -13241,7 +15691,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "python"
     ],
     "ecosystem": "python",
-    "officialUrl": "https://pytest-mock.readthedocs.io",
+    "officialUrl": "https://pytest-mock.readthedocs.io/en/latest/",
     "learnResources": [
       {
         "label": "Official Documentation",
@@ -13266,7 +15716,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pytest-mock"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sphinx-doc",
@@ -13307,7 +15765,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sphinx"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "altair-viz",
@@ -13352,7 +15818,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "altair"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "authlib-py",
@@ -13398,7 +15872,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "authlib"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tox-py",
@@ -13440,7 +15922,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "tox"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-screens",
@@ -13482,7 +15972,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-screens"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-fast-image",
@@ -13524,7 +16022,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-fast-image"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-safe-area-context",
@@ -13565,7 +16071,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-safe-area-context"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "flutter-hooks",
@@ -13608,7 +16122,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "flutter_hooks"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "colyseus",
@@ -13635,7 +16156,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "Getting Started Tutorial",
-        "url": "https://docs.colyseus.io/getting-started/overview/",
+        "url": "https://docs.colyseus.io/getting-started",
         "type": "tutorial"
       }
     ],
@@ -13653,7 +16174,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "colyseus",
       "colyseus.js"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "peerjs",
@@ -13696,7 +16225,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "peerjs"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fast-json-stringify",
@@ -13737,7 +16274,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fast-json-stringify"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sst-dev",
@@ -13784,7 +16329,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sst"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "serverless-framework",
@@ -13826,7 +16379,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "serverless"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "sanitize-html",
@@ -13869,7 +16429,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "sanitize-html"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "minikube-k8s",
@@ -13913,7 +16481,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "minikube"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "skaffold-k8s",
@@ -13957,7 +16532,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "skaffold.yaml"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "tilt-dev",
@@ -13999,7 +16581,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "Tiltfile"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dependabot-tool",
@@ -14016,16 +16605,16 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "automation"
     ],
     "ecosystem": "multi",
-    "officialUrl": "https://docs.github.com/en/code-security/dependabot",
+    "officialUrl": "https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain",
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://docs.github.com/en/code-security/dependabot",
+        "url": "https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain",
         "type": "docs"
       },
       {
         "label": "Configuring Dependabot",
-        "url": "https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates",
+        "url": "https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/configure-version-updates",
         "type": "tutorial"
       }
     ],
@@ -14041,7 +16630,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "dependabot.yml"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "oxc-tool",
@@ -14083,7 +16679,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "oxlint"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "depcheck-tool",
@@ -14125,7 +16729,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "depcheck"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "prismjs",
@@ -14168,7 +16780,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "prismjs"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "quill-editor",
@@ -14211,7 +16831,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "quill"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "downshift-pkg",
@@ -14255,7 +16883,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "downshift"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-datepicker-pkg",
@@ -14299,7 +16935,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-datepicker"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-pdf-pkg",
@@ -14340,7 +16984,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-pdf"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-maps",
@@ -14382,7 +17034,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-maps"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "react-native-video",
@@ -14424,7 +17084,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "react-native-video"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pyjwt-pkg",
@@ -14467,7 +17135,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "pyjwt"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fastapi-users-pkg",
@@ -14512,7 +17188,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fastapi-users"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "statsmodels",
@@ -14557,7 +17241,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "statsmodels"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "workerpool-js",
@@ -14598,7 +17290,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "workerpool"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "slate-editor",
@@ -14641,7 +17341,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "slate",
       "slate-react"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "amplify-aws",
@@ -14685,7 +17393,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "aws-amplify",
       "@aws-amplify/core"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "redis-om-py",
@@ -14707,12 +17422,12 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "learnResources": [
       {
         "label": "Official Documentation",
-        "url": "https://redis-om-python.readthedocs.io/en/latest/",
+        "url": "https://github.com/redis/redis-om-python#readme",
         "type": "docs"
       },
       {
-        "label": "Getting Started Guide",
-        "url": "https://redis-om-python.readthedocs.io/en/latest/getting_started.html",
+        "label": "Redis OM Guides & Docs",
+        "url": "https://github.com/redis/redis-om-python/tree/main/docs",
         "type": "tutorial"
       }
     ],
@@ -14730,7 +17445,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "redis-om"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fastapi-cache2",
@@ -14773,7 +17496,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fastapi-cache2"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "provider-flutter",
@@ -14815,7 +17546,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "provider"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "intl-flutter",
@@ -14857,7 +17595,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "intl"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "jev",
@@ -14903,7 +17648,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "jev",
       "jev-ai"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "rea-re",
@@ -14949,7 +17702,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "rea-cli",
       "rea"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "llm-c",
@@ -14977,7 +17737,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       },
       {
         "label": "llm.c Architecture Walkthrough",
-        "url": "https://github.com/karpathy/llm.c/blob/master/doc/layernorm.md",
+        "url": "https://github.com/karpathy/llm.c/blob/master/doc/layernorm/layernorm.md",
         "type": "tutorial"
       }
     ],
@@ -14995,7 +17755,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "llm.c"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "nanogpt",
@@ -15041,7 +17808,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "nanogpt"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "micrograd",
@@ -15084,7 +17859,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "micrograd"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "autoresearch",
@@ -15129,7 +17912,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "autoresearch"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "browser-use",
@@ -15174,7 +17965,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "browser-use"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "mcp-sdk",
@@ -15218,7 +18017,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@modelcontextprotocol/sdk",
       "mcp"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "unsloth",
@@ -15252,6 +18058,8 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
+      "trl",
+      "deepspeed",
       "axolotl-finetune",
       "peft"
     ],
@@ -15265,7 +18073,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "unsloth"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "litellm",
@@ -15311,7 +18127,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "litellm"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "outlines-ai",
@@ -15344,6 +18168,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
+      "guardrails-ai",
       "instructor",
       "jev"
     ],
@@ -15357,7 +18182,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "outlines"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "open-interpreter",
@@ -15402,7 +18235,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "open-interpreter"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "typescript",
@@ -15428,7 +18269,9 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
         "type": "docs"
       }
     ],
-    "alternatives": [],
+    "alternatives": [
+      "javascript"
+    ],
     "worksWellWith": [
       "react",
       "nextjs",
@@ -15440,11 +18283,21 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "pnpm",
       "fast-glob"
     ],
-    "prerequisites": [],
+    "prerequisites": [
+      "javascript"
+    ],
     "stackIndicators": [
       "typescript",
       "tsc"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "vite",
@@ -15492,7 +18345,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "vite",
       "@vitejs/plugin-react",
       "@vitejs/plugin-vue"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "bun",
@@ -15525,6 +18386,7 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "pnpm"
     ],
     "worksWellWith": [
+      "javascript",
       "typescript",
       "react",
       "hono",
@@ -15534,7 +18396,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "bun",
       "bun-types"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "eslint",
@@ -15575,7 +18445,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "eslint",
       "@typescript-eslint/parser",
       "@typescript-eslint/eslint-plugin"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "pnpm",
@@ -15613,7 +18491,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "pnpm"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "rxjs",
@@ -15649,7 +18535,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "rxjs"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "ngrx",
@@ -15693,7 +18587,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "@ngrx/store",
       "@ngrx/effects",
       "@ngrx/entity"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "node",
+      "browser"
+    ],
+    "source": "bundled"
   },
   {
     "id": "clickhouse",
@@ -15735,7 +18637,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "@clickhouse/client",
       "clickhouse-connect",
       "clickhouse"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "caddy",
@@ -15773,7 +18682,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "prerequisites": [],
     "stackIndicators": [
       "caddy"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "temporal",
@@ -15813,7 +18729,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@temporalio/workflow",
       "temporalio"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "anthropic-sdk",
@@ -15857,7 +18780,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "@anthropic-ai/sdk",
       "anthropic"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "google-genai-sdk",
@@ -15901,7 +18831,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "@google/genai",
       "google-genai",
       "google-generativeai"
-    ]
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "instructor",
@@ -15939,13 +18876,21 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       "anthropic-sdk",
       "google-genai-sdk",
       "pydantic",
-      "fastapi"
+      "fastapi",
+      "guardrails-ai"
     ],
     "prerequisites": [],
     "stackIndicators": [
       "instructor",
       "@instructor-ai/instructor"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "multi"
+    ],
+    "source": "bundled"
   },
   {
     "id": "dspy",
@@ -15989,7 +18934,15 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     "stackIndicators": [
       "dspy-ai",
       "dspy"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
   },
   {
     "id": "fastembed",
@@ -16018,12 +18971,14 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
       }
     ],
     "alternatives": [
+      "sentence-transformers",
       "huggingface-transformers"
     ],
     "worksWellWith": [
       "qdrant",
       "chromadb",
       "llamaindex",
+      "onnxruntime",
       "python"
     ],
     "prerequisites": [
@@ -16031,6 +18986,768 @@ export const DEFAULT_SKILLS_DATA: Skill[] = ([
     ],
     "stackIndicators": [
       "fastembed"
-    ]
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [],
+    "runtimes": [
+      "cpython",
+      "pypy"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "javascript",
+    "name": "JavaScript",
+    "category": "utility",
+    "difficulty": "beginner",
+    "description": "High-level, dynamically typed multi-paradigm programming language powering modern web browsers, servers, and runtimes.",
+    "whyUseIt": "The universal scripting language of the web with first-class functions, event-driven async I/O, and massive npm ecosystem.",
+    "tags": [
+      "javascript",
+      "js",
+      "ecmascript",
+      "web",
+      "node",
+      "browser",
+      "scripting"
+    ],
+    "ecosystem": "javascript",
+    "officialUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    "learnResources": [
+      {
+        "label": "MDN JavaScript Guide",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+        "type": "docs"
+      },
+      {
+        "label": "The Modern JavaScript Tutorial",
+        "url": "https://javascript.info/",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "typescript"
+    ],
+    "worksWellWith": [
+      "bun",
+      "vitest",
+      "eslint",
+      "prettier"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "package.json",
+      "node_modules",
+      ".js",
+      ".mjs",
+      ".cjs"
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When compile-time strict static type safety is required (use TypeScript)"
+    ],
+    "runtimes": [
+      "browser",
+      "node",
+      "deno",
+      "bun"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "jax",
+    "name": "JAX",
+    "category": "ai-ml",
+    "difficulty": "advanced",
+    "description": "Composable transformations of Python and NumPy programs: differentiate, vectorize, JIT to GPU/TPU with XLA.",
+    "whyUseIt": "Premier framework for cutting-edge machine learning research featuring automatic differentiation, pure functional arrays, and XLA acceleration.",
+    "tags": [
+      "jax",
+      "autograd",
+      "xla",
+      "machine-learning",
+      "deep-learning",
+      "gpu",
+      "tpu",
+      "python"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://docs.jax.dev/en/latest/",
+    "learnResources": [
+      {
+        "label": "JAX Official Documentation",
+        "url": "https://docs.jax.dev/en/latest/",
+        "type": "docs"
+      },
+      {
+        "label": "JAX Quickstart Guide",
+        "url": "https://docs.jax.dev/en/latest/quickstart.html",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "pytorch",
+      "tensorflow"
+    ],
+    "worksWellWith": [
+      "numpy",
+      "scipy"
+    ],
+    "prerequisites": [
+      "numpy"
+    ],
+    "stackIndicators": [
+      "jax",
+      "jaxlib"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When building standard production deep learning serving APIs with pre-built model architectures (prefer PyTorch/HuggingFace)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "onnxruntime",
+    "name": "ONNX Runtime",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "Cross-platform high-performance inference and training accelerator for ONNX models across CPU, GPU, and specialized NPUs.",
+    "whyUseIt": "Maximizes throughput and slashes model latency in production by optimizing execution graphs across varied hardware backends.",
+    "tags": [
+      "onnxruntime",
+      "onnx",
+      "inference",
+      "accelerator",
+      "model-deployment",
+      "ai",
+      "python"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://onnxruntime.ai/",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://onnxruntime.ai/docs/",
+        "type": "docs"
+      },
+      {
+        "label": "ONNX Runtime GitHub Repository",
+        "url": "https://github.com/microsoft/onnxruntime#readme",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "tensorrt-llm"
+    ],
+    "worksWellWith": [
+      "pytorch",
+      "huggingface-transformers",
+      "numpy",
+      "fastembed"
+    ],
+    "prerequisites": [],
+    "stackIndicators": [
+      "onnxruntime",
+      "onnxruntime-gpu"
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When serving large autoregressive generative language models with continuous batching and KV caching (prefer vLLM or SGLang)"
+    ],
+    "runtimes": [
+      "python",
+      "node"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "deepspeed",
+    "name": "DeepSpeed",
+    "category": "ai-ml",
+    "difficulty": "advanced",
+    "description": "Deep learning optimization library making distributed training and inference fast, scalable, and memory-efficient.",
+    "whyUseIt": "Enables multi-GPU and multi-node training of massive LLMs via Zero Redundancy Optimizer (ZeRO) stages 1, 2, and 3.",
+    "tags": [
+      "deepspeed",
+      "distributed-training",
+      "zero",
+      "llm",
+      "multi-gpu",
+      "pytorch",
+      "python"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://www.deepspeed.ai/",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://www.deepspeed.ai/getting-started/",
+        "type": "docs"
+      },
+      {
+        "label": "DeepSpeed GitHub Repository",
+        "url": "https://github.com/deepspeedai/DeepSpeed#readme",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "unsloth"
+    ],
+    "worksWellWith": [
+      "pytorch",
+      "huggingface-transformers",
+      "wandb"
+    ],
+    "prerequisites": [
+      "pytorch"
+    ],
+    "stackIndicators": [
+      "deepspeed",
+      "deepspeed-config.json"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When training on a single consumer GPU where lightweight memory optimizers like Unsloth are significantly faster and simpler"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "sglang",
+    "name": "SGLang",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "High-throughput LLM serving engine with RadixAttention for multi-call KV cache reuse and structured constrained decoding.",
+    "whyUseIt": "Delivers up to 5x higher serving throughput than conventional engines through automatic prefix cache reuse and co-designed frontend runtime.",
+    "tags": [
+      "sglang",
+      "llm-serving",
+      "radix-attention",
+      "inference",
+      "structured-decoding",
+      "ai",
+      "python"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://sgl-project.github.io/",
+    "learnResources": [
+      {
+        "label": "SGLang Documentation",
+        "url": "https://sgl-project.github.io/",
+        "type": "docs"
+      },
+      {
+        "label": "SGLang GitHub Repository",
+        "url": "https://github.com/sgl-project/sglang#readme",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "vllm",
+      "ollama"
+    ],
+    "worksWellWith": [
+      "pytorch",
+      "huggingface-transformers",
+      "fastapi"
+    ],
+    "prerequisites": [
+      "python",
+      "pytorch"
+    ],
+    "stackIndicators": [
+      "sglang",
+      "sglang.launch_server"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When running simple quantized models on edge or CPU devices (prefer llama-cpp-python or Ollama)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "llama-cpp-python",
+    "name": "llama-cpp-python",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "Python bindings for llama.cpp supporting high-performance 4-bit, 5-bit, and 8-bit quantized GGUF LLM inference on CPU and GPU.",
+    "whyUseIt": "Run open-weights LLMs directly on consumer hardware and laptops with minimal RAM and optional Metal/CUDA offloading.",
+    "tags": [
+      "llama-cpp-python",
+      "llamacpp",
+      "gguf",
+      "quantization",
+      "local-llm",
+      "inference",
+      "python"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://llama-cpp-python.readthedocs.io/en/latest/",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://llama-cpp-python.readthedocs.io/en/latest/",
+        "type": "docs"
+      },
+      {
+        "label": "llama-cpp-python GitHub Repository",
+        "url": "https://github.com/abetlen/llama-cpp-python#readme",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "ollama",
+      "vllm"
+    ],
+    "worksWellWith": [
+      "langchain",
+      "llamaindex",
+      "open-interpreter"
+    ],
+    "prerequisites": [
+      "python"
+    ],
+    "stackIndicators": [
+      "llama_cpp",
+      "llama-cpp-python",
+      ".gguf"
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When requiring high-concurrency enterprise batch serving across distributed GPU clusters (prefer vLLM or SGLang)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "faiss",
+    "name": "FAISS",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "Library for efficient similarity search and clustering of dense vectors developed by Meta AI Research.",
+    "whyUseIt": "Industry gold standard for indexing and searching billions of dense embeddings with GPU acceleration and state-of-the-art IVF and HNSW indexing.",
+    "tags": [
+      "faiss",
+      "vector-search",
+      "embeddings",
+      "similarity-search",
+      "clustering",
+      "gpu",
+      "ai",
+      "python"
+    ],
+    "ecosystem": "multi",
+    "officialUrl": "https://faiss.ai/",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://faiss.ai/",
+        "type": "docs"
+      },
+      {
+        "label": "FAISS GitHub Repository",
+        "url": "https://github.com/facebookresearch/faiss#readme",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "chromadb",
+      "qdrant"
+    ],
+    "worksWellWith": [
+      "numpy",
+      "pytorch",
+      "scikit-learn"
+    ],
+    "prerequisites": [
+      "numpy"
+    ],
+    "stackIndicators": [
+      "faiss",
+      "faiss-cpu",
+      "faiss-gpu"
+    ],
+    "license": "MIT",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When requiring a managed, multi-tenant vector database with built-in metadata filtering and cloud replication (prefer Qdrant or ChromaDB)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "sentence-transformers",
+    "name": "Sentence Transformers",
+    "category": "ai-ml",
+    "difficulty": "beginner",
+    "description": "State-of-the-art Python framework for compute-efficient dense text, code, and image embeddings using bi-encoders.",
+    "whyUseIt": "The default standard for embedding generation in RAG and semantic search: computes cosine similarity and cross-encoder re-ranking seamlessly.",
+    "tags": [
+      "sentence-transformers",
+      "embeddings",
+      "sbert",
+      "semantic-search",
+      "rag",
+      "ai",
+      "python"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://sbert.net/",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://sbert.net/",
+        "type": "docs"
+      },
+      {
+        "label": "Sentence Transformers Quickstart",
+        "url": "https://sbert.net/docs/quickstart.html",
+        "type": "tutorial"
+      }
+    ],
+    "alternatives": [
+      "fastembed"
+    ],
+    "worksWellWith": [
+      "huggingface-transformers",
+      "pytorch",
+      "faiss",
+      "chromadb",
+      "ragas"
+    ],
+    "prerequisites": [
+      "python",
+      "pytorch"
+    ],
+    "stackIndicators": [
+      "sentence_transformers",
+      "sentence-transformers"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When generating lightweight local embeddings without PyTorch or heavy GPU dependencies (prefer FastEmbed)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "diffusers",
+    "name": "Diffusers",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "State-of-the-art pretrained diffusion models for generating images, audio, and 3D structures with PyTorch.",
+    "whyUseIt": "The premier modular toolbox for diffusion models: supports Stable Diffusion, Flux, ControlNet, and SDXL with built-in memory optimizations.",
+    "tags": [
+      "diffusers",
+      "diffusion",
+      "stable-diffusion",
+      "flux",
+      "generative-ai",
+      "image-generation",
+      "pytorch"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://huggingface.co/docs/diffusers/index",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://huggingface.co/docs/diffusers/index",
+        "type": "docs"
+      },
+      {
+        "label": "Diffusers Quicktour",
+        "url": "https://huggingface.co/docs/diffusers/quicktour",
+        "type": "tutorial"
+      },
+      {
+        "label": "GitHub Repository",
+        "url": "https://github.com/huggingface/diffusers",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "huggingface-transformers"
+    ],
+    "worksWellWith": [
+      "pytorch",
+      "onnxruntime",
+      "sentence-transformers"
+    ],
+    "prerequisites": [
+      "python",
+      "pytorch"
+    ],
+    "stackIndicators": [
+      "diffusers",
+      "DiffusionPipeline",
+      "StableDiffusionPipeline"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When working exclusively with text autoregressive LLMs without multimodal diffusion needs"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "timm",
+    "name": "PyTorch Image Models (timm)",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "Comprehensive collection of state-of-the-art computer vision backbones, layers, and utilities for PyTorch.",
+    "whyUseIt": "The gold standard library for modern computer vision architectures: offers hundreds of pretrained vision transformers, ConvNeXt, and ResNet models.",
+    "tags": [
+      "timm",
+      "computer-vision",
+      "vision-transformer",
+      "vit",
+      "resnet",
+      "pytorch",
+      "image-classification"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://huggingface.co/docs/timm/index",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://huggingface.co/docs/timm/index",
+        "type": "docs"
+      },
+      {
+        "label": "timm Quickstart",
+        "url": "https://huggingface.co/docs/timm/quickstart",
+        "type": "tutorial"
+      },
+      {
+        "label": "GitHub Repository",
+        "url": "https://github.com/huggingface/pytorch-image-models",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "opencv-python"
+    ],
+    "worksWellWith": [
+      "pytorch",
+      "onnxruntime",
+      "diffusers"
+    ],
+    "prerequisites": [
+      "python",
+      "pytorch"
+    ],
+    "stackIndicators": [
+      "timm",
+      "timm.create_model"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When performing low-level image processing, matrix filtering, or classical geometric transformations without deep learning backbones (prefer OpenCV)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "trl",
+    "name": "TRL (Transformer Reinforcement Learning)",
+    "category": "ai-ml",
+    "difficulty": "advanced",
+    "description": "Full-stack library for post-training and aligning language models with RLHF, DPO, PPO, and GRPO.",
+    "whyUseIt": "Essential toolkit for LLM post-training: provides drop-in SFTTrainer, DPOTrainer, and GRPOConfig for state-of-the-art model alignment.",
+    "tags": [
+      "trl",
+      "reinforcement-learning",
+      "rlhf",
+      "dpo",
+      "ppo",
+      "grpo",
+      "fine-tuning",
+      "llm-alignment"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://huggingface.co/docs/trl/index",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://huggingface.co/docs/trl/index",
+        "type": "docs"
+      },
+      {
+        "label": "TRL Quicktour",
+        "url": "https://huggingface.co/docs/trl/quicktour",
+        "type": "tutorial"
+      },
+      {
+        "label": "GitHub Repository",
+        "url": "https://github.com/huggingface/trl",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "unsloth"
+    ],
+    "worksWellWith": [
+      "pytorch",
+      "huggingface-transformers",
+      "deepspeed"
+    ],
+    "prerequisites": [
+      "python",
+      "pytorch",
+      "huggingface-transformers"
+    ],
+    "stackIndicators": [
+      "trl",
+      "SFTTrainer",
+      "DPOTrainer",
+      "GRPOConfig"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When doing standard supervised instruction tuning where ultra-fast manual kernel optimizations without RLHF/DPO are desired (prefer Unsloth)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "ragas",
+    "name": "Ragas",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "Evaluation framework for Retrieval Augmented Generation (RAG) pipelines assessing faithfulness, answer relevancy, and context recall.",
+    "whyUseIt": "Standard metric suite for end-to-end RAG assessment: quantifies hallucination and retrieval relevance without requiring ground-truth human annotations.",
+    "tags": [
+      "ragas",
+      "rag",
+      "evaluation",
+      "metrics",
+      "faithfulness",
+      "hallucination-detection",
+      "llm-eval"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://docs.ragas.io/en/stable/",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://docs.ragas.io/en/stable/",
+        "type": "docs"
+      },
+      {
+        "label": "GitHub Repository",
+        "url": "https://github.com/vibrantlabsai/ragas",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [],
+    "worksWellWith": [
+      "sentence-transformers",
+      "chromadb",
+      "faiss"
+    ],
+    "prerequisites": [
+      "python"
+    ],
+    "stackIndicators": [
+      "ragas",
+      "ragas.evaluate",
+      "ragas.metrics"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When evaluating general classification accuracy or standard NLP benchmarks that do not use retrieval context"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
+  },
+  {
+    "id": "guardrails-ai",
+    "name": "Guardrails AI",
+    "category": "ai-ml",
+    "difficulty": "intermediate",
+    "description": "Open-source framework for building reliable AI applications with structured output validation, guardrails, and runtime hallucination prevention.",
+    "whyUseIt": "Guarantees LLM output structure, semantic correctness, and policy compliance with customizable Hub guards and automatic re-asking.",
+    "tags": [
+      "guardrails-ai",
+      "guardrails",
+      "validation",
+      "hallucination-prevention",
+      "structured-output",
+      "safety",
+      "llm-security"
+    ],
+    "ecosystem": "python",
+    "officialUrl": "https://guardrailsai.com/",
+    "learnResources": [
+      {
+        "label": "Official Documentation",
+        "url": "https://guardrailsai.com/guardrails/docs",
+        "type": "docs"
+      },
+      {
+        "label": "GitHub Repository",
+        "url": "https://github.com/guardrails-ai/guardrails",
+        "type": "docs"
+      }
+    ],
+    "alternatives": [
+      "outlines-ai"
+    ],
+    "worksWellWith": [
+      "instructor",
+      "openai-sdk",
+      "fastapi"
+    ],
+    "prerequisites": [
+      "python"
+    ],
+    "stackIndicators": [
+      "guardrails-ai",
+      "guardrails",
+      "from guardrails import Guard"
+    ],
+    "license": "Apache-2.0",
+    "isDeprecated": false,
+    "whenNotToUse": [
+      "When token-level regex or context-free grammar constrained sampling directly in the inference engine is required (prefer Outlines)"
+    ],
+    "runtimes": [
+      "python"
+    ],
+    "source": "bundled"
   }
 ]) as unknown as Skill[];

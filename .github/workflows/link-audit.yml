@@ -1,0 +1,46 @@
+name: Automated Link Rot & Documentation Health Audit
+
+on:
+  schedule:
+    # Run weekly on Mondays at 02:00 UTC
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  link-audit:
+    name: Audit Catalog Documentation Links
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Full Link Rot Audit
+        run: pnpm run audit:links --report --fix
+        env:
+          NODE_ENV: production
+
+      - name: Upload Link Rot Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-rot-report
+          path: link-rot-report.json
+          retention-days: 14

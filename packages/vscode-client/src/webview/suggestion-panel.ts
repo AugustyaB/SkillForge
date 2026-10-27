@@ -172,6 +172,9 @@ export class SuggestionPanel {
       SuggestionPanel.bookmarkManager?.getBookmarks().map((b) => b.id.toLowerCase()) || []
     );
 
+    const extensionVersion =
+      vscode.extensions.getExtension('skillforge.skillforge')?.packageJSON?.version || '0.1.2';
+
     this.panel.webview.html = generateWebviewHtml({
       nonce,
       cspSource,
@@ -181,6 +184,7 @@ export class SuggestionPanel {
       isLoading: this.isLoading,
       showFeedbackPrompt: this.showFeedbackPrompt,
       bookmarkedSkillIds: bookmarkedSet,
+      extensionVersion,
     });
   }
 

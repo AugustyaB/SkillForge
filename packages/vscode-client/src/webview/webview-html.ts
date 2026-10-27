@@ -16,6 +16,7 @@ export interface WebviewHtmlOptions {
   isLoading?: boolean;
   showFeedbackPrompt?: boolean;
   bookmarkedSkillIds?: Set<string>;
+  extensionVersion?: string;
 }
 
 // Embedded SVG Codicons (Minimalist, theme-adaptive vector icons)
@@ -423,7 +424,7 @@ export function renderFeedbackBar(query: string, show: boolean = false): string 
  * Generates the complete, self-contained HTML page for the Webview.
  */
 export function generateWebviewHtml(options: WebviewHtmlOptions): string {
-  const { nonce, cspSource, result, scopeLabel, isLoading, showFeedbackPrompt } = options;
+  const { nonce, cspSource, result, scopeLabel, isLoading, showFeedbackPrompt, extensionVersion } = options;
 
   const skills = result?.skills || [];
   const query = result?.queryEcho || '';
@@ -448,7 +449,7 @@ export function generateWebviewHtml(options: WebviewHtmlOptions): string {
         <span class="sf-brand-logo sf-icon">${ICON_FORGE}</span>
         <h1 class="sf-title">
           <span>SkillForge</span>
-          <span class="sf-version-tag">v0.1.0</span>
+          <span class="sf-version-tag">v${escapeHtml(extensionVersion || '0.1.2')}</span>
         </h1>
       </div>
       <div class="sf-meta-pills">

@@ -21,6 +21,16 @@ import {
   validateSkillBookmark,
   validateComparisonRequest,
   validateComparisonMatrix,
+  WorkspaceSkillsConfigSchema,
+  validateWorkspaceSkillsConfig,
+  safeValidateWorkspaceSkillsConfig,
+  validateAddLocalSkillPayload,
+  validateRemoveLocalSkillPayload,
+  validateIdeationWizardInput,
+  validateProjectCharter,
+  validateCompileIdeaPromptRequest,
+  validateScaffoldProjectRequest,
+  validateScaffoldProjectResult,
 } from '../index.js';
 
 describe('SkillForge Zod Schemas', () => {
@@ -478,6 +488,222 @@ describe('RawSuggestionSchema', () => {
           isCrossEcosystem: false,
         })
       ).toThrow();
+    });
+  });
+
+  describe('Workspace Private Catalog Configuration Schemas', () => {
+    const validPrivateSkill = {
+      id: 'corp-auth',
+      name: 'CorpAuth',
+      category: 'authentication',
+      difficulty: 'intermediate',
+      description: 'Internal corporate authentication library with SSO and MFA.',
+      whyUseIt: 'Enforces corporate identity policy and security standards.',
+      tags: ['auth', 'sso', 'mfa', 'security', 'corp'],
+      ecosystem: 'javascript',
+      officialUrl: 'https://internal.corp.com/docs/auth',
+      learnResources: [
+        { label: 'Internal Wiki', url: 'https://internal.corp.com/wiki/auth', type: 'docs' },
+      ],
+      alternatives: ['next-auth', 'clerk'],
+      worksWellWith: ['fastify'],
+      prerequisites: ['node'],
+      stackIndicators: ['@corp/auth', 'corp-auth'],
+    };
+
+    it('validates workspace config in loose array format', () => {
+      expect(WorkspaceSkillsConfigSchema.safeParse([validPrivateSkill]).success).toBe(true);
+      const result = validateWorkspaceSkillsConfig([validPrivateSkill]);
+      expect(result.skills).toHaveLength(1);
+      expect(result.skills[0]?.id).toBe('corp-auth');
+      expect(result.skills[0]?.source).toBe('workspace');
+      expect(result.skills[0]?.license).toBe('MIT');
+      expect(result.overrides).toEqual({});
+    });
+
+    it('validates workspace config in structured object format with overrides', () => {
+      const config = {
+        version: '1.0',
+        skills: [validPrivateSkill],
+        overrides: {
+          recoil: {
+            isDeprecated: true,
+            deprecatedReason: 'Migrated to corp-state',
+            migrationTarget: 'corp-state',
+          },
+        },
+      };
+
+      expect(WorkspaceSkillsConfigSchema.safeParse(config).success).toBe(true);
+      const result = validateWorkspaceSkillsConfig(config);
+      expect(result.skills).toHaveLength(1);
+      expect(result.skills[0]?.id).toBe('corp-auth');
+      expect(result.skills[0]?.source).toBe('workspace');
+      expect(result.overrides.recoil).toBeDefined();
+      expect(result.overrides.recoil?.migrationTarget).toBe('corp-state');
+    });
+
+    it('detects duplicate skill IDs within workspace config', () => {
+      expect(() =>
+        validateWorkspaceSkillsConfig([validPrivateSkill, { ...validPrivateSkill }])
+      ).toThrow(/Duplicate workspace skill ID detected/);
+    });
+
+    it('safely handles malformed workspace config without crashing', () => {
+      const invalid = safeValidateWorkspaceSkillsConfig({
+        version: 123, // invalid type
+        skills: [{ id: 'bad skill with spaces' }],
+      });
+      expect(invalid.success).toBe(false);
+    });
+
+    it('validates AddLocalSkillPayload and normalizes defaults', () => {
+      const payload = {
+        workspaceRoot: '/path/to/project',
+        skill: validPrivateSkill,
+      };
+      const validated = validateAddLocalSkillPayload(payload);
+      expect(validated.workspaceRoot).toBe('/path/to/project');
+      expect(validated.overwrite).toBe(true);
+      expect(validated.skill.source).toBe('workspace');
+      expect(validated.skill.license).toBe('MIT');
+    });
+
+    it('rejects AddLocalSkillPayload with missing root or invalid skill', () => {
+      expect(() => validateAddLocalSkillPayload({ workspaceRoot: '', skill: validPrivateSkill })).toThrow();
+      expect(() => validateAddLocalSkillPayload({ workspaceRoot: '/path', skill: { id: 'bad' } })).toThrow();
+    });
+
+    it('validates RemoveLocalSkillPayload', () => {
+      const payload = {
+        workspaceRoot: '/path/to/project',
+        skillId: 'corp-auth',
+      };
+      const validated = validateRemoveLocalSkillPayload(payload);
+      expect(validated.workspaceRoot).toBe('/path/to/project');
+      expect(validated.skillId).toBe('corp-auth');
+    });
+  });
+
+  describe('Project Studio & Ideation Schemas (v1.2.0)', () => {
+    it('validates IdeationWizardInput with defaults', () => {
+      const input = validateIdeationWizardInput({});
+      expect(input.persona).toBe('fresher-student');
+      expect(input.domain).toBe('devtools-cli');
+      expect(input.ecosystem).toBe('recommend');
+      expect(input.timeBudget).toBe('two-week-deep-dive');
+    });
+
+    it('validates custom domain and persona in IdeationWizardInput', () => {
+      const input = validateIdeationWizardInput({
+        persona: 'working-professional',
+        domain: 'custom',
+        customDomain: 'Bioinformatics Pipeline',
+        ecosystem: 'python',
+        timeBudget: 'production-mvp',
+        learningGoal: 'Mastering distributed task queues with Celery and Redis',
+      });
+      expect(input.persona).toBe('working-professional');
+      expect(input.customDomain).toBe('Bioinformatics Pipeline');
+      expect(input.ecosystem).toBe('python');
+    });
+
+    it('validates a complete and structured ProjectCharter', () => {
+      const validCharter = {
+        id: 'campus-lost-found',
+        title: 'Campus Beacon: Real-Time Lost & Found',
+        tagline: 'Instant lost item matching with Telegram alerts and fuzzy search',
+        targetPersona: 'fresher-student',
+        domain: 'campus-social',
+        problemStatement: 'College students lose essentials constantly with no centralized reliable retrieval system.',
+        technicalTwist: 'Automated image classification with MobileNet and real-time Telegram bot alerts.',
+        timeBudget: 'two-week-deep-dive',
+        recommendedSkills: ['fastapi', 'sqlite3', 'pydantic'],
+        architecturePattern: 'REST API + Telegram Webhook + SQLite',
+        milestones: [
+          {
+            phase: 1,
+            name: 'Core Storage & API',
+            objective: 'Build SQLite schemas and CRUD REST endpoints',
+            deliverables: ['Database schema', 'CRUD endpoints for items', 'Unit tests'],
+          },
+          {
+            phase: 2,
+            name: 'Telegram Bot & Fuzzy Search',
+            objective: 'Integrate python-telegram-bot and rapidfuzz',
+            deliverables: ['Bot webhook', 'Fuzzy matching algorithm'],
+          },
+        ],
+        antiPatternsToAvoid: ['Do not use heavy multi-node Kafka for a campus tool'],
+      };
+
+      const charter = validateProjectCharter(validCharter);
+      expect(charter.title).toBe('Campus Beacon: Real-Time Lost & Found');
+      expect(charter.recommendedSkills).toHaveLength(3);
+      expect(charter.milestones).toHaveLength(2);
+    });
+
+    it('rejects ProjectCharter with empty milestones or zero recommended skills', () => {
+      expect(() =>
+        validateProjectCharter({
+          id: 'bad-charter',
+          title: 'Bad Charter',
+          tagline: 'Short tagline',
+          targetPersona: 'intermediate',
+          domain: 'fintech',
+          problemStatement: 'Problem is too short to pass validation constraints',
+          technicalTwist: 'Short',
+          timeBudget: 'weekend-hackathon',
+          recommendedSkills: [], // invalid: empty
+          architecturePattern: 'Microservices',
+          milestones: [], // invalid: empty
+        })
+      ).toThrow();
+    });
+
+    it('validates ScaffoldProjectRequest and normalizes target rules format', () => {
+      const req = validateScaffoldProjectRequest({
+        workspacePath: '/my/workspace',
+        charter: {
+          id: 'dev-linter',
+          title: 'Git Commit Sentinel',
+          tagline: 'Fast local Git commit message and secret scanner CLI',
+          targetPersona: 'intermediate',
+          domain: 'devtools-cli',
+          problemStatement: 'Engineers accidentally commit API keys and poorly formatted commit messages.',
+          technicalTwist: 'Zero-dependency binary scanner with regex bloom filter.',
+          timeBudget: 'weekend-hackathon',
+          recommendedSkills: ['rust', 'clap'],
+          architecturePattern: 'CLI Binary',
+          milestones: [
+            {
+              phase: 1,
+              name: 'CLI Parser & Regex Engine',
+              objective: 'Implement Clap arguments and secret rules',
+              deliverables: ['Scanner binary', 'Test suite'],
+            },
+          ],
+        },
+      });
+
+      expect(req.workspacePath).toBe('/my/workspace');
+      expect(req.targetRulesFormat).toBe('cursor-rule');
+      expect(req.overwriteExisting).toBe(false);
+
+      const promptReq = validateCompileIdeaPromptRequest({
+        input: { persona: 'fresher-student', domain: 'campus-social' },
+        isWildcard: false,
+      });
+      expect(promptReq.isWildcard).toBe(false);
+
+      const scaffoldResult = validateScaffoldProjectResult({
+        success: true,
+        createdFiles: ['PROJECT_SPEC.md', 'README.md'],
+        skippedFiles: [],
+        warnings: [],
+        message: 'Scaffolded cleanly',
+      });
+      expect(scaffoldResult.success).toBe(true);
     });
   });
 });

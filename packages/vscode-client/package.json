@@ -2,7 +2,7 @@
   "name": "skillforge",
   "displayName": "SkillForge",
   "description": "Cross-IDE developer skill discovery engine: map natural language ideas to vetted libraries, frameworks, and architecture patterns",
-  "version": "0.1.1",
+  "version": "1.2.0",
   "publisher": "skillforge",
   "engines": {
     "vscode": "^1.85.0"
@@ -70,7 +70,10 @@
     "onCommand:skillforge.clearBookmarks",
     "onCommand:skillforge.compareSkills",
     "onCommand:skillforge.generateAgentSkill",
-    "onCommand:skillforge.openWalkthrough"
+    "onCommand:skillforge.openWalkthrough",
+    "onCommand:skillforge.browseCatalog",
+    "onCommand:skillforge.viewGeneratedSkills",
+    "onCommand:skillforge.brainstormProject"
   ],
   "contributes": {
     "viewsContainers": {
@@ -206,6 +209,24 @@
         "title": "Configure AI Model (Free, Paid & Custom)",
         "category": "SkillForge",
         "icon": "$(sparkle)"
+      },
+      {
+        "command": "skillforge.browseCatalog",
+        "title": "Browse All Available Skills (Catalog)",
+        "category": "SkillForge",
+        "icon": "$(library)"
+      },
+      {
+        "command": "skillforge.viewGeneratedSkills",
+        "title": "View Generated AI Skill Files",
+        "category": "SkillForge",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "skillforge.brainstormProject",
+        "title": "Brainstorm & Plan Project (Project Studio)",
+        "category": "SkillForge",
+        "icon": "$(lightbulb)"
       }
     ],
     "keybindings": [
@@ -379,9 +400,9 @@
     "bundle": "node esbuild.mjs",
     "bundle:prod": "node esbuild.mjs --production",
     "build": "pnpm run copy-docs && tsc -b && node esbuild.mjs --production",
-    "package": "pnpm run copy-docs && vsce package --no-dependencies",
-    "publish:vsce": "vsce publish --no-dependencies",
-    "publish:ovsx": "ovsx publish --no-dependencies",
+    "package": "pnpm run copy-docs && vsce package --no-dependencies --baseImagesUrl https://raw.githubusercontent.com/AugustyaB/SkillForge/main/packages/vscode-client",
+    "publish:vsce": "vsce publish --no-dependencies --baseImagesUrl https://raw.githubusercontent.com/AugustyaB/SkillForge/main/packages/vscode-client",
+    "publish:ovsx": "ovsx publish --no-dependencies --baseImagesUrl https://raw.githubusercontent.com/AugustyaB/SkillForge/main/packages/vscode-client",
     "clean": "rimraf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {

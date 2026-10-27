@@ -8,3 +8,5 @@ out/
 coverage/
 *.log
 .vscode-test/
+.link-audit-cache.json
+*.link-audit-cache.json

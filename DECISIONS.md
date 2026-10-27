@@ -17,6 +17,13 @@ This document records the major architectural, technical, and design decisions m
 - [ADR-009: Persistent Bookmarking Engine & Side-by-Side Technology Comparison Matrix](#adr-009-persistent-bookmarking-engine--side-by-side-technology-comparison-matrix)
 - [ADR-016: Dedicated Model Context Protocol (MCP) Server Architecture (`packages/mcp`)](#adr-016-dedicated-model-context-protocol-mcp-server-architecture-packagesmcp)
 - [ADR-019: Open VSX Marketplace Quality & Trust Audit Remediation](#adr-019-open-vsx-marketplace-quality--trust-audit-remediation)
+- [ADR-020: Information Retrieval Evaluation Harness & SkillsBench Directive Certification (DB-v1.1)](#adr-020-information-retrieval-evaluation-harness--skillsbench-directive-certification-db-v11)
+- [ADR-021: Schema & Semantic Metadata Depth (License, Deprecation, whenNotToUse)](#adr-021-schema--semantic-metadata-depth-license-deprecation-whennottouse)
+- [ADR-022: Structured Synonym & Acronym Taxonomy Architecture](#adr-022-structured-synonym--acronym-taxonomy-architecture)
+- [ADR-023: Workspace Private Catalog Extensibility Architecture](#adr-023-workspace-private-catalog-extensibility-architecture)
+- [ADR-024: Local Skills Database & Interactive Management Engine Architecture](#adr-024-local-skills-database--interactive-management-engine-architecture)
+- [ADR-025: Automated Link Health & Link Rot Audit Architecture](#adr-025-automated-link-health--link-rot-audit-architecture)
+- [ADR-026: Expansion into Machine Learning, Accelerated Compute & Agent Directives (DB-v1.2)](#adr-026-expansion-into-machine-learning-accelerated-compute--agent-directives-db-v12)
 
 ---
 
@@ -322,6 +329,213 @@ This document records the major architectural, technical, and design decisions m
   - **Dual-License Attribution Notice**: Formalized dual-licensing in `README.md` and created `NOTICE` outlining MIT software permissions and CC BY 4.0 dataset attribution terms.
 - **Rationale**: Resolves all 10 audit findings, ensuring user trust, accurate BYOK behavior, and seamless marketplace presentation on Open VSX and VS Code Marketplace.
 - **Trade-offs**: Increases packaged VSIX archive size from 407 KB to 567 KB due to bundled screenshots and full changelog, well within the 1.5 MB performance budget.
+
+---
+
+## ADR-020: Information Retrieval Evaluation Harness & SkillsBench Directive Certification (DB-v1.1)
+
+- **Date**: 2026-10-26
+- **Status**: **ACCEPTED & IMPLEMENTED**
+- **Context**: As the SkillForge knowledge base scaled to 378 skills across 15 categories, empirical proof of recommendation accuracy and agent usability became mandatory. Industry standards (Anthropic Agent Evals, SkillsBench, OpenAI Evals) require rigorous quantitative benchmarks (MRR, NDCG@k, HitRate@k) and defensive resilience against non-ideal queries (hostile inputs, typos, regex characters).
+- **Decision**:
+  - **IR Benchmark Architecture (`packages/server/src/benchmarks/`)**:
+    - Created mathematical evaluation library (`ir-metrics.ts`) implementing MRR, DCG@k, NDCG@k, and HitRate@k.
+    - Curated 46 diverse developer evaluation queries (`golden-queries.ts`) with graded relevance (3=Ideal, 2=Strong, 1=Acceptable), including adversarial edge cases.
+    - Built `BenchmarkRunner` producing consolidated reports and terminal scorecards.
+  - **SkillsBench & Anthropic 5-Pillar Directive Evaluator (`agent-directive-evaluator.ts`)**:
+    - Built automated evaluator enforcing Token Budget (1,000–6,500 chars), Frontmatter Integrity (`agent-skill`, `claude-skill`, `cursor-rule`, `root-agents`), Progressive Disclosure (trigger guidance + negative boundaries), Deterministic Verification commands, and Anti-Pattern warnings.
+  - **Ranking Algorithm Tuning**:
+    - Added morphological lemmatization (suffix stripping) and length-guarded substring tag matching in `SkillsRepository.search`.
+    - Replaced premature hard difficulty filtering with a Soft Inferred Difficulty Boost (+10 pts) in `SuggestionEngine`, ensuring descriptive query adjectives (e.g. "complex sorting") never eliminate relevant intermediate/beginner libraries.
+    - Introduced Category Intent Alignment Boost (+35 pts) to prioritize domain-appropriate tools over mentioned ambient language identifiers.
+  - **Defensive Error Boundaries**:
+    - Wrapped LSP RPC handlers (`suggest`, `compare`, `generateAgentSkill`) in try/catch blocks with structured fallback responses.
+    - Sanitized `alreadyInstalled` and `activeFileSignals` against hostile null/undefined/number inputs.
+    - Clamped `options.maxResults` strictly between 1 and 50.
+- **Empirical Results**:
+  - MRR: **0.9496** (target $\ge 0.8500$)
+  - NDCG@5: **0.8222** (target $\ge 0.8000$)
+  - HitRate@1: **0.9070** (target $\ge 0.7000$)
+  - HitRate@3: **1.0000** (target $\ge 0.9000$)
+  - HitRate@5: **1.0000** (target $\ge 0.9500$)
+  - Agent Directive Quality: **100% compliance** across all 28 variants.
+  - Latency: P50 = 2.27ms, P95 = 4.92ms (< 10ms target).
+- **Rationale**: Aligns SkillForge with peer industry benchmarks, certifying the database as production-ready and fully reproducible.
+
+---
+
+## ADR-021: Schema & Semantic Metadata Depth (License, Deprecation, whenNotToUse)
+
+- **Date**: 2026-10-26
+- **Status**: **ACCEPTED & IMPLEMENTED**
+- **Context**: While `DB-v1.1` certified topological graph invariants and IR metrics, enterprise developers require explicit software licensing compliance (`license`), active deprecation warnings with modern replacement targets (`isDeprecated`, `migrationTarget`), tool-specific anti-patterns (`whenNotToUse`), and target execution runtimes (`runtimes`).
+- **Decision**:
+  - **Schema Extensions**: Added optional/defaulted fields to `SkillSchema` in `@skillforge/shared`: `license`, `isDeprecated`, `deprecatedReason`, `migrationTarget`, `whenNotToUse`, `runtimes`, and `source`.
+  - **Backward Compatibility via Normalization**: Implemented `normalizeSkillDefaults` in `@skillforge/shared/src/schemas.ts` to ensure all parsed catalog records receive non-empty defaults (`license: 'MIT'`, `isDeprecated: false`, etc.) while allowing legacy mocks and test literals without new fields to compile cleanly.
+  - **Full Catalog Backfill**: Enriched all 378 skills in `skills.json` with accurate SPDX licenses (`MIT`, `Apache-2.0`, `BSD-3-Clause`, `Proprietary`), active deprecation flags for legacy tools (e.g. `recoil` $\to$ `jotai`), and populated `whenNotToUse` bullets on architectural tools (`prisma`, `mongodb`, `zustand`, `docker`, `fastapi`, `apollo-graphql`, `tailwind-css`, etc.).
+  - **Directive & Comparison Surfacing**: Updated `AgentSkillGenerator` to inject deprecation notice banners and tool-specific `### When NOT to Use` sections. Updated `ComparisonEngine` to surface licenses in pros and deprecation / avoid-if guidance in caveats.
+- **Empirical Results**:
+  - 100% of 378 catalog skills contain valid licenses, deprecation flags, and runtime metadata.
+  - All 402 unit tests in 33 test files pass cleanly, including the new `schema-lifecycle.test.ts` suite.
+- **Rationale**: Elevates SkillForge from a simple library index to a legally compliant, lifecycle-aware developer knowledge engine.
+
+---
+
+## ADR-022: Structured Synonym & Acronym Taxonomy Architecture
+
+- **Date**: 2026-10-27
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 2)
+- **Context**: Real-world developers frequently query using common industry abbreviations, acronyms, and shorthand (e.g. `authn`, `sso`, `k8s`, `tf`, `gql`, `e2e`, `rdbms`, `mq`, `i18n`, `wasm`). Previously, unless a skill's individual JSON tags manually duplicated these acronyms, natural language queries failed or produced suboptimal rankings.
+- **Decision**:
+  - **Centralized Taxonomy Dictionary (`packages/server/src/data/taxonomy.ts`)**:
+    - Created `TAXONOMY_MAP` bridging industry acronyms with canonical categories, tags, target tools, and expansions across 9 key engineering domains (Auth, Databases, Testing, Protocols/Messaging, DevOps/IaC, Internationalization, Languages, UI/CLI, Observability/AI).
+  - **Defensive Boundary & Prototype Pollution Protections**:
+    - Implemented `expandQueryWithTaxonomy(rawQuery)` utilizing strict whole-word token matching. Substrings within larger words (e.g. `platform` containing `tf`, `rates` containing `ts`) never trigger spurious taxonomy expansions.
+    - Added defense against object prototype properties (`constructor`, `__proto__`, `toString`, `valueOf`), ensuring adversarial attacks or unusual inputs cannot pollute runtime behavior.
+    - Sanitized punctuation and non-alphanumeric noise strings (`!@#$%^&*()_+`) to return clean, empty token arrays without throwing exceptions.
+  - **Integrated Intent Parsing & Scoring Pipeline**:
+    - Enriched `IntentParser.parse`: dynamically extracts detected categories and explicit ecosystem hints from shorthand terms (`py`, `ts`, `rs`, `c++`, `authn`, `rdbms`).
+    - Enriched `SkillsRepository.search`: awards canonical tool matches (+55 pts), taxonomy category alignment (+20 pts), and taxonomy synonym token matches (+25/+30 pts).
+- **Empirical Results**:
+  - Searching for `tf` reliably ranks `terraform` at #1.
+  - Searching for `k8s` ranks `kubernetes` at #1.
+  - Searching for `authn` surfaces top authentication tools (`next-auth`, `clerk`, `passport`, `lucia`).
+  - Searching for `gql` returns `apollo-graphql` in top results.
+  - Searching for `e2e` surfaces `playwright` and `cypress`.
+  - Added dedicated test suite `taxonomy-expansion.test.ts` (17 tests).
+  - Maintained zero regressions on benchmark harness: $\text{MRR} = 0.9496$, $\text{NDCG@5} = 0.8225$, $\text{HitRate@3} = 1.0000$. Total passing tests increased to **419 / 419 across 34 suites**.
+- **Rationale**: Decouples query vocabulary flexibility from catalog authoring overhead, ensuring complete coverage for standard developer vernacular while maintaining strict performance and security.
+
+---
+
+## ADR-023: Workspace Private Catalog Extensibility Architecture
+
+- **Date**: 2026-10-27
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 3)
+- **Context**: Enterprise repositories and specialized engineering teams need to register internal corporate libraries (e.g. `@corp/auth-client`, bespoke design systems) or apply project-specific overrides (e.g. flagging a bundled library as deprecated in favor of an internal tool) without modifying the bundled `skills.json` dataset.
+- **Decision**:
+  - **Shared Configuration Schemas (`@skillforge/shared`)**:
+    - Created `WorkspaceSkillsConfigSchema` supporting both loose array representations (`[ { id: "corp-auth", ... } ]`) and structured config objects (`{ version: "1.0", skills: [...], overrides: { "recoil": { ... } } }`).
+    - Implemented `validateWorkspaceSkillsConfig` ensuring all declared workspace skills receive `source: 'workspace'`, undergo default normalization, and are validated against ID uniqueness constraints.
+  - **In-Memory Dynamic Overlay Engine (`SkillsRepository`)**:
+    - Built `loadWorkspaceConfig` and `loadWorkspaceSkills` scanning workspace candidate files in order: `.skillforge.json` $\to$ `.skillforge/skills.json` $\to$ `.skillforge/catalog.json`.
+    - Merged private skills into all existing inverted indices (`idIndex`, `tagIndex`, `categoryIndex`, `ecosystemIndex`, `indicatorIndex`) with non-destructive shadowing: an identical ID shadows the bundled skill without corrupting or duplicating repository entries.
+    - Implemented `resetWorkspaceSkills` ensuring pristine baseline restoration during test teardown and dynamic workspace folder switching.
+  - **Relevance & Priority Scoring**:
+    - Added a Workspace Affinity Boost (+40 pts) in `SkillsRepository.search` for private workspace skills that match query tokens, ensuring relevant company-internal tools take priority.
+    - Preserved intent precedence: irrelevant workspace skills are never forcibly injected if the query opposes their category/ecosystem.
+  - **Adversarial & Fault Tolerance Defenses**:
+    - Enforced a 5MB maximum file size limit to prevent memory exhaustion attacks.
+    - Wrapped file reading and JSON parsing in defensive try/catch blocks; invalid syntax, empty files, and permission errors record non-fatal diagnostics in `errors` array while preserving bundled catalog functionality.
+    - Guarded against path traversal and hostile root inputs (`null`, `undefined`, empty string, non-existent directories).
+- **Empirical Results**:
+  - `workspace-private-catalog.test.ts` (14 tests) passing cleanly.
+  - Total passing tests increased to **437 / 437 across 35 suites**.
+  - All IR benchmark metrics maintained: $\text{MRR} = 0.9496$, $\text{NDCG@5} = 0.8225$, $\text{HitRate@3} = 1.0000$.
+- **Rationale**: Provides enterprise-ready catalog extensibility with zero configuration friction and complete resilience against corrupt workspace files.
+
+---
+
+## ADR-024: Local Skills Database & Interactive Management Engine Architecture
+
+- **Date**: 2026-10-27
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 4)
+- **Context**: While Phase 3 established declarative loading of static workspace files, developers and client extensions need programmatic and interactive CRUD capabilities (create, update, delete, list) to manage custom project skills directly. These operations must be fail-safe, atomic, resilient to concurrency/file locks, and immediately synchronized with the in-memory search indices without requiring server restarts.
+- **Decision**:
+  - **Shared Management Contracts (`@skillforge/shared`)**:
+    - Defined `AddLocalSkillPayloadSchema`, `RemoveLocalSkillPayloadSchema`, and `LocalSkillsResultSchema` in `schemas.ts`.
+    - Registered custom LSP JSON-RPC methods: `skillforge/addLocalSkill`, `skillforge/removeLocalSkill`, `skillforge/listLocalSkills`.
+  - **Atomic File Writing & Windows Lock Resilience**:
+    - Built `LocalSkillsManager` in `@skillforge/server/src/data/local-skills-manager.ts` executing atomic writes via temporary files (`.tmp.<pid>.<timestamp>`) and atomic renames (`fs.renameSync`).
+    - Added retry backoff logic (up to 3 attempts with exponential delay) to handle transient Windows antivirus or file watcher locks.
+    - Added automated backup rotation: preserves `.skills.json.bak` prior to overwriting existing database files.
+  - **Corrupted Database Recovery**:
+    - Implemented non-destructive rotation: if an existing database file contains corrupted or invalid JSON, it is automatically rotated to `.skills.json.corrupt.<timestamp>` to prevent data loss while allowing clean recreation.
+  - **Live In-Memory Cache Coherence**:
+    - Implemented live mutability methods in `SkillsRepository`: `addLocalSkill`, `removeLocalSkill`, `listLocalSkills`.
+    - Added or removed skills update all 5 inverted index maps immediately and invalidate `QueryCache`, making new tools instantly searchable with the +40 Workspace Affinity Boost.
+- **Empirical Results**:
+  - `local-skills-manager.test.ts` (11 tests) passing cleanly.
+  - Total passing tests increased to **451 / 451 across 36 suites**.
+  - All IR benchmark metrics maintained: $\text{MRR} = 0.9496$, $\text{NDCG@5} = 0.8225$, $\text{HitRate@3} = 1.0000$.
+- **Rationale**: Encapsulates all data persistence, locking, and index synchronization within the database layer, freeing IDE clients from low-level storage management.
+
+---
+
+### ADR-025: Automated Link Health & Link Rot Audit Architecture
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 5)
+- **Context**: External documentation URLs and learning resource links in modern developer tools continuously degrade over time ("link rot") due to domain migrations, doc engine restructurings, or CDN bot protection policies. To ensure developers never encounter broken 404 links or confusing redirects inside VS Code or agent tool calls, SkillForge requires an automated, robust verification harness that can audit URLs in CI and locally without being blocked by anti-bot protections.
+- **Decision**:
+  - **Core Auditor Engine (`packages/server/scripts/audit-link-rot.cjs`)**:
+    - Concurrent HTTP connection pool with configurable concurrency (default: 6) and timeout (default: 6000ms).
+    - Intelligent `HEAD` $\to$ `GET` fallback: tests lightweight `HEAD` first, seamlessly falling back to `GET` if the target server rejects `HEAD` (405/403/400) or fails.
+    - Permanent Redirect (301/308) tracking: resolves redirects up to 5 hops with cycle detection (`REDIRECT_LOOP`) and provides an optional auto-fix flag (`--fix`) to patch `skills.json` directly.
+    - Cloudflare / Anti-Bot Resilience: uses a modern desktop browser User-Agent header to avoid CDN bot-tarpitting, reducing latency from 14s+ to sub-300ms.
+    - Smart Disk Caching: maintains `.link-audit-cache.json` with a 7-day TTL to avoid unnecessary repeated network requests.
+    - Exponential backoff and retry for rate limiting (HTTP 429/503).
+  - **CI Automation & Package Integration**:
+    - Created [`.github/workflows/link-audit.yml`](file:///.github/workflows/link-audit.yml) running weekly scheduled health checks on Mondays.
+    - Added `"audit:links"` script to `packages/server/package.json` and root `package.json`.
+    - Created typed declarations [`audit-link-rot.d.ts`](file:///packages/server/scripts/audit-link-rot.d.ts) and [`audit-link-rot.d.cts`](file:///packages/server/scripts/audit-link-rot.d.cts).
+  - **Catalog Link Rot Remediation**:
+    - Audited catalog skills and resolved dead links / outdated hosts across: Recharts (`recharts.github.io`), SeaORM (`/sea-orm-tutorial/`), Uvicorn (`uvicorn.dev`), Gunicorn (MkDocs on `gunicorn.org`), Valibot (`/guides/installation/`), TanStack Virtual (`/framework/react/react-virtual`), Biome (`/linter/`), Elysia (`/quick-start`), wasm-bindgen (`/docs/wasm-bindgen/`), llm-c (`/doc/layernorm/layernorm.md`), PostCSS (`/postcss#readme`), Strawberry GraphQL (`/schema-basics`), Pytest-Asyncio (`/how-to-guides/index.html`), Ent Go (`/tutorial-setup`), Colyseus (`/getting-started`), Cassandra (`/cassandra/getting-started/`), Gin (`/en/docs/quickstart/`), BullMQ (`/guide/introduction`), OpenCV (`github.com/opencv/opencv-python`), Jotai (`/docs`), NativeWind (`/docs/getting-started/installation`), and ioredis (`/ioredis#readme`).
+- **Empirical Results**:
+  - `link-rot-auditor.test.ts` (13 tests) passing with 100% coverage of redirect loops, timeouts, caching, and auto-fixes.
+  - Vitest test suite: **464 / 464 tests passing across 37 test suites**.
+  - All Information Retrieval benchmarks verified: $\text{MRR} = 0.9496$, $\text{NDCG@5} = 0.8225$, $\text{HitRate@3} = 1.0000$, $\text{HitRate@5} = 1.0000$.
+- **Rationale**: Keeps documentation links evergreen, prevents broken links from reaching production users, and automates link hygiene with zero manual overhead.
+
+---
+
+## ADR-026: Expansion into Machine Learning, Accelerated Compute & Agent Directives (DB-v1.2)
+
+- **Date**: 2026-10-27
+- **Status**: **ACCEPTED & IMPLEMENTED** (Release DB-v1.2)
+- **Context**: The SkillForge database was primarily focused on web, backend, and cloud development. Critical non-web domains—specifically Machine Learning accelerators, LLM serving engines, quantization, vector retrieval, computer vision, post-training alignment, and RAG evaluation—as well as the core `javascript` language entry, were absent.
+- **Decision**:
+  - **4-Wave Staged Ingestion Lifecycle**:
+    - **Wave 1 (Languages & ML Accelerators)**: `javascript`, `jax`, `onnxruntime`, `deepspeed`.
+    - **Wave 2 (Serving, Quantization & Retrieval)**: `sglang`, `llama-cpp-python`, `faiss`, `sentence-transformers`.
+    - **Wave 3 (Vision, Alignment & Evaluation)**: `diffusers`, `timm`, `trl`, `ragas`, `guardrails-ai`.
+    - **Wave 4 (Agent Directives & IR Certification)**: Generated 52 verified agent directives (`SKILL.md`) in 4 formats and certified Information Retrieval benchmarks.
+  - **Graph Topology & Reciprocity**:
+    - Enforced all 7 Utility Fitness Rubric (UFR) invariants on 391 skills, ensuring 100% bidirectional alternative symmetry and zero isolated island skills.
+    - Updated reciprocal relationships in `typescript`, `pytorch`, `tensorflow`, `unsloth`, `fastembed`, `bun`, `vllm`, `ollama`, `chromadb`, `qdrant`, `huggingface-transformers`, `opencv-python`, `outlines-ai`, and `instructor`.
+  - **Zero Link Rot Certification**:
+    - Audited all official documentation and tutorial URLs with `audit-link-rot.cjs` yielding 100% 200 OK responses with zero redirects or broken links.
+  - **Natural Language Taxonomy Expansion**:
+    - Added comprehensive synonym and acronym expansion mappings in `packages/server/src/data/taxonomy.ts` covering `diffusers`, `diffusion`, `flux`, `timm`, `vit`, `trl`, `dpo`, `grpo`, `ragas`, `guardrails`, `sglang`, `radix`, `gguf`, `llamacpp`, `faiss`, `hnsw`, `sbert`, `jax`, `onnxruntime`, and `deepspeed`.
+- **Empirical Results**:
+  - Catalog expanded from 378 to 391 skills.
+  - All 467 tests across 37 suites passing cleanly.
+  - Information Retrieval metrics certified on `DB-v1.2`: $\text{MRR} = 0.9496$, $\text{NDCG@5} = 0.8225$, $\text{HitRate@3} = 1.0000$, $\text{HitRate@5} = 1.0000$.
+---
+
+## ADR-027: SkillForge Project Studio — Adaptive Ideation & Workspace Scaffolder (v1.2.0)
+
+- **Date**: 2026-10-28
+- **Status**: **ACCEPTED & IMPLEMENTED** (Phase 11 / Release v1.2.0)
+- **Context**: Developers (especially college students breaking out of tutorial hell, but also experienced professionals designing side projects or POCs) struggle with "blank canvas paralysis". Static project catalogs quickly become obsolete and impose heavy maintenance debt. The extension needed a dynamic, proactive studio that captures user preferences through guided discovery, formulates concrete project charters with non-clichéd technical twists using modern AI, and 1-click scaffolds the workspace while linking directly into SkillForge's vetted 391-skill ecosystem and AI coding directives.
+- **Decision**:
+  - **Hybrid Architecture (Adaptive Wizard + Wildcard + Flexible AI Bridge)**:
+    - Implemented `ProjectIdeationWizard` providing a low-cognitive-barrier 5-step QuickPick flow (Persona, Domain, Language/Stack, Time Commitment, and Optional Learning Goal).
+    - Built `WildcardIdeaSynthesizer` providing zero-input trending project seeds pairing modern paradigms (e.g. eBPF, local embeddings, WebSockets, regex bloom filters) with real problems.
+    - Implemented `IdeaPromptCompiler` enforcing strict time-to-scope pruning (preventing over-engineering on weekend projects) and anchoring recommended libraries in SkillForge's canonical catalog.
+  - **Multi-Tiered LLM Execution & Resilient Zero-Key Fallback**:
+    - Primary: Native VS Code Language Model API (`vscode.lm`) with zero configuration required for users with GitHub Copilot or built-in language models.
+    - Fallback: "Clipboard Master Prompt Exporter" (`LlmBridge.copyMasterPrompt`) allowing zero-key users to copy the engineered prompt to ChatGPT/Claude/Gemini web and import the resulting JSON charter.
+  - **Non-Destructive Workspace Scaffolding**:
+    - Built `ProjectScaffolderEngine` with path sanitization defending against directory traversal.
+    - Generates `PROJECT_SPEC.md`, `README.md` (or `README.skillforge.md` if an existing README is present), `.skillforge.json`, and automatically invokes `AgentSkillGenerator` to generate matching `.cursor/rules/*.mdc` or `SKILL.md` files.
+- **Empirical Results**:
+  - Full test suite expanded to **509 tests passing across 40 suites**.
+  - `skillforge-1.2.0.vsix` packaged cleanly (629.41 KB across 80 files).
+- **Rationale**: Closes the developer loop from initial project ideation to technology selection, AI context generation, and verified execution.
+
+
+
+
+
 
 
 

@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import * as vscode from 'vscode';
 import {
   LanguageClient,
@@ -11,6 +12,7 @@ import {
   SKILLFORGE_GENERATE_AGENT_SKILL_METHOD,
   SKILLFORGE_PING_METHOD,
   SKILLFORGE_SUGGEST_METHOD,
+  SKILLFORGE_COMPILE_IDEA_PROMPT_METHOD,
   type AgentSkillFormat,
   type CompareResult,
   type ComparisonMatrix,
@@ -21,6 +23,8 @@ import {
   type ProviderType,
   type SkillSuggestionParams,
   type SkillSuggestionResult,
+  type CompileIdeaPromptParams,
+  type CompileIdeaPromptResult,
 } from '@skillforge/shared';
 import { ScopeManager } from './context/scope-manager.js';
 import { SkillForgeCodeLensProvider } from './providers/codelens-provider.js';
@@ -35,6 +39,11 @@ import { FeedbackManager } from './feedback/feedback-manager.js';
 import { SecretManager } from './secrets/secret-manager.js';
 import { SuggestionPanel } from './webview/suggestion-panel.js';
 import { ComparisonPanel } from './webview/comparison-panel.js';
+import { CatalogBrowser } from './catalog/catalog-browser.js';
+import { WorkspaceFileScanner, type WorkspaceSkillFile } from './context/workspace-file-scanner.js';
+import { ProjectIdeationWizard } from './ideation/project-wizard.js';
+import { CharterPreviewPanel } from './ideation/charter-preview-panel.js';
+import { LlmBridge } from './ideation/llm-bridge.js';
 
 let client: LanguageClient | undefined;
 
@@ -234,6 +243,22 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     SuggestionPanel.createOrShow(context.extensionUri, scopeManager.activeScope);
   });
   context.subscriptions.push(showCanvasCmd);
+
+  // Command: Browse All Available Skills (Catalog)
+  const browseCatalogCmd = vscode.commands.registerCommand('skillforge.browseCatalog', async () => {
+    const rootPath = scopeManager.workspaceRoot || scopeManager.activeScope.absolutePath;
+    await CatalogBrowser.showCatalog(
+      context.extensionUri,
+      rootPath,
+      async (skillId: string) => {
+        await vscode.commands.executeCommand('skillforge.compareSkills', skillId);
+      },
+      async (skillId: string) => {
+        await vscode.commands.executeCommand('skillforge.generateAgentSkill', skillId);
+      }
+    );
+  });
+  context.subscriptions.push(browseCatalogCmd);
 
   // Command: Open Beginner Guide
   const openWalkthroughCmd = vscode.commands.registerCommand('skillforge.openWalkthrough', () => {
@@ -711,6 +736,163 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }
   );
   context.subscriptions.push(generateAgentSkillCmd);
+
+  // Command: View Generated AI Skill Files
+  const viewGeneratedSkillsCmd = vscode.commands.registerCommand(
+    'skillforge.viewGeneratedSkills',
+    async () => {
+      const rootPath = scopeManager.workspaceRoot || scopeManager.activeScope.absolutePath;
+      if (!rootPath && (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0)) {
+        vscode.window.showInformationMessage(
+          'SkillForge: Please open a workspace or project folder to view skill files.'
+        );
+        return;
+      }
+
+      const files = await WorkspaceFileScanner.scanWorkspace(rootPath);
+      if (files.length === 0) {
+        const action = await vscode.window.showInformationMessage(
+          'SkillForge: No AI skill directives or configuration files found in this workspace.',
+          'Generate AI Skill',
+          'Create .skillforge.json'
+        );
+        if (action === 'Generate AI Skill') {
+          vscode.commands.executeCommand('skillforge.generateAgentSkill');
+        } else if (action === 'Create .skillforge.json') {
+          const targetDir = rootPath || vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+          if (targetDir) {
+            const templatePath = path.join(targetDir, '.skillforge.json');
+            const templateContent = JSON.stringify(
+              {
+                version: '1.0',
+                skills: [],
+                overrides: {},
+              },
+              null,
+              2
+            );
+            fs.writeFileSync(templatePath, templateContent, 'utf8');
+            const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(templatePath));
+            await vscode.window.showTextDocument(doc);
+            vscode.window.showInformationMessage(
+              'SkillForge: Created starter .skillforge.json in workspace root.'
+            );
+          }
+        }
+        return;
+      }
+
+      interface FileQuickPickItem extends vscode.QuickPickItem {
+        file: WorkspaceSkillFile;
+      }
+
+      const items: FileQuickPickItem[] = files.map((file) => {
+        const icon = file.fileType === 'workspace-config' ? '$(gear)' : '$(file-code)';
+        return {
+          label: `${icon} ${file.name}`,
+          description: `${file.relativePath} (${(file.fileSizeBytes / 1024).toFixed(1)} KB)`,
+          detail: file.summary,
+          file,
+        };
+      });
+
+      const selected = await vscode.window.showQuickPick(items, {
+        title: `SkillForge Workspace Skill Files (${files.length} found)`,
+        placeHolder: 'Select a skill directive or configuration file to open in editor...',
+        matchOnDescription: true,
+        matchOnDetail: true,
+      });
+
+      if (selected) {
+        const doc = await vscode.workspace.openTextDocument(selected.file.uri);
+        await vscode.window.showTextDocument(doc);
+      }
+    }
+  );
+  context.subscriptions.push(viewGeneratedSkillsCmd);
+
+  // Command: Brainstorm & Plan Project (Project Studio v1.2.0)
+  const brainstormProjectCmd = vscode.commands.registerCommand(
+    'skillforge.brainstormProject',
+    async () => {
+      if (!client || !client.isRunning()) {
+        vscode.window.showErrorMessage('SkillForge local engine is not running.');
+        return;
+      }
+
+      const wizardResult = await ProjectIdeationWizard.run();
+      if (!wizardResult) {
+        return;
+      }
+
+      await vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Notification,
+          title: 'SkillForge Project Studio: Formulating Project Spec...',
+          cancellable: true,
+        },
+        async (_progress, token) => {
+          try {
+            // 1. Request prompt compilation from LSP server
+            const compileRes = await client!.sendRequest<CompileIdeaPromptResult>(
+              SKILLFORGE_COMPILE_IDEA_PROMPT_METHOD,
+              {
+                request: {
+                  input: wizardResult.input,
+                  isWildcard: wizardResult.isWildcard,
+                },
+              } as CompileIdeaPromptParams
+            );
+
+            const compiled = compileRes.compiled;
+
+            // 2. Execute with LLM Bridge (native Copilot or fallback)
+            let charter = await LlmBridge.executeWithVsCodeLm(compiled, token);
+
+            // If no native LLM or LLM execution was aborted/empty, fallback to simulated or clipboard import
+            if (!charter) {
+              const action = await vscode.window.showInformationMessage(
+                'SkillForge: Native language model not active. Would you like to export the master prompt or import a JSON charter?',
+                'Copy Master Prompt',
+                'Import JSON Charter'
+              );
+
+              if (action === 'Copy Master Prompt') {
+                await LlmBridge.copyMasterPrompt(compiled);
+                vscode.window.showInformationMessage(
+                  '📋 Master prompt copied! Paste into ChatGPT/Claude, then click "Import JSON Charter".'
+                );
+                return;
+              } else if (action === 'Import JSON Charter') {
+                const jsonText = await vscode.window.showInputBox({
+                  prompt: 'Paste the generated JSON charter from your AI chat',
+                  placeHolder: '{ "id": "...", "title": "...", "problemStatement": "...", ... }',
+                });
+                if (!jsonText) return;
+                charter = LlmBridge.parseProjectCharter(jsonText);
+              } else {
+                return;
+              }
+            }
+
+            // 3. Surface Project Charter Preview
+            await CharterPreviewPanel.show(
+              charter,
+              compiled,
+              client,
+              async () => {
+                vscode.commands.executeCommand('skillforge.brainstormProject');
+              }
+            );
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
+            vscode.window.showErrorMessage(`SkillForge Ideation Error: ${msg}`);
+          }
+        }
+      );
+    }
+  );
+  context.subscriptions.push(brainstormProjectCmd);
 
   // Command: Find Libraries for Idea (Core suggestion flow)
   const suggestCmd = vscode.commands.registerCommand(

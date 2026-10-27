@@ -24,6 +24,11 @@ function makeSuggested(
     worksWellWith: [],
     prerequisites: [],
     stackIndicators: [overrides.id],
+    license: overrides.license || 'MIT',
+    isDeprecated: overrides.isDeprecated ?? false,
+    whenNotToUse: overrides.whenNotToUse || [],
+    runtimes: overrides.runtimes || ['node'],
+    source: overrides.source || 'bundled',
     trustTier: 'verified' as TrustTier,
     confidence: 0.85,
     reasoning: `Matched: ${overrides.name}`,
@@ -187,6 +192,11 @@ describe('ConflictDetector', () => {
       worksWellWith: ['rxjs'],
       prerequisites: ['typescript'],
       stackIndicators: ['@angular/core', 'angular'],
+      license: 'MIT',
+      isDeprecated: false,
+      whenNotToUse: [],
+      runtimes: ['node', 'browser'],
+      source: 'bundled',
     };
 
     const reactSkill: Skill = {
@@ -204,6 +214,11 @@ describe('ConflictDetector', () => {
       worksWellWith: ['nextjs'],
       prerequisites: ['javascript'],
       stackIndicators: ['react', 'react-dom'],
+      license: 'MIT',
+      isDeprecated: false,
+      whenNotToUse: [],
+      runtimes: ['node', 'browser'],
+      source: 'bundled',
     };
 
     const repo = new SkillsRepository([angularSkill, reactSkill]);

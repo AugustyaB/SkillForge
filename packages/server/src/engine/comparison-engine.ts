@@ -199,6 +199,9 @@ export class ComparisonEngine {
 
   private derivePros(skill: Skill): string[] {
     const pros: string[] = [];
+    if (skill.license) {
+      pros.push(`License: ${skill.license}`);
+    }
     if (skill.whyUseIt) {
       pros.push(skill.whyUseIt);
     }
@@ -214,13 +217,21 @@ export class ComparisonEngine {
   }
 
   private deriveCaveats(skill: Skill): string | undefined {
+    const caveatsList: string[] = [];
+    if (skill.isDeprecated) {
+      caveatsList.push(
+        `DEPRECATED: ${skill.deprecatedReason || 'Maintenance is suspended.'}${skill.migrationTarget ? ` Consider migrating to ${skill.migrationTarget}.` : ''}`
+      );
+    }
+    if (skill.whenNotToUse && skill.whenNotToUse.length > 0) {
+      caveatsList.push(`Avoid if: ${skill.whenNotToUse[0]}`);
+    }
     if (skill.prerequisites && skill.prerequisites.length > 0) {
-      return `Assumes proficiency with ${skill.prerequisites.join(', ')}.`;
+      caveatsList.push(`Assumes proficiency with ${skill.prerequisites.join(', ')}.`);
+    } else if (skill.difficulty === 'advanced') {
+      caveatsList.push('Advanced architectural paradigms and learning curve.');
     }
-    if (skill.difficulty === 'advanced') {
-      return 'Advanced architectural paradigms and learning curve.';
-    }
-    return undefined;
+    return caveatsList.length > 0 ? caveatsList.join(' ') : undefined;
   }
 
   private synthesizeAlternativeColumn(

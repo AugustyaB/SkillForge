@@ -21,7 +21,7 @@ export function createSkillForgeMcpServer(): McpServer {
 
   const server = new McpServer({
     name: 'skillforge',
-    version: '0.1.1',
+    version: '1.2.0',
   });
 
   // Tool 1: skillforge_suggest

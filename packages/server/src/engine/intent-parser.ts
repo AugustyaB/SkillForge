@@ -1,4 +1,5 @@
 import type { SkillCategory, Difficulty } from '@skillforge/shared';
+import { expandQueryWithTaxonomy } from '../data/taxonomy.js';
 
 export type ActionVerb =
   | 'build'
@@ -234,6 +235,20 @@ export class IntentParser {
             tokens.push(noHyphen);
           }
         }
+      }
+    }
+
+    // 7. Taxonomy enrichment (acronyms, industry synonyms, domain categories)
+    const taxonomy = expandQueryWithTaxonomy(cleanQuery);
+    for (const cat of taxonomy.detectedCategories) {
+      detectedCategories.add(cat);
+    }
+    if (!explicitEcosystem && taxonomy.detectedEcosystem) {
+      explicitEcosystem = taxonomy.detectedEcosystem;
+    }
+    for (const synToken of taxonomy.synonymTokens) {
+      if (synToken.length >= 2 && !STOP_WORDS.has(synToken) && !tokens.includes(synToken)) {
+        tokens.push(synToken);
       }
     }
 

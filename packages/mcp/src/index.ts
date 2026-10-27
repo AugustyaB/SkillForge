@@ -27,7 +27,7 @@ async function runCli(rawArgs: string[]): Promise<void> {
 
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
-SkillForge MCP & CLI Server v0.1.1
+SkillForge MCP & CLI Server v1.2.0
 
 USAGE:
   # Run as MCP Server (Claude Desktop, Cursor, Windsurf, Avante.nvim):
@@ -43,7 +43,7 @@ USAGE:
   }
 
   if (args.includes('--version') || args.includes('-v')) {
-    console.log('0.1.1');
+    console.log('0.1.2');
     process.exit(0);
   }
 

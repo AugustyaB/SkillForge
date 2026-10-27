@@ -63,8 +63,23 @@ export class SuggestionEngine {
     const context = params?.context;
     const options = params?.options;
     const alreadyInstalled = new Set(
-      (context?.alreadyInstalled || []).map((pkg) => pkg.toLowerCase().trim())
+      (context?.alreadyInstalled || [])
+        .filter((pkg): pkg is string => typeof pkg === 'string' && pkg.trim().length > 0)
+        .map((pkg) => pkg.toLowerCase().trim())
     );
+
+    const safeSignals = (context?.activeFileSignals || [])
+      .map((s) => s?.language)
+      .filter((lang): lang is string => typeof lang === 'string' && lang.trim().length > 0)
+      .map((lang) => lang.toLowerCase().trim());
+
+    // Dynamically load workspace private skills if workspace paths are present in context
+    if (context?.scope?.paths && context.scope.paths.length > 0) {
+      this.repository.loadWorkspaceSkills(context.scope.paths);
+    }
+
+    // Defensive clamping on maxResults: strictly between 1 and 50 (prevents negative buffer floods)
+    const maxResults = Math.max(1, Math.min(50, Math.floor(Number(options?.maxResults) || 5)));
 
     // 1. Check Query Cache (BUG-04: hash complete request context and options)
     const cacheKey = this.cache.generateKey({
@@ -73,8 +88,8 @@ export class SuggestionEngine {
       installed: Array.from(alreadyInstalled),
       difficulty: options?.difficulty || 'all',
       ecosystem: context?.ecosystem || '',
-      activeSignals: context?.activeFileSignals?.map((s) => s.language) || [],
-      maxResults: options?.maxResults ?? 5,
+      activeSignals: safeSignals,
+      maxResults,
       minTrustTier: options?.minTrustTier,
     });
 
@@ -99,12 +114,11 @@ export class SuggestionEngine {
         ? context.ecosystem
         : undefined);
 
-    // 3. Search candidates from repository
-    const maxResults = options?.maxResults ?? 5;
+    // 3. Search candidates from repository (explicit options.difficulty acts as hard filter; inferred intent difficulty acts as soft boost below)
     const candidates = this.repository.search(intent, {
-      difficulty: options?.difficulty ?? parsedIntent.difficultyPreference,
+      difficulty: options?.difficulty ?? 'all',
       ecosystem: targetEcosystem,
-      maxResults: maxResults * 3, // retrieve broader pool to re-score with context
+      maxResults: Math.max(30, maxResults * 5), // retrieve broader pool to re-score with context
     });
 
     let results: SuggestedSkill[];
@@ -153,12 +167,29 @@ export class SuggestionEngine {
         }
 
         // C. Active File Signal Boost (+15 pts)
-        if (context?.activeFileSignals && context.activeFileSignals.length > 0) {
-          const activeLangs = context.activeFileSignals.map((s) => s.language.toLowerCase());
-          if (skill.ecosystem !== 'multi' && activeLangs.includes(skill.ecosystem)) {
+        if (safeSignals.length > 0) {
+          if (skill.ecosystem !== 'multi' && safeSignals.includes(skill.ecosystem.toLowerCase())) {
             finalScore += 15;
             reasons.push(`Matches active editor file ecosystem (${skill.ecosystem})`);
           }
+        }
+
+        // D. Category Intent Alignment Boost (+35 pts)
+        if (
+          parsedIntent.detectedCategories.length > 0 &&
+          parsedIntent.detectedCategories.includes(skill.category)
+        ) {
+          finalScore += 35;
+          reasons.push(`Directly satisfies detected category intent (${skill.category})`);
+        }
+
+        // E. Inferred Difficulty Alignment Boost (+10 pts)
+        if (
+          parsedIntent.difficultyPreference &&
+          skill.difficulty === parsedIntent.difficultyPreference
+        ) {
+          finalScore += 10;
+          reasons.push(`Matches preferred difficulty tier (${skill.difficulty})`);
         }
 
         const confidence = Math.min(

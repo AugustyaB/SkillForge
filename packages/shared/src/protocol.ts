@@ -9,6 +9,10 @@ import type {
   SkillRequestPayload,
   TrustTier,
   WorkspaceContext,
+  CompileIdeaPromptRequest,
+  CompiledIdeaPrompt,
+  ScaffoldProjectRequest,
+  ScaffoldProjectResult,
 } from './types.js';
 
 /**
@@ -20,6 +24,34 @@ export const SKILLFORGE_FEEDBACK_METHOD = 'skillforge/feedback';
 export const SKILLFORGE_SKILL_REQUEST_METHOD = 'skillforge/skillRequest';
 export const SKILLFORGE_COMPARE_METHOD = 'skillforge/compare';
 export const SKILLFORGE_GENERATE_AGENT_SKILL_METHOD = 'skillforge/generateAgentSkill';
+export const SKILLFORGE_LOCAL_SKILLS_ADD_METHOD = 'skillforge/addLocalSkill';
+export const SKILLFORGE_LOCAL_SKILLS_REMOVE_METHOD = 'skillforge/removeLocalSkill';
+export const SKILLFORGE_LOCAL_SKILLS_LIST_METHOD = 'skillforge/listLocalSkills';
+export const SKILLFORGE_COMPILE_IDEA_PROMPT_METHOD = 'skillforge/compileIdeaPrompt';
+export const SKILLFORGE_SCAFFOLD_PROJECT_METHOD = 'skillforge/scaffoldProject';
+
+export interface AddLocalSkillParams {
+  workspaceRoot: string;
+  skill: Skill;
+  overwrite?: boolean;
+}
+
+export interface RemoveLocalSkillParams {
+  workspaceRoot: string;
+  skillId: string;
+}
+
+export interface ListLocalSkillsParams {
+  workspaceRoot: string;
+}
+
+export interface LocalSkillOperationResult {
+  success: boolean;
+  skillId?: string;
+  message: string;
+  error?: string;
+  skills?: Skill[];
+}
 
 export interface SuggestionOptions {
   maxResults?: number;
@@ -103,4 +135,20 @@ export interface PingResult {
   status: 'ok';
   version: string;
   timestamp: number;
+}
+
+export interface CompileIdeaPromptParams {
+  request: CompileIdeaPromptRequest;
+}
+
+export interface CompileIdeaPromptResult {
+  compiled: CompiledIdeaPrompt;
+}
+
+export interface ScaffoldProjectParams {
+  request: ScaffoldProjectRequest;
+}
+
+export interface ScaffoldProjectResponse {
+  result: ScaffoldProjectResult;
 }

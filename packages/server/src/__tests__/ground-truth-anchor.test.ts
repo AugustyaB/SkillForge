@@ -23,6 +23,11 @@ function makeSkill(overrides: Partial<Skill> & { id: string; name: string }): Sk
     worksWellWith: [],
     prerequisites: [],
     stackIndicators: [overrides.id],
+    license: overrides.license || 'MIT',
+    isDeprecated: overrides.isDeprecated ?? false,
+    whenNotToUse: overrides.whenNotToUse || [],
+    runtimes: overrides.runtimes || ['node'],
+    source: overrides.source || 'bundled',
     ...overrides,
   };
 }

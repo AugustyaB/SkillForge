@@ -31,15 +31,21 @@ export class ConflictDetector {
    */
   public detectConflicts(
     skills: SuggestedSkill[],
-    alreadyInstalled: string[]
+    alreadyInstalled: string[] = []
   ): SuggestedSkill[] {
+    const safeInstalled = Array.isArray(alreadyInstalled)
+      ? alreadyInstalled.filter(
+          (pkg): pkg is string => typeof pkg === 'string' && pkg.trim().length > 0
+        )
+      : [];
+
     const installedSet = new Set(
-      alreadyInstalled.map((pkg) => pkg.toLowerCase().trim())
+      safeInstalled.map((pkg) => pkg.toLowerCase().trim())
     );
 
     // Expand installed set with canonical skill IDs if repository is available
     if (this.repository) {
-      for (const pkg of alreadyInstalled) {
+      for (const pkg of safeInstalled) {
         const matched = this.repository.getSkillByIndicator(pkg);
         if (matched) {
           installedSet.add(matched.id.toLowerCase());

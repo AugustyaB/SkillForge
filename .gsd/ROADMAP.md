@@ -1,8 +1,8 @@
 # ROADMAP.md
 
-> **Current Phase**: Phase 9 (Agent Skill Generation & Usability Validation Engine) — Complete
-> **Milestone**: v1.0 — SkillForge MVP + Agent Skills Engine
-> **Target**: Cross-IDE skill suggestion engine with beginner-first UX, multi-tiered reliability, user-controlled context scoping, and agent skill directive synthesis.
+> **Current Phase**: Phase 11 (Project Studio — Adaptive Ideation & Workspace Scaffolder) — In Planning (Gate 1)
+> **Milestone**: v1.2.0 — SkillForge Project Studio & Unified Catalog Engine
+> **Target**: Cross-IDE developer skill discovery extension and project ideation studio with adaptive prompt synthesis, 1-click workspace scaffolding, zero-input wildcard generation, and multi-tiered reliability across 391 vetted skills.
 
 ## Must-Haves (from SPEC)
 
@@ -150,6 +150,41 @@
 
 ---
 
+### Phase 10: Model Context Protocol (MCP) Server for AI Coding Agents
+**Status**: ✅ Complete
+**Objective**: Provide a standalone Model Context Protocol (MCP) server package (`packages/mcp`, published as `skillforge-mcp-server` / `@skillforge/mcp`) enabling LLM agents (Claude Desktop, Cursor, Antigravity, Smithery, Neovim) to dynamically discover skills, query detailed compatibility/deprecation metadata, and generate agent directives via standard MCP tools.
+**Deliverables**:
+- Standalone MCP server with tools: `discover_skills`, `get_skill_details`, `generate_agent_skill`, and `suggest_tech_stack`.
+- Multi-transport support (stdio, npx, Smithery CLI).
+- Integration packages for Neovim (`skillforge.nvim`) and Smithery configuration (`smithery.yaml`).
+- Package bundling with `tsup` yielding standalone zero-dependency executable.
+**Requirements**: REQ-MCP, REQ-AgentSkills
+**Depends on**: Phase 9
+
+---
+
+### Phase 11: Project Studio — Adaptive Ideation & Workspace Scaffolder (Milestone v1.2.0)
+**Status**: ⏳ In Planning (Gate 1 Lock)
+**Objective**: Transform SkillForge from purely reactive skill discovery into a proactive project planning partner for developers of all experience levels (from college students to senior staff engineers). Incorporates an adaptive multi-step questionnaire (Approach B), flexible AI prompt compilation with scope control (Approach C), a zero-input "🎲 I'm Feeling Lucky" wildcard, and 1-click workspace scaffolding wired directly into SkillForge's 391-skill graph and AI coding directives.
+**Deliverables**:
+- **1. Ideation Questionnaire & Wizard (`skillforge.brainstormProject`)**:
+  - Step-by-step QuickPick / Webview wizard capturing: Target Persona / Level (Student $\to$ Senior), Domain / Industry, Preferred Language / Ecosystem, Time Commitment, and Technical Constraints.
+- **2. "🎲 I'm Feeling Lucky" Zero-Input Wildcard**:
+  - Instant idea generator pairing disparate modern domains and technical paradigms into concrete, non-clichéd project concepts without requiring user answers.
+- **3. Contextual Prompt Compiler & LLM Bridge**:
+  - Injects SkillForge vetted knowledge base, anti-patterns, and realistic time-to-scope pruning rules into an optimized LLM system prompt.
+  - Multi-provider execution: VS Code native language model API (`vscode.lm`), BYOK endpoints (Gemini, Claude, OpenAI, Ollama), and zero-key "📋 Copy Master Prompt to Clipboard" fallback.
+- **4. Project Charter & Twist Presentation**:
+  - Surfaces Title, Problem Statement, Persona, Technical Twist, Mapped SkillForge 391-Skill Tech Stack, and 3-Phase Milestone Roadmap.
+- **5. 1-Click Workspace Scaffolding**:
+  - Safe file creation generating `PROJECT_SPEC.md`, `README.md`, `.skillforge.json`, and automatic generation of `.cursor/rules/*.mdc`, `.claude/skills/`, or `SKILL.md`.
+- **6. Adversarial Usability Test Suite**:
+  - Verification covering empty workspaces, hostile inputs, extreme scope mismatches (e.g. 2 hours vs distributed DB), offline/no-key fallbacks, and directory traversal safeguards.
+**Requirements**: REQ-Ideation, REQ-Scaffolding, REQ-AntiHappyPath
+**Depends on**: Phase 10
+
+---
+
 ## Phase Dependency Graph
 
 ```mermaid
@@ -165,4 +200,6 @@ graph TD
     P6 --> P7
     P7 --> P8["🚀 Phase 8\nPolish & Ship\n(Onboarding, VSIX, Release)"]
     P8 --> P9["🤖 Phase 9\nAgent Skill Generation\n(SKILL.md & Usability Validation)"]
+    P9 --> P10["🔌 Phase 10\nMCP Server\n(smithery & skillforge-mcp-server)"]
+    P10 --> P11["🚀 Phase 11\nProject Studio\n(Ideation, Scaffolding & v1.2.0)"]
 ```

@@ -1,6 +1,6 @@
 {
   "name": "@skillforge/server",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Headless Language Server Protocol (LSP) server for SkillForge",
   "main": "dist/api.js",
@@ -17,6 +17,7 @@
   },
   "scripts": {
     "validate:skills": "node scripts/validate-skills.cjs",
+    "audit:links": "node scripts/audit-link-rot.cjs",
     "build": "node scripts/validate-skills.cjs && node scripts/generate-skills-data.cjs && tsc -b && node -e \"const fs = require('fs'); fs.mkdirSync('dist/data', { recursive: true }); fs.copyFileSync('src/data/skills.json', 'dist/data/skills.json');\"",
     "clean": "rimraf dist tsconfig.tsbuildinfo"
   },

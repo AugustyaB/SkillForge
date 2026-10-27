@@ -89,24 +89,27 @@ describe('TreeViewModels', () => {
   describe('buildQuickActionItems', () => {
     it('returns standard quick action items with correct commands and icons', () => {
       const items = buildQuickActionItems();
-      expect(items).toHaveLength(3);
+      expect(items).toHaveLength(6);
 
       const commandIds = items.map((i) => i.commandId);
       expect(commandIds).toEqual([
+        'skillforge.brainstormProject',
         'skillforge.suggestForCurrentFile',
         'skillforge.suggest',
+        'skillforge.browseCatalog',
+        'skillforge.viewGeneratedSkills',
         'skillforge.rescanWorkspace',
       ]);
 
       const icons = items.map((i) => i.iconId);
-      expect(icons).toEqual(['sparkle', 'search', 'refresh']);
+      expect(icons).toEqual(['lightbulb', 'sparkle', 'search', 'library', 'file-code', 'refresh']);
     });
   });
 
   describe('buildAllCommandsItems', () => {
-    it('returns all 16 SkillForge commands with icons, descriptions, and non-collapsible state', () => {
+    it('returns all 19 SkillForge commands with icons, descriptions, and non-collapsible state', () => {
       const items = buildAllCommandsItems();
-      expect(items).toHaveLength(16);
+      expect(items).toHaveLength(19);
 
       for (const item of items) {
         expect(item.id).toMatch(/^cmd-/);
@@ -117,10 +120,13 @@ describe('TreeViewModels', () => {
       }
 
       const commandIds = items.map((i) => i.commandId);
+      expect(commandIds).toContain('skillforge.brainstormProject');
       expect(commandIds).toContain('skillforge.suggest');
       expect(commandIds).toContain('skillforge.suggestForCurrentFile');
       expect(commandIds).toContain('skillforge.compareSkills');
       expect(commandIds).toContain('skillforge.generateAgentSkill');
+      expect(commandIds).toContain('skillforge.browseCatalog');
+      expect(commandIds).toContain('skillforge.viewGeneratedSkills');
       expect(commandIds).toContain('skillforge.openWalkthrough');
     });
   });

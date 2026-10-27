@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620">
+  <defs>
+    <style>
+      .bg { fill: #18181b; }
+      .bar { fill: #121214; }
+      .sidebar { fill: #1f1f23; }
+      .card { fill: #27272a; stroke: #3f3f46; stroke-width: 1; }
+      .border { stroke: #27272a; stroke-width: 1; }
+      .header-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px; font-weight: 700; fill: #a1a1aa; letter-spacing: 0.5px; }
+      .title-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; font-weight: 600; fill: #f4f4f5; }
+      .body-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; fill: #d4d4d8; }
+      .muted-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 11px; fill: #71717a; }
+      .code-text { font-family: 'Cascadia Code', Consolas, monospace; font-size: 11px; fill: #38bdf8; }
+      .badge-bg { fill: #064e3b; stroke: #059669; stroke-width: 1; rx: 4; }
+      .badge-text { font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 600; fill: #34d399; }
+      .btn { fill: #3b82f6; rx: 4; }
+      .btn-text { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 600; fill: #ffffff; }
+      .icon-active { fill: #38bdf8; }
+      .icon-dim { fill: #71717a; }
+    </style>
+  </defs>
+
+  <!-- Background / Window Frame -->
+  <rect class="bg" width="960" height="620" rx="10" />
+  
+  <!-- Titlebar -->
+  <rect fill="#09090b" width="960" height="38" rx="10" />
+  <circle cx="20" cy="19" r="6" fill="#ef4444" />
+  <circle cx="38" cy="19" r="6" fill="#f59e0b" />
+  <circle cx="56" cy="19" r="6" fill="#10b981" />
+  <text x="480" y="24" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12px" fill="#71717a">SkillForge — Activity Bar &amp; Workspace Context (VS Code)</text>
+
+  <!-- Activity Bar (Far Left) -->
+  <rect class="bar" x="0" y="38" width="54" height="582" />
+  <!-- Activity bar icons -->
+  <rect x="0" y="96" width="3" height="36" fill="#38bdf8" />
+  <!-- SkillForge Anvil Icon (active) -->
+  <g transform="translate(15, 102)" fill="#38bdf8">
+    <path d="M4 2 L20 2 L20 5 L17 7 L17 11 L19 14 L19 16 L5 16 L5 14 L7 11 L7 7 L4 5 Z" stroke="#38bdf8" stroke-width="1.5" fill="none"/>
+    <circle cx="12" cy="7" r="2" fill="#38bdf8" />
+  </g>
+  <!-- Files Icon -->
+  <g transform="translate(17, 56)" fill="#71717a">
+    <rect x="2" y="2" width="16" height="18" rx="2" fill="none" stroke="#71717a" stroke-width="1.5"/>
+  </g>
+  <!-- Search Icon -->
+  <g transform="translate(17, 150)" fill="#71717a">
+    <circle cx="9" cy="9" r="6" fill="none" stroke="#71717a" stroke-width="1.5"/>
+    <line x1="14" y1="14" x2="19" y2="19" stroke="#71717a" stroke-width="1.5"/>
+  </g>
+
+  <!-- Sidebar (Primary Panel) -->
+  <rect class="sidebar" x="54" y="38" width="320" height="582" />
+  <line x1="374" y1="38" x2="374" y2="620" stroke="#27272a" stroke-width="1" />
+
+  <!-- Sidebar Header -->
+  <text x="72" y="65" class="header-text">SKILLFORGE: DEVELOPER COMPASS</text>
+
+  <!-- View 1: Context & Stack -->
+  <rect x="64" y="80" width="300" height="120" class="card" rx="6" />
+  <text x="78" y="102" class="title-text">📦 Context &amp; Stack</text>
+  <text x="78" y="122" class="body-text">Scope: <tspan class="code-text">Entire Workspace</tspan></text>
+  <text x="78" y="140" class="muted-text">Ecosystems: TypeScript, Python, Rust</text>
+  <text x="78" y="158" class="muted-text">Manifests: package.json, pyproject.toml</text>
+  <rect x="78" y="168" width="80" height="20" class="badge-bg" />
+  <text x="86" y="182" class="badge-text">✓ 36 Installed</text>
+
+  <!-- View 2: Quick Actions -->
+  <rect x="64" y="210" width="300" height="110" class="card" rx="6" />
+  <text x="78" y="232" class="title-text">⚡ Quick Actions</text>
+  <rect x="78" y="244" width="130" height="26" class="btn" />
+  <text x="88" y="261" class="btn-text">✨ Suggest for Idea</text>
+  <rect x="216" y="244" width="136" height="26" fill="#3f3f46" rx="4" />
+  <text x="226" y="261" class="btn-text">⚖️ Compare Tools</text>
+  <text x="78" y="296" class="muted-text">Shortcuts: Ctrl+Alt+S / Cmd+Alt+S</text>
+
+  <!-- View 3: All SkillForge Commands -->
+  <rect x="64" y="330" width="300" height="110" class="card" rx="6" />
+  <text x="78" y="352" class="title-text">🛠️ All Commands (16 Available)</text>
+  <text x="78" y="374" class="body-text">• Suggest for Current File (Ctrl+Alt+F)</text>
+  <text x="78" y="394" class="body-text">• Select Scope Directory</text>
+  <text x="78" y="414" class="body-text">• Generate AI Agent Skill (SKILL.md)</text>
+  <text x="78" y="430" class="muted-text">• Configure BYOK API Key (Gemini/OpenAI)</text>
+
+  <!-- View 4: Saved Bookmarks & History -->
+  <rect x="64" y="450" width="300" height="150" class="card" rx="6" />
+  <text x="78" y="472" class="title-text">⭐ Saved Bookmarks</text>
+  <text x="78" y="494" class="body-text">⭐ <tspan font-weight="600">zustand</tspan> — State Management</text>
+  <text x="78" y="514" class="body-text">⭐ <tspan font-weight="600">fastapi</tspan> — Web Backend</text>
+  <text x="78" y="534" class="body-text">⭐ <tspan font-weight="600">shadcn-ui</tspan> — UI Components</text>
+  <text x="78" y="565" class="title-text">🕒 Recent Queries</text>
+  <text x="78" y="585" class="muted-text">"state management for react" (5 results)</text>
+
+  <!-- Main Canvas Preview (Right) -->
+  <rect x="375" y="38" width="585" height="582" fill="#18181b" />
+  
+  <!-- Canvas Header -->
+  <rect x="395" y="60" width="545" height="70" fill="#27272a" rx="8" />
+  <text x="415" y="88" class="title-text" font-size="16px">🎯 Recommended Libraries for "state management"</text>
+  <text x="415" y="112" class="muted-text">Curated offline search across 363 vetted developer tools • 0ms latency</text>
+
+  <!-- Card 1: Zustand -->
+  <rect x="395" y="145" width="545" height="135" class="card" rx="8" />
+  <text x="415" y="175" class="title-text" font-size="15px">1. Zustand <tspan class="code-text" font-size="13px">zustand</tspan></text>
+  <rect x="830" y="160" width="95" height="22" class="badge-bg" />
+  <text x="840" y="175" class="badge-text">✅ Verified Tier</text>
+  <text x="415" y="202" class="body-text">A small, fast, and scalable bearbones state management solution using simplified flux principles.</text>
+  <text x="415" y="224" class="muted-text">Works well with: <tspan class="code-text">react, nextjs, typescript</tspan> • Alternatives: <tspan fill="#f59e0b">jotai, recoil, redux</tspan></text>
+  <rect x="415" y="240" width="130" height="26" fill="#10b981" rx="4" />
+  <text x="425" y="257" font-family="-apple-system, sans-serif" font-size="11px" font-weight="600" fill="#ffffff">📥 pnpm add zustand</text>
+  <rect x="555" y="240" width="120" height="26" fill="#6366f1" rx="4" />
+  <text x="565" y="257" font-family="-apple-system, sans-serif" font-size="11px" font-weight="600" fill="#ffffff">🤖 Agent Directive</text>
+
+  <!-- Card 2: TanStack Query -->
+  <rect x="395" y="295" width="545" height="135" class="card" rx="8" />
+  <text x="415" y="325" class="title-text" font-size="15px">2. TanStack Query <tspan class="code-text" font-size="13px">@tanstack/react-query</tspan></text>
+  <rect x="830" y="310" width="95" height="22" class="badge-bg" />
+  <text x="840" y="325" class="badge-text">✅ Verified Tier</text>
+  <text x="415" y="352" class="body-text">Powerful asynchronous state management for server data, caching, and background refetching.</text>
+  <text x="415" y="374" class="muted-text">Works well with: <tspan class="code-text">react, vue, svelte</tspan> • Weekly Downloads: <tspan fill="#34d399">4.2M</tspan></text>
+  <rect x="415" y="390" width="180" height="26" fill="#10b981" rx="4" />
+  <text x="425" y="407" font-family="-apple-system, sans-serif" font-size="11px" font-weight="600" fill="#ffffff">📥 pnpm add @tanstack/...</text>
+
+  <!-- Privacy Guarantee Footer Banner -->
+  <rect x="395" y="450" width="545" height="55" fill="#0f172a" stroke="#1e293b" rx="8" />
+  <text x="415" y="475" class="title-text" fill="#38bdf8">🔒 100% Offline &amp; Private by Default</text>
+  <text x="415" y="493" class="muted-text">Zero source code leaves your machine. In-memory inverted index searches without cloud dependencies.</text>
+</svg>

@@ -96,6 +96,16 @@ export function buildContextTreeItems(params: ContextViewModelParams): TreeItemM
 export function buildQuickActionItems(): TreeItemModel[] {
   return [
     {
+      id: 'qa-brainstorm-project',
+      label: 'Brainstorm & Plan Project',
+      description: 'Project Studio',
+      tooltip: 'Formulate an innovative project idea, technical twist, stack & milestone roadmap.',
+      iconId: 'lightbulb',
+      commandId: 'skillforge.brainstormProject',
+      contextValue: 'quickAction',
+      collapsibleState: 'none',
+    },
+    {
       id: 'qa-suggest-current-file',
       label: 'Suggest for Current File',
       description: 'Match open file',
@@ -108,10 +118,30 @@ export function buildQuickActionItems(): TreeItemModel[] {
     {
       id: 'qa-open-suggest',
       label: 'Find Libraries for Idea',
-      description: 'Search 363 tools',
+      description: 'Search catalog',
       tooltip: 'Describe what you want to build in plain English and get recommended libraries with trust ratings and install buttons.',
       iconId: 'search',
       commandId: 'skillforge.suggest',
+      contextValue: 'quickAction',
+      collapsibleState: 'none',
+    },
+    {
+      id: 'qa-browse-catalog',
+      label: 'Browse All Available Skills',
+      description: 'Explore catalog',
+      tooltip: 'Browse and search through all vetted libraries and tools in the SkillForge catalog.',
+      iconId: 'library',
+      commandId: 'skillforge.browseCatalog',
+      contextValue: 'quickAction',
+      collapsibleState: 'none',
+    },
+    {
+      id: 'qa-view-generated-skills',
+      label: 'View Generated AI Skill Files',
+      description: 'Workspace rules',
+      tooltip: 'List and open all AI skill directives (SKILL.md, .cursor/rules, .skillforge.json) in your project.',
+      iconId: 'file-code',
+      commandId: 'skillforge.viewGeneratedSkills',
       contextValue: 'quickAction',
       collapsibleState: 'none',
     },
@@ -134,6 +164,16 @@ export function buildQuickActionItems(): TreeItemModel[] {
  */
 export function buildAllCommandsItems(): TreeItemModel[] {
   return [
+    {
+      id: 'cmd-brainstorm-project',
+      label: 'Brainstorm & Plan Project',
+      description: 'Studio wizard',
+      tooltip: 'Formulate project ideas, technical twists, and 1-click scaffold workspaces.',
+      iconId: 'lightbulb',
+      commandId: 'skillforge.brainstormProject',
+      contextValue: 'commandItem',
+      collapsibleState: 'none',
+    },
     {
       id: 'cmd-suggest',
       label: 'Find Libraries for Idea',
@@ -291,6 +331,26 @@ export function buildAllCommandsItems(): TreeItemModel[] {
       tooltip: 'Verifies that SkillForge\'s built-in offline library search engine is running on your computer (no internet required).',
       iconId: 'pulse',
       commandId: 'skillforge.testConnection',
+      contextValue: 'commandItem',
+      collapsibleState: 'none',
+    },
+    {
+      id: 'cmd-browse-catalog',
+      label: 'Browse All Available Skills (Catalog)',
+      description: 'Curated library catalog',
+      tooltip: 'Explore all vetted technologies, licenses, and documentation across categories.',
+      iconId: 'library',
+      commandId: 'skillforge.browseCatalog',
+      contextValue: 'commandItem',
+      collapsibleState: 'none',
+    },
+    {
+      id: 'cmd-view-generated-skills',
+      label: 'View Generated AI Skill Files',
+      description: 'Workspace rules & configs',
+      tooltip: 'Find and jump to SKILL.md, .cursor/rules, and .skillforge.json files in your workspace.',
+      iconId: 'file-code',
+      commandId: 'skillforge.viewGeneratedSkills',
       contextValue: 'commandItem',
       collapsibleState: 'none',
     },

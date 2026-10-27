@@ -57,8 +57,8 @@ Generate structured `.agent/skills/<id>/SKILL.md` or `.cursor/rules/<id>.mdc` di
 ## 🌟 Core Highlights
 
 - **Intent-Based Discovery**: Describe what you want to build in plain English (e.g. *"real-time chat with WebSockets"*, *"fast async postgres ORM"*, *"declarative UI animations"*) and receive instant, ranked suggestions.
-- **363 Curated, Purposeful Technologies**: An offline, in-memory knowledge base covering Web, Python, Mobile, AI/ML, Rust, Go, Java/JVM, DevOps, and Security. Every skill serves a concrete purpose with real package names, install commands, and verified docs.
-- **100% Offline & Private by Default**: No code transmission, no cloud servers required, and zero telemetry. Queries execute locally in $<2\text{ms}$.
+- **386 Curated, Purposeful Technologies**: An offline, in-memory knowledge base covering Web, Python, Mobile, AI/ML, Rust, Go, Java/JVM, DevOps, and Security. Every skill serves a concrete purpose with real package names, install commands, and verified docs.
+- **100% Offline & Private by Default**: No code transmission, no cloud servers required, and zero telemetry. Queries execute locally in < 2ms.
 - **Battle-Tested Trust Seals**: Multi-tiered reliability with **Verified** and **Suggested** tiers, real npm/GitHub download metrics, and deprecation warnings.
 - **Side-by-Side Comparison Matrix**: Compare 2 to 3 competing tools directly inside VS Code with architectural conflict warnings, pros, caveats, and companion chips.
 - **Context & Monorepo Scoping**: Auto-discovers monorepo workspaces and lets you lock context to specific directories (`apps/web`, `packages/backend`).
@@ -147,7 +147,7 @@ SkillForge automatically inspects workspace manifests to identify existing depen
 
 ## ⚙️ Configuration Settings
 
-Customize SkillForge behavior in VS Code Settings (`Ctrl+,` or `Cmd+,` $\to$ search `skillforge`):
+Customize SkillForge behavior in VS Code Settings (`Ctrl+,` or `Cmd+,` → search `skillforge`):
 
 | Setting | Type | Default | Description |
 | :--- | :--- | :--- | :--- |

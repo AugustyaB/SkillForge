@@ -335,6 +335,7 @@ export class AgentSkillGenerator {
         project_skill: skill.name,
         ecosystem: skill.ecosystem,
         category: skill.category,
+        license: skill.license || 'MIT',
         generated_by: 'SkillForge',
       };
     } else {
@@ -345,6 +346,7 @@ export class AgentSkillGenerator {
         triggers,
         stack: skill.ecosystem,
         difficulty: skill.difficulty,
+        license: skill.license || 'MIT',
         official_docs: skill.officialUrl,
       };
     }
@@ -362,6 +364,13 @@ export class AgentSkillGenerator {
 
     // Title & Context Header
     sections.push(`# SkillForge Agent Directive: ${skill.name}`);
+
+    if (skill.isDeprecated) {
+      sections.push(
+        `> ⚠️ **DEPRECATION NOTICE**: \`${skill.name}\` is deprecated/sunsetted. ${skill.deprecatedReason || ''}\n${skill.migrationTarget ? `> **Recommended Migration Target**: \`${skill.migrationTarget}\`` : ''}`
+      );
+    }
+
     sections.push(
       `> **Mission**: Automated agent directive for using \`${skill.name}\` (${skill.category} / ${skill.ecosystem}). Follow this protocol whenever inspecting, authoring, refactoring, or testing code integrating with this technology.`
     );
@@ -371,6 +380,7 @@ export class AgentSkillGenerator {
 - **Package / Tool**: \`${skill.stackIndicators[0] || skill.id}\`
 - **Ecosystem**: \`${skill.ecosystem}\`
 - **Category**: \`${skill.category}\`
+- **License**: \`${skill.license || 'MIT'}\`
 - **Why Choose It**: ${skill.whyUseIt}
 - **Official Documentation**: [${skill.officialUrl}](${skill.officialUrl})
 - **Stack Synergy**: ${skill.worksWellWith.length > 0 ? skill.worksWellWith.map((w) => `\`${w}\``).join(', ') : 'Standard ecosystem libraries'}
@@ -409,10 +419,15 @@ When writing code with \`${skill.name}\`, follow these idiomatic guidelines:
 ${bestPractices.map((bp) => `- ${bp}`).join('\n')}`);
 
     // Section 4: Common Anti-Patterns & Pitfalls
+    let antiPatternsBody = antiPatterns.map((ap) => `- ${ap}`).join('\n');
+    if (skill.whenNotToUse && skill.whenNotToUse.length > 0) {
+      antiPatternsBody = `### When NOT to Use\n${skill.whenNotToUse.map((w) => `- ${w}`).join('\n')}\n\n### Operational Failure Modes\n${antiPatternsBody}`;
+    }
+
     sections.push(`## 4. Common Anti-Patterns & Pitfalls
 Avoid the following failure modes when implementing changes:
 
-${antiPatterns.map((ap) => `- ${ap}`).join('\n')}`);
+${antiPatternsBody}`);
 
     // Section 5: Deterministic Verification Protocol
     sections.push(`## 5. Verification Protocol

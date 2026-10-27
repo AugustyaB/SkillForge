@@ -137,6 +137,13 @@ export const SkillSchema = z.object({
   worksWellWith: z.array(z.string()),
   prerequisites: z.array(z.string()),
   stackIndicators: z.array(z.string()).min(1, 'Must have at least one stack indicator'),
+  license: z.string().optional(),
+  isDeprecated: z.boolean().optional(),
+  deprecatedReason: z.string().optional(),
+  migrationTarget: z.string().optional(),
+  whenNotToUse: z.array(z.string()).optional(),
+  runtimes: z.array(z.string()).optional(),
+  source: z.enum(['bundled', 'workspace']).optional(),
 });
 
 export const PackageHealthSchema = z.object({
@@ -194,34 +201,171 @@ export function safeValidateRawSuggestion(data: unknown) {
 }
 
 /**
- * Validates a single skill record against the schema
+ * Applies default lifecycle and metadata values to a skill record
+ */
+export function normalizeSkillDefaults(skill: InferredSkill): InferredSkill {
+  return {
+    ...skill,
+    license: skill.license || 'MIT',
+    isDeprecated: skill.isDeprecated ?? false,
+    whenNotToUse: skill.whenNotToUse || [],
+    runtimes: skill.runtimes || [],
+    source: skill.source || 'bundled',
+  };
+}
+
+/**
+ * Validates a single skill record against the schema and applies defaults
  */
 export function validateSkill(data: unknown): InferredSkill {
-  return SkillSchema.parse(data);
+  return normalizeSkillDefaults(SkillSchema.parse(data));
 }
 
 /**
- * Safely parses a single skill record
+ * Safely parses a single skill record and applies defaults on success
  */
 export function safeValidateSkill(data: unknown) {
-  return SkillSchema.safeParse(data);
+  const result = SkillSchema.safeParse(data);
+  if (result.success) {
+    return {
+      success: true as const,
+      data: normalizeSkillDefaults(result.data),
+    };
+  }
+  return result;
 }
 
 /**
- * Validates an array of skills, checking for valid schemas and ID uniqueness
+ * Validates an array of skills, checking for valid schemas and ID uniqueness, and applying defaults
  */
 export function validateSkillsArray(data: unknown): InferredSkill[] {
   const parsed = z.array(SkillSchema).parse(data);
   const ids = new Set<string>();
 
-  for (const skill of parsed) {
+  return parsed.map((skill) => {
     if (ids.has(skill.id)) {
       throw new Error(`Duplicate skill ID detected: "${skill.id}"`);
     }
     ids.add(skill.id);
+    return normalizeSkillDefaults(skill);
+  });
+}
+
+/**
+ * Structured workspace skills configuration schema
+ */
+export const WorkspaceSkillsObjectSchema = z.object({
+  version: z.string().optional().default('1.0'),
+  skills: z.array(SkillSchema).default([]),
+  overrides: z.record(z.string(), SkillSchema.partial()).optional().default({}),
+});
+
+export const WorkspaceSkillsConfigSchema = z.union([
+  z.array(SkillSchema),
+  WorkspaceSkillsObjectSchema,
+]);
+
+export type WorkspaceSkillsConfig = z.infer<typeof WorkspaceSkillsConfigSchema>;
+
+export interface ValidatedWorkspaceConfig {
+  skills: InferredSkill[];
+  overrides: Record<string, Partial<InferredSkill>>;
+}
+
+/**
+ * Validates a workspace private catalog config (either array of skills or config object with skills + overrides)
+ */
+export function validateWorkspaceSkillsConfig(data: unknown): ValidatedWorkspaceConfig {
+  const parsed = WorkspaceSkillsConfigSchema.parse(data);
+
+  if (Array.isArray(parsed)) {
+    const ids = new Set<string>();
+    const skills = parsed.map((s) => {
+      if (ids.has(s.id)) {
+        throw new Error(`Duplicate workspace skill ID detected: "${s.id}"`);
+      }
+      ids.add(s.id);
+      return normalizeSkillDefaults({ ...s, source: 'workspace' });
+    });
+    return { skills, overrides: {} };
   }
 
-  return parsed;
+  const ids = new Set<string>();
+  const skills = (parsed.skills || []).map((s) => {
+    if (ids.has(s.id)) {
+      throw new Error(`Duplicate workspace skill ID detected: "${s.id}"`);
+    }
+    ids.add(s.id);
+    return normalizeSkillDefaults({ ...s, source: 'workspace' });
+  });
+
+  return {
+    skills,
+    overrides: parsed.overrides || {},
+  };
+}
+
+/**
+ * Safely validates a workspace private catalog config
+ */
+export function safeValidateWorkspaceSkillsConfig(data: unknown):
+  | { success: true; data: ValidatedWorkspaceConfig }
+  | { success: false; error: z.ZodError | Error } {
+  try {
+    const validated = validateWorkspaceSkillsConfig(data);
+    return { success: true, data: validated };
+  } catch (err: unknown) {
+    if (err instanceof z.ZodError || err instanceof Error) {
+      return { success: false, error: err };
+    }
+    return { success: false, error: new Error(String(err)) };
+  }
+}
+
+/**
+ * Payload schema for adding or updating a local workspace skill
+ */
+export const AddLocalSkillPayloadSchema = z.object({
+  workspaceRoot: z.string().min(1, 'workspaceRoot is required'),
+  skill: SkillSchema,
+  overwrite: z.boolean().optional().default(true),
+});
+
+export type InferredAddLocalSkillPayload = z.infer<typeof AddLocalSkillPayloadSchema>;
+
+/**
+ * Payload schema for removing a local workspace skill
+ */
+export const RemoveLocalSkillPayloadSchema = z.object({
+  workspaceRoot: z.string().min(1, 'workspaceRoot is required'),
+  skillId: z.string().min(1, 'skillId is required'),
+});
+
+export type InferredRemoveLocalSkillPayload = z.infer<typeof RemoveLocalSkillPayloadSchema>;
+
+/**
+ * Result schema for local skills CRUD operations
+ */
+export const LocalSkillsResultSchema = z.object({
+  success: z.boolean(),
+  skillId: z.string().optional(),
+  message: z.string(),
+  error: z.string().optional(),
+  skills: z.array(SkillSchema).optional(),
+});
+
+export type InferredLocalSkillsResult = z.infer<typeof LocalSkillsResultSchema>;
+
+export function validateAddLocalSkillPayload(data: unknown): InferredAddLocalSkillPayload {
+  const parsed = AddLocalSkillPayloadSchema.parse(data);
+  return {
+    ...parsed,
+    skill: normalizeSkillDefaults({ ...parsed.skill, source: 'workspace' }),
+  };
+}
+
+export function validateRemoveLocalSkillPayload(data: unknown): InferredRemoveLocalSkillPayload {
+  return RemoveLocalSkillPayloadSchema.parse(data);
 }
 
 /**
@@ -413,4 +557,126 @@ export function validateGenerateAgentSkillRequest(
 
 export function validateGeneratedAgentSkill(data: unknown): GeneratedAgentSkill {
   return GeneratedAgentSkillSchema.parse(data);
+}
+
+/**
+ * -------------------------------------------------------------
+ * Project Studio & Adaptive Ideation Schemas (SkillForge v1.2.0)
+ * -------------------------------------------------------------
+ */
+
+export const IdeationPersonaSchema = z.enum([
+  'fresher-student',
+  'intermediate',
+  'working-professional',
+]);
+export type IdeationPersona = z.infer<typeof IdeationPersonaSchema>;
+
+export const IdeationDomainSchema = z.enum([
+  'devtools-cli',
+  'fintech',
+  'ai-agents',
+  'realtime-collab',
+  'observability-security',
+  'campus-social',
+  'open-source-utility',
+  'web-fullstack',
+  'custom',
+]);
+export type IdeationDomain = z.infer<typeof IdeationDomainSchema>;
+
+export const TimeBudgetSchema = z.enum([
+  'weekend-hackathon',
+  'two-week-deep-dive',
+  'production-mvp',
+]);
+export type TimeBudget = z.infer<typeof TimeBudgetSchema>;
+
+export const IdeationWizardInputSchema = z.object({
+  persona: IdeationPersonaSchema.default('fresher-student'),
+  domain: IdeationDomainSchema.default('devtools-cli'),
+  customDomain: z.string().trim().max(100).optional(),
+  ecosystem: z.string().trim().default('recommend'),
+  timeBudget: TimeBudgetSchema.default('two-week-deep-dive'),
+  learningGoal: z.string().trim().max(200).optional(),
+});
+export type IdeationWizardInput = z.infer<typeof IdeationWizardInputSchema>;
+
+export const ProjectMilestoneSchema = z.object({
+  phase: z.number().int().positive(),
+  name: z.string().min(2),
+  objective: z.string().min(5),
+  deliverables: z.array(z.string().min(2)).min(1),
+});
+export type ProjectMilestone = z.infer<typeof ProjectMilestoneSchema>;
+
+export const ProjectCharterSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(2).max(120),
+  tagline: z.string().min(5).max(250),
+  targetPersona: IdeationPersonaSchema,
+  domain: z.string().min(2),
+  problemStatement: z.string().min(10),
+  technicalTwist: z.string().min(5),
+  timeBudget: TimeBudgetSchema,
+  recommendedSkills: z.array(z.string().min(1)).min(1),
+  architecturePattern: z.string().min(2),
+  milestones: z.array(ProjectMilestoneSchema).min(1),
+  antiPatternsToAvoid: z.array(z.string()).default([]),
+});
+export type ProjectCharter = z.infer<typeof ProjectCharterSchema>;
+
+export const CompileIdeaPromptRequestSchema = z.object({
+  input: IdeationWizardInputSchema,
+  isWildcard: z.boolean().default(false),
+});
+export type CompileIdeaPromptRequest = z.infer<typeof CompileIdeaPromptRequestSchema>;
+
+export const CompiledIdeaPromptSchema = z.object({
+  systemPrompt: z.string().min(20),
+  userPrompt: z.string().min(10),
+  recommendedCatalogSkills: z.array(z.string()),
+  suggestedTwistSeed: z.string().optional(),
+});
+export type CompiledIdeaPrompt = z.infer<typeof CompiledIdeaPromptSchema>;
+
+export const ScaffoldProjectRequestSchema = z.object({
+  workspacePath: z.string().min(1),
+  charter: ProjectCharterSchema,
+  targetRulesFormat: AgentSkillFormatSchema.default('cursor-rule'),
+  overwriteExisting: z.boolean().default(false),
+});
+export type ScaffoldProjectRequest = z.infer<typeof ScaffoldProjectRequestSchema>;
+
+export const ScaffoldProjectResultSchema = z.object({
+  success: z.boolean(),
+  createdFiles: z.array(z.string()),
+  skippedFiles: z.array(z.string()).default([]),
+  warnings: z.array(z.string()).default([]),
+  message: z.string(),
+});
+export type ScaffoldProjectResult = z.infer<typeof ScaffoldProjectResultSchema>;
+
+export function validateIdeationWizardInput(data: unknown): IdeationWizardInput {
+  return IdeationWizardInputSchema.parse(data);
+}
+
+export function validateProjectCharter(data: unknown): ProjectCharter {
+  return ProjectCharterSchema.parse(data);
+}
+
+export function validateCompileIdeaPromptRequest(data: unknown): CompileIdeaPromptRequest {
+  return CompileIdeaPromptRequestSchema.parse(data);
+}
+
+export function validateCompiledIdeaPrompt(data: unknown): CompiledIdeaPrompt {
+  return CompiledIdeaPromptSchema.parse(data);
+}
+
+export function validateScaffoldProjectRequest(data: unknown): ScaffoldProjectRequest {
+  return ScaffoldProjectRequestSchema.parse(data);
+}
+
+export function validateScaffoldProjectResult(data: unknown): ScaffoldProjectResult {
+  return ScaffoldProjectResultSchema.parse(data);
 }

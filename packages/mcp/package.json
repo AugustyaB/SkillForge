@@ -1,6 +1,6 @@
 {
   "name": "skillforge-mcp-server",
-  "version": "0.1.1",
+  "version": "1.2.0",
   "description": "Model Context Protocol (MCP) server for SkillForge: discover vetted libraries, detect architectural conflicts, and generate AI agent skill directives",
   "license": "MIT",
   "keywords": [

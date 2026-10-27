@@ -1,29 +1,46 @@
 # STATE.md — Session Memory
 
-> **Last Updated**: 2026-10-14
-> **Current Phase**: Open VSX Marketplace Quality & Trust Audit Remediation — COMPLETE (v0.1.1)
+> **Last Updated**: 2026-10-28
+> **Current Phase**: Phase 11: Project Studio — Adaptive Ideation & Workspace Scaffolder (Milestone v1.2.0) — COMPLETE & EMPIRICALLY VERIFIED
 > **Context Health**: PEAK
 
 ## Active Session
 
-- **Status**: Visual Studio Marketplace and npm MCP distributions published live, Neovim plugin and Smithery configuration implemented, verified across all test suites, and synchronized.
-- **Live Distributions**:
-  - **VS Code Marketplace**: Verified LIVE at `https://marketplace.visualstudio.com/items?itemName=skillforge.skillforge` (Publisher: `skillforge`, Extension: `skillforge`, Version: `0.1.1`).
-  - **Open VSX Registry**: Verified LIVE at `https://open-vsx.org/extension/SkillForge/skillforge` (`v0.1.1`).
-  - **npm Registry (MCP Server)**: Verified LIVE at `https://www.npmjs.com/package/skillforge-mcp-server` (`v0.1.0` / `0.1.1`, executable via `npx -y skillforge-mcp-server`).
-  - **Neovim / Vim Plugin**: Implemented in repository root (`lua/skillforge/init.lua`, `plugin/skillforge.lua`, `docs/integrations/NEOVIM.md`) with floating window UI and Avante/CodeCompanion hooks.
-  - **Smithery.ai Registry**: Specification configured (`smithery.yaml`).
-- **Verification Proof**:
+- **Milestone v1.2.0 Deliverables (100% Implemented & Verified)**:
+  1. **Architecture & Flow Documentation ([`flow.md`](file:///c:/Users/augus/Documents/antigravity/radiant-bardeen/flow.md))**: Complete mermaid architecture diagram and runtime lifecycle documented.
+  2. **Shared Protocol & Zod Schemas (`@skillforge/shared`)**:
+     - `IdeationPersonaSchema`, `IdeationDomainSchema`, `TimeBudgetSchema`, `IdeationWizardInputSchema`, `ProjectCharterSchema`, `ScaffoldProjectRequestSchema`.
+     - LSP methods: `skillforge/compileIdeaPrompt` and `skillforge/scaffoldProject`.
+  3. **Headless LSP Ideation & Scaffolder Engine (`@skillforge/server`)**:
+     - `IdeaPromptCompiler`: Contextual prompt compiler injecting 391-skill catalog, persona principles (fresher vs senior), and time-to-scope pruning (weekend MVP vs production).
+     - `WildcardIdeaSynthesizer`: Zero-input wildcard seed generator pairing modern paradigms (eBPF, local embeddings, CRDTs) with practical problem statements.
+     - `ProjectScaffolderEngine`: Non-destructive workspace scaffolder generating `PROJECT_SPEC.md`, `README.md` (with `README.skillforge.md` collision fallback), `.skillforge.json`, and invoking `AgentSkillGenerator` for AI rule directives.
+  4. **VS Code Client Workbench Integration (`packages/vscode-client`)**:
+     - `ProjectIdeationWizard`: 5-step adaptive QuickPick questionnaire with low cognitive friction and custom domain support.
+     - `LlmBridge`: Multi-tier execution with native `vscode.lm` (Copilot), JSON fence-stripping parser, and zero-key clipboard export fallback.
+     - `CharterPreviewPanel`: Interactive charter preview with 1-click scaffolding and export actions.
+     - Tree view integration: Added `qa-brainstorm-project` to Quick Actions and `cmd-brainstorm-project` to All Commands.
+  5. **Unified Catalog & Workspace Tools (Consolidated in v1.2.0)**:
+     - `skillforge.browseCatalog`: 391 vetted skills catalog browser.
+     - `skillforge.viewGeneratedSkills`: Safe workspace scanner for AI directives.
+     - Database DB-v1.2: ML accelerators, quantization, serving, taxonomy expansion, and license metadata.
+- **Verification Proof (v1.2.0)**:
   - `tsc -b`: Clean across all packages with 0 diagnostics.
-  - Vitest Unit Tests: **383/383 tests passing** across 31 test suites.
-  - Standalone MCP Binary: 1.45 MB zero-dependency bundle (`packages/mcp/dist/index.js`), dual stdio MCP transport + CLI flags (`--suggest`, `--compare`, `--rules`).
+  - Vitest Unit Tests: **509/509 tests passing** across 40 test suites.
+  - VSIX Package Audit: `skillforge-1.2.0.vsix` packaged cleanly (80 files, **629.41 KB**, $< 1.5\text{ MB}$ performance budget).
+  - Standalone MCP Binary: Cleanly generated at 1634.8 KB.
 - **Defects**: 0 open bugs in `BUGS.md`.
-- **Git & Remote Sync**: Local `main` branch synced with GitHub `https://github.com/AugustyaB/SkillForge.git`.
+- **Git & Remote Sync**: Local `main` branch with clean working tree ready for commit and release tag `v1.2.0`.
 
-## 📌 Pre-Release Queue for Next Version (v0.1.2)
-> **NOTE BEFORE PUBLISHING NEXT RELEASE**: Apply the following two queued fixes before packaging and releasing `v0.1.2`:
-1. **Screenshot 404 Resolution on Open VSX**: Mirror `resources/screenshots/` to repository root and pass `--baseImagesUrl https://raw.githubusercontent.com/AugustyaB/SkillForge/main/packages/vscode-client` in `packages/vscode-client/package.json` package script so relative image URLs resolve properly on Open VSX.
-2. **Remove Raw LaTeX from README**: Replace `$<2\text{ms}$` with `< 2ms` and `$\to$` with Unicode `→` in `packages/vscode-client/README.md`.
+## 📌 Release Checklist for v1.2.0
+- [x] Architecture flowchart saved to `flow.md`.
+- [x] Shared data contracts and Zod schemas implemented and tested.
+- [x] Server-side prompt compiler, wildcard synthesizer, and project scaffolder implemented.
+- [x] Client QuickPick wizard, LLM bridge, and preview panel implemented.
+- [x] Command `skillforge.brainstormProject` registered in manifest and tree views.
+- [x] Unified version bump to `1.2.0` synchronized across root, client, server, shared, and MCP.
+- [x] Clean VSIX package generation: `skillforge-1.2.0.vsix` verified at 629.41 KB.
+- [x] Documentation synchronized in `CHANGELOG.md`, `DECISIONS.md`, `flow.md`, and `ROADMAP.md`.
 
 ## Completed Work in Phase 9
 1. **Shared Agent Skill Contracts (`packages/shared`)**:
